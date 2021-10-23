@@ -6,10 +6,9 @@ set BYTE_PERIOD [expr $BIT_PERIOD * 8]
 
 create_clock  -name {clk} -period [expr 1000 / 16] [get_ports {clk}] 
 create_clock  -name {clk_pll} -period $CLK_PERIOD  [get_nets {clk_pll}] 
-create_generated_clock  -name {clk_1mhz} -source [get_ports {clk}] [get_nets {clk_1mhz}] -divide_by 16
-create_generated_clock  -name {app_clk} -source [get_ports {clk}] [get_nets {clk_2mhz}] -divide_by 8
+create_generated_clock  -name {clk_app} -source [get_nets {clk_pll}] [get_nets {clk_div4}] -divide_by 4
 
-set_clock_groups -asynchronous -group {clk} -group {clk_1mhz} -group {app_clk} -group {clk_pll}
+set_clock_groups -asynchronous -group {clk} -group {clk_app} -group {clk_pll}
 
 #set_multicycle_path -setup 4 -to [remove_from_collection [all_registers] [get_cells "clk_cnt_q*"]]
 #set_multicycle_path -hold 3 -to [remove_from_collection [all_registers] [get_cells "clk_cnt_q*"]]

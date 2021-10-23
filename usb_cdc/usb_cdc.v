@@ -8,8 +8,8 @@
 module usb_cdc
   #(parameter VENDORID = 16'h0000,
     parameter PRODUCTID = 16'h0000,
-    parameter IN_BULK_MAXPACKETSIZE = 8'd8,
-    parameter OUT_BULK_MAXPACKETSIZE = 8'd8,
+    parameter IN_BULK_MAXPACKETSIZE = 'd8,
+    parameter OUT_BULK_MAXPACKETSIZE = 'd8,
     parameter BIT_SAMPLES = 'd4,
     parameter USE_APP_CLK = 0,
     parameter APP_CLK_RATIO = 'd4)
@@ -41,7 +41,7 @@ module usb_cdc
     input        rx_dn_i
     );
 
-   localparam [7:0] CTRL_MAXPACKETSIZE = 'd8;
+   localparam    CTRL_MAXPACKETSIZE = 'd8;
    localparam [3:0] ENDP_CTRL = 'd0,
                     ENDP_BULK = 'd1,
                     ENDP_INT = 'd2;
@@ -50,7 +50,6 @@ module usb_cdc
 
    wire [6:0]       addr;
    wire [3:0]       endp;
-   wire [10:0]      frame;
    wire [7:0]       out_data;
    wire [7:0]       in_data, ctrl_in_data, bulk_in_data;
    wire             out_valid;
@@ -98,7 +97,7 @@ module usb_cdc
           .tx_dp_o(tx_dp_o),
           .tx_dn_o(tx_dn_o),
           .endp_o(endp),
-          .frame_o(frame),
+          .frame_o(),
           .out_data_o(out_data),
           .out_valid_o(out_valid),
           .out_err_o(out_err),
@@ -124,7 +123,6 @@ module usb_cdc
                .CTRL_MAXPACKETSIZE(CTRL_MAXPACKETSIZE),
                .IN_BULK_MAXPACKETSIZE(IN_BULK_MAXPACKETSIZE),
                .OUT_BULK_MAXPACKETSIZE(OUT_BULK_MAXPACKETSIZE),
-               .ENDP_CTRL(ENDP_CTRL),
                .ENDP_BULK(ENDP_BULK),
                .ENDP_INT(ENDP_INT))
    u_ctrl_endp (.addr_o(addr),

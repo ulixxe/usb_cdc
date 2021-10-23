@@ -2,16 +2,16 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity TinyFPGA_BX is
+entity demo is
   port (
     clk    : in    std_logic;           -- 16MHz Clock
     led    : out   std_logic;           -- User LED ON=1, OFF=0
     usb_p  : inout std_logic;           -- USB+
     usb_n  : inout std_logic;           -- USB-
     usb_pu : out   std_logic);          -- USB 1.5kOhm Pullup EN
-end entity TinyFPGA_BX;
+end entity demo;
 
-architecture fpga of TinyFPGA_BX is
+architecture fpga of demo is
   constant BIT_SAMPLES : integer                := 4;
   constant DIVF        : bit_vector(6 downto 0) := to_bitvector(std_logic_vector(to_unsigned(12*BIT_SAMPLES-1, 7)));
   signal clk_pll       : std_logic;
@@ -61,8 +61,8 @@ architecture fpga of TinyFPGA_BX is
     generic (
       VENDORID               : std_logic_vector(15 downto 0) := X"0000";
       PRODUCTID              : std_logic_vector(15 downto 0) := X"0000";
-      IN_BULK_MAXPACKETSIZE  : std_logic_vector(7 downto 0)  := X"08";
-      OUT_BULK_MAXPACKETSIZE : std_logic_vector(7 downto 0)  := X"08";
+      IN_BULK_MAXPACKETSIZE  : integer                       := 8;
+      OUT_BULK_MAXPACKETSIZE : integer                       := 8;
       BIT_SAMPLES            : integer                       := 4;
       USE_APP_CLK            : integer                       := 0;
       APP_CLK_RATIO          : integer                       := 4);
@@ -211,8 +211,8 @@ begin
     generic map (
       VENDORID               => X"1D50",
       PRODUCTID              => X"6130",
-      IN_BULK_MAXPACKETSIZE  => X"08",
-      OUT_BULK_MAXPACKETSIZE => X"08",
+      IN_BULK_MAXPACKETSIZE  => 8,
+      OUT_BULK_MAXPACKETSIZE => 8,
       BIT_SAMPLES            => BIT_SAMPLES,
       USE_APP_CLK            => 1,
       APP_CLK_RATIO          => BIT_SAMPLES*12/2)  -- BIT_SAMPLES * 12MHz / 2MHz

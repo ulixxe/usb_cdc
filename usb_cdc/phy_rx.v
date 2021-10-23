@@ -86,7 +86,7 @@ module phy_rx
          clk_cnt_q <= 'd0;
       end else begin
          if (dp_q[1] == dp_q[0] && dn_q[1] == dn_q[0]) begin
-            if (clk_cnt_q == BIT_SAMPLES-1)
+            if ({1'b0, clk_cnt_q} == BIT_SAMPLES-1)
               clk_cnt_q <= 'd0;
             else
               clk_cnt_q <= clk_cnt_q + 1;
@@ -117,7 +117,7 @@ module phy_rx
 
    localparam       VALID_SAMPLES = BIT_SAMPLES/2; // consecutive valid samples
 
-   assign clk_gate = (clk_cnt_q == (VALID_SAMPLES-1)) ? 1'b1 : 1'b0;
+   assign clk_gate = ({1'b0, clk_cnt_q} == (VALID_SAMPLES-1)) ? 1'b1 : 1'b0;
    assign rx_ready = (data_q[0] == 1'b1 && stuffing_cnt_q != 3'd6) ? 1'b1 : 1'b0;
    assign rx_err = (rx_state_q == ST_ERR) ? 1'b1 : 1'b0;
    assign rx_eop = (rx_state_q == ST_EOP && nrzi_q[3:2] == DJ) ? 1'b1 : 1'b0;

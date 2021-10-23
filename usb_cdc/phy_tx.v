@@ -70,7 +70,7 @@ module phy_tx
          if (tx_state_q == ST_IDLE && tx_valid_i == 1'b0)
            clk_cnt_q <= 'd0;
          else begin
-            if (clk_cnt_q == BIT_SAMPLES-1)
+            if ({1'b0, clk_cnt_q} == BIT_SAMPLES-1)
               clk_cnt_q <= 'd0;
             else
               clk_cnt_q <= clk_cnt_q + 1;
@@ -78,7 +78,7 @@ module phy_tx
       end
    end
 
-   assign clk_gate = (clk_cnt_q == BIT_SAMPLES-1) ? 1'b1 : 1'b0;
+   assign clk_gate = ({1'b0, clk_cnt_q} == BIT_SAMPLES-1) ? 1'b1 : 1'b0;
    assign tx_ready_o = clk_gate & tx_ready;
 
    always @(posedge clk_i or negedge rstn_i) begin

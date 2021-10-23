@@ -9,8 +9,8 @@
 //   shall sink OUT data.
 
 module bulk_endp
-  #(parameter IN_BULK_MAXPACKETSIZE = 8'd8,
-    parameter OUT_BULK_MAXPACKETSIZE = 8'd8,
+  #(parameter IN_BULK_MAXPACKETSIZE = 'd8,
+    parameter OUT_BULK_MAXPACKETSIZE = 'd8,
     parameter BIT_SAMPLES = 'd4,
     parameter USE_APP_CLK = 0,
     parameter APP_CLK_RATIO = 'd4)
@@ -84,7 +84,7 @@ module bulk_endp
                     ST_OUT_NAK = 2'd2;
 
    reg [1:0]        out_state_q, out_state_d;
-   reg [0:8*OUT_LENGTH-1] out_fifo_q, out_fifo_d;
+   reg [8*OUT_LENGTH-1:0] out_fifo_q, out_fifo_d;
    reg [ceil_log2(OUT_LENGTH)-1:0] out_first_q;
    reg [ceil_log2(OUT_LENGTH)-1:0] out_last_q, out_last_d;
    reg [ceil_log2(OUT_LENGTH)-1:0] out_last_qq, out_last_dd;
@@ -149,7 +149,7 @@ module bulk_endp
    localparam ST_IN_IDLE = 1'b0,
               ST_IN_DATA = 1'b1;
 
-   reg [0:8*IN_LENGTH-1] in_fifo_q;
+   reg [8*IN_LENGTH-1:0] in_fifo_q;
    reg [ceil_log2(IN_LENGTH)-1:0] in_last_q;
    reg [ceil_log2(IN_LENGTH)-1:0] in_first_q;
    reg [ceil_log2(IN_LENGTH)-1:0] in_first_qq;
@@ -226,7 +226,7 @@ module bulk_endp
 
    generate
       if (USE_APP_CLK == 0) begin : u_data_sync
-         assign app_out_valid_o = ((out_empty == 1'b0 && delay_out_cnt_q == BIT_SAMPLES-1) ? 1'b1 : 1'b0);
+         assign app_out_valid_o = ((out_empty == 1'b0 && {1'b0, delay_out_cnt_q} == BIT_SAMPLES-1) ? 1'b1 : 1'b0);
 
          always @(posedge clk_i or negedge rstn_i) begin
             if (~rstn_i) begin
@@ -234,7 +234,7 @@ module bulk_endp
                delay_out_cnt_q <= 'd0;
                out_full_q <= 1'b0;
             end else begin
-               if (delay_out_cnt_q != BIT_SAMPLES-1) begin
+               if ({1'b0, delay_out_cnt_q} != BIT_SAMPLES-1) begin
                   delay_out_cnt_q <= delay_out_cnt_q + 1;
                end else begin
                   out_full_q <= (out_last_qq == ((out_first_q == 'd0) ? OUT_LENGTH-1: out_first_q-1) ? 1'b1 : 1'b0);
@@ -251,7 +251,7 @@ module bulk_endp
             end
          end
 
-         assign app_in_ready_o = ((in_full == 1'b0 && delay_in_cnt_q == BIT_SAMPLES-1) ? 1'b1 : 1'b0);
+         assign app_in_ready_o = ((in_full == 1'b0 && {1'b0, delay_in_cnt_q} == BIT_SAMPLES-1) ? 1'b1 : 1'b0);
 
          always @(posedge clk_i or negedge rstn_i) begin
             if (~rstn_i) begin
@@ -259,7 +259,7 @@ module bulk_endp
                in_last_q <= 'd0;
                delay_in_cnt_q <= 'd0;
             end else begin
-               if (delay_in_cnt_q != BIT_SAMPLES-1) begin
+               if ({1'b0, delay_in_cnt_q} != BIT_SAMPLES-1) begin
                   delay_in_cnt_q <= delay_in_cnt_q + 1;
                end else begin
                   if (in_full == 1'b0) begin
@@ -303,7 +303,7 @@ module bulk_endp
                app_clk_sq <= 3'd0;
             end else begin
                app_clk_sq <= {app_clk_i, app_clk_sq[2:1]};
-               if (delay_out_cnt_q != BIT_SAMPLES-1) begin
+               if ({1'b0, delay_out_cnt_q} != BIT_SAMPLES-1) begin
                   delay_out_cnt_q <= delay_out_cnt_q + 1;
                end else begin
                   out_full_q <= (out_last_qq == ((out_first_q == 'd0) ? OUT_LENGTH-1: out_first_q-1) ? 1'b1 : 1'b0);
@@ -348,7 +348,7 @@ module bulk_endp
                delay_in_cnt_q <= 'd0;
                in_ready_q <= 1'b0;
             end else begin
-               if (delay_in_cnt_q != BIT_SAMPLES-1) begin
+               if ({1'b0, delay_in_cnt_q} != BIT_SAMPLES-1) begin
                   delay_in_cnt_q <= delay_in_cnt_q + 1;
                end else begin
                   if (in_full == 1'b0) begin

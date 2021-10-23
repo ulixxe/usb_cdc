@@ -4,7 +4,7 @@ Version=Lattice Semiconductor Corporation iCEcube - Release: 2020.12.27943 - Bui
 ProjectName=usb_cdc
 Vendor=SiliconBlue
 Synthesis=synplify
-ProjectVFiles=../../usb_cdc/phy_tx.v=work,../../usb_cdc/phy_rx.v=work,../../usb_cdc/sie.v=work,../../usb_cdc/ctrl_endp.v=work,../../usb_cdc/bulk_endp.v=work,../../usb_cdc/usb_cdc.v=work,../hdl/prescaler_rtl.vhd=work,../hdl/rom_wrapper.v=work,../hdl/ram_wrapper.v=work,../hdl/app.v=work,../hdl/TinyFPGA_BX_fpga.vhd=work
+ProjectVFiles=../../../usb_cdc/phy_tx.v=work,../../../usb_cdc/phy_rx.v=work,../../../usb_cdc/sie.v=work,../../../usb_cdc/ctrl_endp.v=work,../../../usb_cdc/bulk_endp.v=work,../../../usb_cdc/usb_cdc.v=work,../../hdl/demo/prescaler.v=work,../../hdl/demo/rom_wrapper.v=work,../../hdl/demo/ram_wrapper.v=work,../../hdl/demo/app.v=work,../../hdl/demo/demo.v=work
 ProjectCFiles=constraints/clk.sdc
 CurImplementation=usb_cdc_Implmnt
 Implementations=usb_cdc_Implmnt
@@ -66,9 +66,9 @@ DevicePower=
 NetlistFile=usb_cdc_Implmnt/usb_cdc.edf
 AdditionalEDIFFile=
 IPEDIFFile=
-DesignLib=usb_cdc_Implmnt/sbt/netlist/oadb-TinyFPGA_BX
+DesignLib=usb_cdc_Implmnt/sbt/netlist/oadb-demo
 DesignView=_rt
-DesignCell=TinyFPGA_BX
+DesignCell=demo
 SynthesisSDCFile=usb_cdc_Implmnt/usb_cdc.scf
 UserPinConstraintFile=
 UserSDCFile=

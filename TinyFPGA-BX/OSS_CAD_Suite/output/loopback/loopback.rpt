@@ -1,0 +1,77 @@
+
+icetime topological timing analysis report
+==========================================
+
+Info: max_span_hack is enabled: estimate is conservative.
+
+Report for critical path:
+-------------------------
+
+        lc40_7_7_7 (LogicCell40) [clk] -> lcout: 0.896 ns
+     0.896 ns net_25315 (u_usb_cdc.u_ctrl_endp.req_q[2])
+        odrv_7_7_25315_29415 (Odrv4) I -> O: 0.548 ns
+        t2826 (LocalMux) I -> O: 0.486 ns
+        inmux_7_8_29575_29588 (InMux) I -> O: 0.382 ns
+        lc40_7_8_1 (LogicCell40) in0 -> lcout: 0.662 ns
+     2.974 ns net_25432 (u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_LUT4_I1_I3[0])
+        t2840 (LocalMux) I -> O: 0.486 ns
+        inmux_6_9_25596_25641 (InMux) I -> O: 0.382 ns
+        lc40_6_9_2 (LogicCell40) in1 -> lcout: 0.589 ns
+     4.431 ns net_21479 (u_usb_cdc.u_ctrl_endp.byte_cnt_q_SB_DFFER_Q_E_SB_LUT4_O_I1[2])
+        odrv_6_9_21479_21623 (Odrv4) I -> O: 0.548 ns
+        t2545 (Span4Mux_v4) I -> O: 0.548 ns
+        t2544 (LocalMux) I -> O: 0.486 ns
+        inmux_5_13_22019_22069 (InMux) I -> O: 0.382 ns
+        t419 (CascadeMux) I -> O: 0.000 ns
+        lc40_5_13_4 (LogicCell40) in2 -> lcout: 0.558 ns
+     6.953 ns net_17896 (u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_LUT4_I1_O[2])
+        t2152 (LocalMux) I -> O: 0.486 ns
+        inmux_6_12_25984_26009 (InMux) I -> O: 0.382 ns
+        lc40_6_12_2 (LogicCell40) in0 -> lcout: 0.662 ns
+     8.483 ns net_21848 (u_usb_cdc.u_bulk_endp.in_valid_q_SB_LUT4_I3_O[1])
+        t2601 (LocalMux) I -> O: 0.486 ns
+        inmux_6_13_26089_26144 (InMux) I -> O: 0.382 ns
+        lc40_6_13_4 (LogicCell40) in0 -> lcout: 0.662 ns
+    10.013 ns net_21973 (u_usb_cdc.ctrl_stall_SB_LUT4_I1_O[2])
+        t2629 (LocalMux) I -> O: 0.486 ns
+        inmux_7_13_30176_30234 (InMux) I -> O: 0.382 ns
+        lc40_7_13_6 (LogicCell40) in1 -> lcout: 0.589 ns
+    11.471 ns net_26052 (u_usb_cdc.u_sie.out_eop_q_SB_LUT4_I1_O[0])
+        t3010 (LocalMux) I -> O: 0.486 ns
+        inmux_7_12_30055_30104 (InMux) I -> O: 0.382 ns
+        lc40_7_12_5 (LogicCell40) in0 -> lcout: 0.662 ns
+    13.000 ns net_25928 (u_usb_cdc.u_bulk_endp.in_state_q_SB_LUT4_I3_1_I0[1])
+        t2981 (LocalMux) I -> O: 0.486 ns
+        inmux_7_11_29923_29957 (InMux) I -> O: 0.382 ns
+        lc40_7_11_1 (LogicCell40) in0 -> lcout: 0.662 ns
+    14.530 ns net_25801 (u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_DFFER_Q_E_SB_LUT4_O_I2[0])
+        odrv_7_11_25801_25581 (Odrv4) I -> O: 0.548 ns
+        t2962 (Span4Mux_h4) I -> O: 0.465 ns
+        t2961 (LocalMux) I -> O: 0.486 ns
+        inmux_10_7_41002_41053 (InMux) I -> O: 0.382 ns
+        lc40_10_7_6 (LogicCell40) in0 -> lcout: 0.662 ns
+    17.073 ns net_36872 (u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_DFFER_Q_E_SB_LUT4_O_I2_SB_LUT4_I2_O)
+        odrv_10_7_36872_33455 (Odrv4) I -> O: 0.548 ns
+        t3641 (Span4Mux_v4) I -> O: 0.548 ns
+        t3640 (LocalMux) I -> O: 0.486 ns
+        inmux_11_7_45079_45140 (CEMux) I -> O: 0.889 ns
+    19.544 ns net_45140 (u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_DFFER_Q_E_SB_LUT4_O_I2_SB_LUT4_I2_O)
+        lc40_11_7_5 (LogicCell40) ce [setup]: 0.000 ns
+    19.544 ns net_40948 (u_usb_cdc.addr[5])
+
+Resolvable net names on path:
+     0.896 ns ..  2.312 ns u_usb_cdc.u_ctrl_endp.req_q[2]
+     2.974 ns ..  3.842 ns u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_LUT4_I1_I3[0]
+     4.431 ns ..  6.395 ns u_usb_cdc.u_ctrl_endp.byte_cnt_q_SB_DFFER_Q_E_SB_LUT4_O_I1[2]
+     6.953 ns ..  7.822 ns u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_LUT4_I1_O[2]
+     8.483 ns ..  9.352 ns u_usb_cdc.u_bulk_endp.in_valid_q_SB_LUT4_I3_O[1]
+    10.013 ns .. 10.881 ns u_usb_cdc.ctrl_stall_SB_LUT4_I1_O[2]
+    11.471 ns .. 12.339 ns u_usb_cdc.u_sie.out_eop_q_SB_LUT4_I1_O[0]
+    13.000 ns .. 13.869 ns u_usb_cdc.u_bulk_endp.in_state_q_SB_LUT4_I3_1_I0[1]
+    14.530 ns .. 16.412 ns u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_DFFER_Q_E_SB_LUT4_O_I2[0]
+    17.073 ns .. 19.544 ns u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_DFFER_Q_E_SB_LUT4_O_I2_SB_LUT4_I2_O
+                  lcout -> u_usb_cdc.addr[5]
+
+Total number of logic levels: 10
+Total path delay: 19.54 ns (51.17 MHz)
+

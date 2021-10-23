@@ -15,8 +15,8 @@
 //   - Serial-Parallel/Parallel-Serial conversion.
 
 module sie
-  #(parameter CTRL_MAXPACKETSIZE = 8'd8,
-    parameter IN_BULK_MAXPACKETSIZE = 8'd8,
+  #(parameter CTRL_MAXPACKETSIZE = 'd8,
+    parameter IN_BULK_MAXPACKETSIZE = 'd8,
     parameter ENDP_CTRL = 4'd0,
     parameter ENDP_BULK = 4'd1,
     parameter BIT_SAMPLES = 'd4)
@@ -124,7 +124,7 @@ module sie
 
    function [4:0] rev5;
       input [4:0] data;
-      reg [3:0]   i;
+      reg [2:0]   i;
       begin
          for (i = 0; i <= 4; i = i + 1) begin
             rev5[i] = data[4-i];
@@ -140,7 +140,7 @@ module sie
       begin
          crc16 = crc;
          for (i = 0; i <= 7; i = i + 1) begin
-            if ((data[i] ^ crc16[15]) == 1'b1)
+            if ((data[i[2:0]] ^ crc16[15]) == 1'b1)
               crc16 = {crc16[14:0], 1'b0} ^ POLY16;
             else
               crc16 = {crc16[14:0], 1'b0};
@@ -153,7 +153,7 @@ module sie
       reg [3:0]   i;
       begin
          for (i = 0; i <= 7; i = i + 1) begin
-            rev8[i] = data[7-i];
+            rev8[i[2:0]] = data[7-i];
          end
       end
    endfunction
