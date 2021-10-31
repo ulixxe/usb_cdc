@@ -23,9 +23,9 @@
 module ctrl_endp
   #(parameter VENDORID = 16'h0000,
     parameter PRODUCTID = 16'h0000,
-    parameter CTRL_MAXPACKETSIZE = 8'd8,
-    parameter IN_BULK_MAXPACKETSIZE = 8'd8,
-    parameter OUT_BULK_MAXPACKETSIZE = 8'd8,
+    parameter CTRL_MAXPACKETSIZE = 'd8,
+    parameter IN_BULK_MAXPACKETSIZE = 'd8,
+    parameter OUT_BULK_MAXPACKETSIZE = 'd8,
     parameter ENDP_BULK = 4'd1,
     parameter ENDP_INT = 4'd2)
    (

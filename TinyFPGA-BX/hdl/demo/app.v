@@ -39,7 +39,7 @@ module app
       begin
          crc32 = crc;
          for (i = 0; i <= 7; i = i + 1) begin
-            if ((data[i] ^ crc32[31]) == 1'b1)
+            if ((data[i[2:0]] ^ crc32[31]) == 1'b1)
               crc32 = {crc32[30:0], 1'b0} ^ POLY32;
             else
               crc32 = {crc32[30:0], 1'b0};
@@ -52,7 +52,7 @@ module app
       reg [3:0]   i;
       begin
          for (i = 0; i <= 7; i = i + 1) begin
-            rev8[i] = data[7-i];
+            rev8[i[2:0]] = data[7-i];
          end
       end
    endfunction

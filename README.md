@@ -5,7 +5,7 @@ USB\_CDC is a Verilog implementation of the Full Speed (12Mbit/s) USB communicat
 Windows 10 provides a built-in driver (Usbser.sys) for USB CDC devices.
 A USB\_CDC device is automatically recognized by Windows 10 as a virtual COM port, and a serial port terminal application such as [CoolTerm](https://freeware.the-meiers.org/) can be used to communicate with it.
 
-The USB\_CDC idea was born from the awesome [Luke Valenty's TinyFPGA](https://github.com/tinyfpga/TinyFPGA-BX) board. TinyFPGA uses a ["bit-banged" USB port](https://github.com/tinyfpga/TinyFPGA-Bootloader) implemented in FPGA itself for communication with the host PC.
+The USB\_CDC idea was born from the awesome [Luke Valenty's TinyFPGA](https://github.com/tinyfpga/TinyFPGA-BX) board. TinyFPGA uses a ["bit-banged" USB port](https://github.com/tinyfpga/TinyFPGA-Bootloader) implemented in the FPGA fabric for communication with the host PC.
 David Williams, with his [TinyFPGA-BX USB serial module](https://github.com/davidthings/tinyfpga_bx_usbserial), changed Luke's code to allow USB communication for FPGA designs.
 David's code uses the same clock for both USB internal stuff and data interface with FPGA application designs.
 Instead, USB\_CDC aims to use a different asynchronous clock to allow a lower frequency clock for FPGA application designs.
@@ -41,12 +41,12 @@ BIT\_SAMPLES defines the number of samples taken on USB dp/dn lines for each bit
 ![](readme_files/bit_samples.png)
 
 ### USE\_APP\_CLK and APP\_CLK\_RATIO
-`app_clk` is the FPGA design clock. It can be the same as USB internal stuff (USE\_APP\_CLK = 0) or can be a different asynchronous one (USE\_APP\_CLK = 1). If `app_clk` is asynchronous with `clk`, then for proper synchronization, it must have a frequency less or equal to CLK<sub>freq</sub>/4 (APP\_CLK\_RATIO &ge; 4).
+`app_clk` is the FPGA application clock. It can be the same as USB internal stuff (USE\_APP\_CLK = 0) or can be a different asynchronous one (USE\_APP\_CLK = 1). If `app_clk` is asynchronous with `clk`, then for proper synchronization, it must have a frequency less or equal to CLK<sub>freq</sub>/4 (APP\_CLK\_RATIO &ge; 4).
 If APP\_CLK\_RATIO is greater than or equal to 8, then USB data is exchanged with FPGA design at each `app_clk` cycle. Otherwise, if 4 &le; APP\_CLK\_RATIO &lt; 8, then USB data is exchanged every 2 `app_clk` cycles.
  
 ## Logic Resource Utilization
 
-The USB\_CDC code alone (with IN/OUT data in simple loopback configuration and default verilog parameters) shows the following logic resource utilization from iCecube2:
+The USB\_CDC code alone (with IN/OUT data in simple loopback configuration and all verilog parameters to default but USE\_APP\_CLK = 1) shows the following logic resource utilization from iCecube2:
 
 ```
 Logic Resource Utilization:
@@ -73,11 +73,9 @@ The clock timing summary is:
 ```
                    1::Clock Frequency Summary
  =====================================================================
-Number of clocks: 4
-Clock: clk               | Frequency: 143.96 MHz  | Target: 16.13 MHz  | 
+Number of clocks: 2
+Clock: clk               | Frequency: 69.50 MHz   | Target: 48.39 MHz  | 
 Clock: clk_app           | Frequency: 223.54 MHz  | Target: 12.50 MHz  | 
-Clock: clk_pll           | Frequency: 69.50 MHz   | Target: 50.00 MHz  | 
-Clock: u_pll/PLLOUTCORE  | N/A                    | Target: 48.39 MHz  | 
 ```
 
 ## Directory Structure
@@ -97,31 +95,34 @@ Clock: u_pll/PLLOUTCORE  | N/A                    | Target: 48.39 MHz  |
     │   ├── demo
     │   │   ├── TinyFPGA_BX_fpga.vhd   --> Top level (VHDL)
     │   │   ├── TinyFPGA_BX.v          --> Top level (verilog)
-    │   │   ├── app.v
-    │   │   ├── prescaler_rtl.vhd
-    │   │   ├── prescaler.v
-    │   │   ├── ram_wrapper.v
-    │   │   └── rom_wrapper.v
+    │   │   :
+    │   │
     │   └── loopback
     │       ├── loopback.v             --> Top level (verilog)
-    │       └── prescaler.v
-    ├── iCecube2                       --> iCecube2 project
+    │       :
+    │
+    ├── iCecube2                       --> iCecube2 projects
     │   ├── demo
-    │   │   ├── constraints
-    │   │   │   ├── clk.sdc
-    │   │   │   └── pins.pcf
-    │   │   ├── usb_cdc_Implmnt
-    │   │   │   └── sbt
-    │   │   │       └── outputs
-    │   │   │           ├── demo.rpt
-    │   │   │           └── bitmap
-    │   │   │               └── demo_bitmap.bin
     │   │   ├── usb_cdc_sbt.project    --> iCecube2 project file
-    │   │   └── usb_cdc_syn.prj
+    │   │   :
+    │   │
     │   └── loopback
+    │       ├── usb_cdc_sbt.project    --> iCecube2 project file
     │       :
-    └── python                         --> USB CDC class test
-        ├── dump.py
-        ├── run.py
-        └── tinyfpga.py 
+    │
+    ├── OSS_CAD_Suite                  --> OSS CAD Suite projects
+    │   ├── Makefile
+    │   ├── input
+    │   │   ├── demo
+    │   │   │   :
+    │   │   └── loopback
+    │   │       :
+    │   │
+    │   └── output
+    │       :
+    │
+    └── python                         --> test files
+        └── demo
+            ├── run.py
+            :
 ```

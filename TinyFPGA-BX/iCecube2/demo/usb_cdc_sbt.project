@@ -4,7 +4,7 @@ Version=Lattice Semiconductor Corporation iCEcube - Release: 2020.12.27943 - Bui
 ProjectName=usb_cdc
 Vendor=SiliconBlue
 Synthesis=synplify
-ProjectVFiles=../../../usb_cdc/phy_tx.v=work,../../../usb_cdc/phy_rx.v=work,../../../usb_cdc/sie.v=work,../../../usb_cdc/ctrl_endp.v=work,../../../usb_cdc/bulk_endp.v=work,../../../usb_cdc/usb_cdc.v=work,../../hdl/demo/prescaler_rtl.vhd=work,../../hdl/demo/rom_wrapper.v=work,../../hdl/demo/ram_wrapper.v=work,../../hdl/demo/app.v=work,../../hdl/demo/demo_fpga.vhd=work
+ProjectVFiles=../../../usb_cdc/phy_tx.v=work,../../../usb_cdc/phy_rx.v=work,../../../usb_cdc/sie.v=work,../../../usb_cdc/ctrl_endp.v=work,../../../usb_cdc/bulk_endp.v=work,../../../usb_cdc/usb_cdc.v=work,../../hdl/demo/prescaler_rtl.vhd=work,../../hdl/demo/rom.v=work,../../hdl/demo/ram.v=work,../../hdl/demo/app.v=work,../../hdl/demo/demo_fpga.vhd=work
 ProjectCFiles=constraints/clk.sdc
 CurImplementation=usb_cdc_Implmnt
 Implementations=usb_cdc_Implmnt

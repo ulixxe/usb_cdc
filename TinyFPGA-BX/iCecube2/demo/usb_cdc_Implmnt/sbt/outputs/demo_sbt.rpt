@@ -6,7 +6,7 @@
 
 * Build Date:         Dec 10 2020 17:24:17
 
-* File Generated:     Oct 29 2021 15:12:45
+* File Generated:     Oct 31 2021 22:58:58
 
 * Purpose:            General info of design implementation
 
@@ -17,7 +17,7 @@
 Synthesis/Placement Summary:
 ----------------------------
     Status:  Successful
-    Runtime: 2 seconds
+    Runtime: 1 seconds
 
 Device Info:
 ------------
@@ -37,10 +37,10 @@ Design statistics:
 
 Logic Resource Utilization:
 ---------------------------
-    Total Logic Cells: 1693/7680
-        Combinational Logic Cells: 1150     out of   7680      14.974%
+    Total Logic Cells: 1694/7680
+        Combinational Logic Cells: 1151     out of   7680      14.987%
         Sequential Logic Cells:    543      out of   7680      7.07031%
-        Logic Tiles:               307      out of   960       31.9792%
+        Logic Tiles:               308      out of   960       32.0833%
     Registers: 
         Logic Registers:           543      out of   7680      7.07031%
         IO Registers:              0        out of   1280      0
@@ -95,13 +95,13 @@ Detailed Global Buffer Info:
 Router Summary:
 ---------------
     Status:  Successful
-    Runtime: 18 seconds
+    Runtime: 17 seconds
 
 Routing Resource Utilization:
 -----------------------------
-              Local line of tile    12533 out of 146184      8.57344%
-                          Span 4     3038 out of  29696      10.2303%
-                         Span 12      495 out of   5632      8.78906%
+              Local line of tile    12585 out of 146184      8.60901%
+                          Span 4     3248 out of  29696      10.9375%
+                         Span 12      470 out of   5632      8.34517%
                   Global network        8 out of      8      100%
-      Vertical Inter-LUT Connect      449 out of   6720      6.68155%
+      Vertical Inter-LUT Connect      416 out of   6720      6.19048%
 

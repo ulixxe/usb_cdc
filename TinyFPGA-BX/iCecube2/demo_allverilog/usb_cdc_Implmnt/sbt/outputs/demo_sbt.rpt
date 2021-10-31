@@ -6,7 +6,7 @@
 
 * Build Date:         Dec 10 2020 17:24:17
 
-* File Generated:     Oct 29 2021 15:21:22
+* File Generated:     Oct 31 2021 23:09:06
 
 * Purpose:            General info of design implementation
 
@@ -28,7 +28,7 @@ Device Info:
 Design statistics:
 ------------------
     FFs:                  543
-    LUTs:                 1690
+    LUTs:                 1699
     RAMs:                 4
     IOBs:                 5
     GBs:                  7
@@ -37,10 +37,10 @@ Design statistics:
 
 Logic Resource Utilization:
 ---------------------------
-    Total Logic Cells: 1696/7680
-        Combinational Logic Cells: 1153     out of   7680      15.013%
+    Total Logic Cells: 1705/7680
+        Combinational Logic Cells: 1162     out of   7680      15.1302%
         Sequential Logic Cells:    543      out of   7680      7.07031%
-        Logic Tiles:               308      out of   960       32.0833%
+        Logic Tiles:               310      out of   960       32.2917%
     Registers: 
         Logic Registers:           543      out of   7680      7.07031%
         IO Registers:              0        out of   1280      0
@@ -87,7 +87,7 @@ Detailed Global Buffer Info:
     3              3                   56      u_usb_cdc.u_sie.clk_gate_0_i_g    
     1              0                   45      u_usb_cdc.u_ctrl_endp.clk_gate_g  
     2              1                   324     u_usb_cdc.rstn_i_g                
-    7              1                   83      u_usb_cdc.bulk_out_ready_g        
+    7              1                   84      u_usb_cdc.bulk_out_ready_g        
     4              0                   139     u_app.rstn_sq_i_g_0               
     0              2                   161     clk_2mhz_g                        
 
@@ -99,9 +99,9 @@ Router Summary:
 
 Routing Resource Utilization:
 -----------------------------
-              Local line of tile    12576 out of 146184      8.60286%
-                          Span 4     3003 out of  29696      10.1125%
-                         Span 12      487 out of   5632      8.64702%
+              Local line of tile    12648 out of 146184      8.65211%
+                          Span 4     2988 out of  29696      10.062%
+                         Span 12      418 out of   5632      7.42188%
                   Global network        8 out of      8      100%
-      Vertical Inter-LUT Connect      437 out of   6720      6.50298%
+      Vertical Inter-LUT Connect      435 out of   6720      6.47321%
 

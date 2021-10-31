@@ -4,3 +4,5 @@
 ../../usb_cdc/ctrl_endp.v
 ../../usb_cdc/bulk_endp.v
 ../../usb_cdc/usb_cdc.v
+../hdl/loopback/prescaler.v
+../hdl/loopback/loopback.v
