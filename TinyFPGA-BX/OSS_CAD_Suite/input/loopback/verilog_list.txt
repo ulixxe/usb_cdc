@@ -1,8 +1,0 @@
-../../usb_cdc/phy_tx.v
-../../usb_cdc/phy_rx.v
-../../usb_cdc/sie.v
-../../usb_cdc/ctrl_endp.v
-../../usb_cdc/bulk_endp.v
-../../usb_cdc/usb_cdc.v
-../hdl/loopback/prescaler.v
-../hdl/loopback/loopback.v

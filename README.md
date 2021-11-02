@@ -21,7 +21,9 @@ USB\_CDC provides a FIFO interface to transfer data to/from FPGA application. Bo
 
 ![](readme_files/fifo_timings.png)
 
-Data is consumed on rising `app_clk` when both `valid` and `ready` signals are high (red up arrows on the picture). The `valid` signal is high only when new data is available. After data is consumed and there is no new data available, the `valid` signal is asserted low.
+Data is consumed on rising `app_clk` when both `valid` and `ready` signals are high (red up arrows on the picture). Tsetup and Thold depend on FPGA technology.
+
+The `valid` signal is high only when new data is available. After data is consumed and there is no new data available, the `valid` signal is asserted low.
 
 ![](readme_files/fifo_protocol.png)
 
@@ -82,47 +84,48 @@ Clock: clk_app           | Frequency: 223.54 MHz  | Target: 12.50 MHz  |
 
 ```
 .
-├── README.md                          --> This file
-├── usb_cdc                            --> USB_CDC verilog files
+├── README.md                            --> This file
+├── usb_cdc                              --> USB_CDC verilog files
 │   ├── bulk_endp.v
 │   ├── ctrl_endp.v
 │   ├── phy_rx.v
 │   ├── phy_tx.v
 │   ├── sie.v
 │   └── usb_cdc.v
-└── TinyFPGA-BX                        --> Example designs
-    ├── hdl
-    │   ├── demo
-    │   │   ├── TinyFPGA_BX_fpga.vhd   --> Top level (VHDL)
-    │   │   ├── TinyFPGA_BX.v          --> Top level (verilog)
-    │   │   :
-    │   │
-    │   └── loopback
-    │       ├── loopback.v             --> Top level (verilog)
-    │       :
-    │
-    ├── iCecube2                       --> iCecube2 projects
-    │   ├── demo
-    │   │   ├── usb_cdc_sbt.project    --> iCecube2 project file
-    │   │   :
-    │   │
-    │   └── loopback
-    │       ├── usb_cdc_sbt.project    --> iCecube2 project file
-    │       :
-    │
-    ├── OSS_CAD_Suite                  --> OSS CAD Suite projects
-    │   ├── Makefile
-    │   ├── input
-    │   │   ├── demo
-    │   │   │   :
-    │   │   └── loopback
-    │   │       :
-    │   │
-    │   └── output
-    │       :
-    │
-    └── python                         --> test files
-        └── demo
-            ├── run.py
-            :
+└── examples                             --> Example designs
+    └── TinyFPGA-BX
+        ├── hdl
+        │   ├── demo
+        │   │   ├── demo_fpga.vhd        --> Top level (VHDL)
+        │   │   ├── demo.v               --> Top level (verilog)
+        │   │   :
+        │   │
+        │   └── loopback
+        │       ├── loopback.v           --> Top level (verilog)
+        │       :
+        │
+        ├── iCecube2                     --> iCecube2 projects
+        │   ├── demo
+        │   │   ├── usb_cdc_sbt.project  --> iCecube2 project file
+        │   │   :
+        │   │
+        │   └── loopback
+        │       ├── usb_cdc_sbt.project  --> iCecube2 project file
+        │       :
+        │
+        ├── OSS_CAD_Suite                --> OSS CAD Suite projects
+        │   ├── Makefile
+        │   ├── input
+        │   │   ├── demo
+        │   │   │   :
+        │   │   └── loopback
+        │   │       :
+        │   │
+        │   └── output
+        │       :
+        │
+        └── python                       --> test files
+            └── demo
+                ├── run.py
+                :
 ```
