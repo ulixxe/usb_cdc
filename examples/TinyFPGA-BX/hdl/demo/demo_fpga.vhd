@@ -23,6 +23,7 @@ architecture fpga of demo is
   signal rstn_sync     : std_logic_vector(1 downto 0);
   signal rstn          : std_logic;
   signal up_cnt        : unsigned(20 downto 0);
+  signal usb_pu_q      : std_logic;
   signal rx_dp         : std_logic;
   signal rx_dn         : std_logic;
   signal tx_dp         : std_logic;
@@ -37,12 +38,12 @@ architecture fpga of demo is
 
   component prescaler is
     port (
-      clk_16mhz_i : in  std_logic;
+      clk_i       : in  std_logic;
       rstn_i      : in  std_logic;
-      clk_1mhz_o  : out std_logic;
-      clk_2mhz_o  : out std_logic;
-      clk_4mhz_o  : out std_logic;
-      clk_8mhz_o  : out std_logic);
+      clk_div16_o : out std_logic;
+      clk_div8_o  : out std_logic;
+      clk_div4_o  : out std_logic;
+      clk_div2_o  : out std_logic);
   end component prescaler;
 
   component app is
@@ -164,12 +165,12 @@ begin
 
   u_prescaler : component prescaler
     port map (
-      clk_16mhz_i => clk,
+      clk_i       => clk,
       rstn_i      => lock,
-      clk_1mhz_o  => clk_1mhz,
-      clk_2mhz_o  => clk_2mhz,
-      clk_4mhz_o  => clk_4mhz,
-      clk_8mhz_o  => clk_8mhz);
+      clk_div16_o => clk_1mhz,
+      clk_div8_o  => clk_2mhz,
+      clk_div4_o  => clk_4mhz,
+      clk_div2_o  => clk_8mhz);
 
   p_rstn : process (clk_1mhz, lock) is
   begin
@@ -185,8 +186,12 @@ begin
   p_up : process (clk_1mhz, rstn) is
   begin
     if rstn = '0' then
-      up_cnt <= (others => '0');
+      up_cnt   <= (others => '0');
+      usb_pu_q <= '0';
     elsif clk_1mhz'event and clk_1mhz = '1' then
+      if up_cnt(14) = '1' then
+        usb_pu_q <= '1';  -- TSIGATT < 100ms (USB2.0 Tab.7-14 pag.188)
+      end if;
       if up_cnt(up_cnt'high) = '0' then
         up_cnt <= up_cnt + 1;
       end if;
@@ -194,7 +199,7 @@ begin
   end process p_up;
 
   led    <= not(up_cnt(up_cnt'high));
-  usb_pu <= up_cnt(up_cnt'high);
+  usb_pu <= usb_pu_q;
 
   u_app : component app
     port map (

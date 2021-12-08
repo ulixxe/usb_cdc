@@ -1,0 +1,8 @@
+# 
+## name ## bulk_endp.out_state
+## color ## Blue
+## data ## Decimal
+
+0 ST_OUT_IDLE
+1 ST_OUT_DATA
+2 ST_OUT_NAK

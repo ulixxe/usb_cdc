@@ -11,10 +11,35 @@ David's code uses the same clock for both USB internal stuff and data interface 
 Instead, USB\_CDC aims to use a different asynchronous clock to allow a lower frequency clock for FPGA application designs.
 Furthermore, USB\_CDC was designed from scratch to keep FPGA resource utilization at the minimum and without the use of EBR memories.
 
-## Block Diagram
+## Block Diagram and Pinout
 
 ![](readme_files/usb_cdc.png)
 
+### Clocks
+* `clk_i`: clock with a frequency of 12MHz*BIT\_SAMPLES
+* `app_clk_i`: asynchronous clock used if parameter `USE_APP_CLK = 1`
+
+### Reset
+* `rstn_i`: asynchronous reset, active low
+
+### FIFO out (from the USB host)
+* `out_data_o`: data byte
+* `out_valid_o`: valid control signal
+* `out_ready_i`: ready control signal
+
+### FIFO in (to the USB host)
+* `in_data_i`: data byte
+* `in_valid_i`: valid control signal
+* `in_ready_o`: ready control signal
+
+### USB bus physical receivers
+* `rx_dp_i`: receiver bit stream
+* `rx_dn_1`: receiver bit stream
+
+### USB bus physical transmitters
+* `tx_dp_o`: transmitter bit stream
+* `tx_dn_o`: transmitter bit stream
+* `tx_en_o`: transmitter enable
 
 ## FIFO interface
 USB\_CDC provides a FIFO interface to transfer data to/from FPGA application. Both `in_*` and `out_*` channels use the same transmission protocol.
@@ -45,10 +70,13 @@ BIT\_SAMPLES defines the number of samples taken on USB dp/dn lines for each bit
 ### USE\_APP\_CLK and APP\_CLK\_RATIO
 `app_clk` is the FPGA application clock. It can be the same as USB internal stuff (USE\_APP\_CLK = 0) or can be a different asynchronous one (USE\_APP\_CLK = 1). If `app_clk` is asynchronous with `clk`, then for proper synchronization, it must have a frequency less or equal to CLK<sub>freq</sub>/4 (APP\_CLK\_RATIO &ge; 4).
 If APP\_CLK\_RATIO is greater than or equal to 8, then USB data is exchanged with FPGA design at each `app_clk` cycle. Otherwise, if 4 &le; APP\_CLK\_RATIO &lt; 8, then USB data is exchanged every 2 `app_clk` cycles.
+
+## Examples
+A few examples with complete implementation on FPGA are present in the `examples` directory. In addition, simulation testbenches are provided for each one.
  
 ## Logic Resource Utilization
 
-The USB\_CDC code alone (with IN/OUT data in simple loopback configuration and all verilog parameters to default but USE\_APP\_CLK = 1) shows the following logic resource utilization from iCecube2:
+The USB\_CDC code alone (with IN/OUT data in simple loopback configuration and all verilog parameters to default but USE\_APP\_CLK = 1) shows the following logic resource utilization from iCEcube2:
 
 ```
 Logic Resource Utilization:
@@ -104,13 +132,13 @@ Clock: clk_app           | Frequency: 223.54 MHz  | Target: 12.50 MHz  |
         │       ├── loopback.v           --> Top level (verilog)
         │       :
         │
-        ├── iCecube2                     --> iCecube2 projects
+        ├── iCEcube2                     --> iCEcube2 projects
         │   ├── demo
-        │   │   ├── usb_cdc_sbt.project  --> iCecube2 project file
+        │   │   ├── usb_cdc_sbt.project  --> iCEcube2 project file
         │   │   :
         │   │
         │   └── loopback
-        │       ├── usb_cdc_sbt.project  --> iCecube2 project file
+        │       ├── usb_cdc_sbt.project  --> iCEcube2 project file
         │       :
         │
         ├── OSS_CAD_Suite                --> OSS CAD Suite projects

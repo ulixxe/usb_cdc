@@ -1,0 +1,9 @@
+# 
+## name ## phy_rx.nrzi
+## color ## Blue
+## data ## Decimal
+
+0 SE0
+1 DJ
+2 DK
+3 SE1

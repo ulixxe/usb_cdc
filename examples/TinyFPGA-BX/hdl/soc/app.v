@@ -66,7 +66,7 @@ module app
 
    always @(posedge clk_i or negedge rstn) begin
       if (~rstn) begin
-         status_q <= 'd0;
+         status_q <= ST_RESET;
          fifo_irq_q <= 1'b0;
          data_q <= 'd0;
       end else begin

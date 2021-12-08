@@ -11,4 +11,7 @@ loopback.v \
 
 
 # list of HDL files directories separated by ":"
-VPATH = ../../../usb_cdc:../hdl/loopback:
+VPATH = ../../../usb_cdc: \
+        ../hdl/loopback: \
+        ../../common/hdl: \
+        ../../common/hdl/ice40: \

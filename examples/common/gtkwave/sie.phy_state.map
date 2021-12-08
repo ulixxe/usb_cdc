@@ -1,0 +1,18 @@
+# 
+## name ## sie.phy_state_q
+## name ## sie.phy_state_d
+## color ## Blue
+## data ## Decimal
+
+0 PHY_IDLE
+1 PHY_RX_PID
+2 PHY_RX_ADDR
+3 PHY_RX_ENDP
+4 PHY_RX_DATA0
+5 PHY_RX_DATA
+6 PHY_RX_WAIT_EOP
+7 PHY_TX_HANDSHAKE_PID
+8 PHY_TX_DATA_PID
+9 PHY_TX_DATA
+10 PHY_TX_CRC16_0
+11 PHY_TX_CRC16_1

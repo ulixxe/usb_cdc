@@ -45,7 +45,7 @@ module soc
           .PLLOUTCORE(),
           .PLLOUTGLOBAL(clk_pll),
           .EXTFEEDBACK(1'b0),
-          .DYNAMICDELAY('d0),
+          .DYNAMICDELAY(8'd0),
           .LOCK(lock),
           .BYPASS(1'b0),
           .RESETB(1'b1),
@@ -54,12 +54,12 @@ module soc
           .SCLK(1'b0),
           .LATCHINPUTVALUE(1'b1));
 
-   prescaler u_prescaler (.clk_16mhz_i(clk),
+   prescaler u_prescaler (.clk_i(clk),
                           .rstn_i(lock),
-                          .clk_1mhz_o(clk_1mhz),
-                          .clk_2mhz_o(clk_2mhz),
-                          .clk_4mhz_o(clk_4mhz),
-                          .clk_8mhz_o(clk_8mhz));
+                          .clk_div16_o(clk_1mhz),
+                          .clk_div8_o(clk_2mhz),
+                          .clk_div4_o(clk_4mhz),
+                          .clk_div2_o(clk_8mhz));
 
    reg [1:0]        rstn_sync;
 
@@ -88,13 +88,12 @@ module soc
          sleep_sq <= 2'b00;
       end else begin
          sleep_sq <= {sleep, sleep_sq[1]};
-         if (up_cnt[20] == 1'b0) begin
-            up_cnt <= up_cnt + 1;
-         end else begin
-            usb_pu_q <= 1'b1;
-            if (~sleep_sq[0])
-              up_cnt <= 21'hE0000;
-         end
+         if (up_cnt[14] == 1'b1)
+           usb_pu_q <= 1'b1; // TSIGATT < 100ms (USB2.0 Tab.7-14 pag.188)
+         if (up_cnt[20] == 1'b0)
+           up_cnt <= up_cnt + 1;
+         else if (~sleep_sq[0])
+           up_cnt <= 21'hE0000;
       end
    end
 

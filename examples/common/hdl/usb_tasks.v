@@ -1,0 +1,1140 @@
+
+`define max(a,b)((a) > (b) ? (a) : (b))
+`define min(a,b)((a) < (b) ? (a) : (b))
+
+`define assert(msg, signal, value) \
+   if ((signal) !== (value)) begin \
+      device_fail = 1'b1; \
+      $display("%c[1;31m",27); \
+      $display("ERROR @ %t: %s", $time, msg); \
+      $display("  actual:   %x", signal); \
+      $display("  expected: %x", value); \
+      $display("%c[0m",27); \
+      #(1*`BIT_TIME); \
+      $finish; \
+  end
+
+`define assert_error(msg) \
+   device_fail = 1'b1; \
+   $display("%c[1;31m",27); \
+   $display("ERROR @ %t\n  %s", $time, msg); \
+   $display("%c[0m",27); \
+   #(1*`BIT_TIME); \
+   $finish;
+
+`define assert_end(msg) \
+   $display("%c[1;32m",27); \
+   $display("@ %t\n  %s", $time, msg); \
+   $display("%c[0m",27); \
+   $finish;
+
+`define progress_bar(end_ms) \
+   integer time_ms; \
+   initial begin \
+      time_ms = 0; \
+      forever begin \
+         #(1000000/83*`BIT_TIME); \
+         time_ms = time_ms + 1; \
+         $write("%4d ms", time_ms); \
+         if (end_ms > 0) \
+            $write("  (%3d%%)", 100*time_ms/end_ms); \
+         $write("\015"); \
+         $fflush(32'h8000_0001); // flush STDOUT \
+      end \
+   end
+
+
+localparam [3:0] PID_OUT = 4'b0001,
+                 PID_IN = 4'b1001,
+                 PID_SOF = 4'b0101,
+                 PID_SETUP = 4'b1101,
+                 PID_DATA0 = 4'b0011,
+                 PID_DATA1 = 4'b1011,
+                 PID_ACK = 4'b0010,
+                 PID_NAK = 4'b1010,
+                 PID_STALL = 4'b1110;
+
+localparam [7:0] REQ_GET_STATUS = 'd0,
+                 REQ_CLEAR_FEATURE = 'd1,
+                 REQ_RESERVED1 = 'd2,
+                 REQ_SET_FEATURE = 'd3,
+                 REQ_RESERVED2 = 'd4,
+                 REQ_SET_ADDRESS = 'd5,
+                 REQ_GET_DESCRIPTOR = 'd6,
+                 REQ_SET_DESCRIPTOR = 'd7,
+                 REQ_GET_CONFIGURATION = 'd8,
+                 REQ_SET_CONFIGURATION = 'd9,
+                 REQ_GET_INTERFACE = 'd10,
+                 REQ_SET_INTERFACE = 'd11,
+                 REQ_SYNCH_FRAME = 'd12,
+                 REQ_SET_LINE_CODING = 'h20,
+                 REQ_GET_LINE_CODING = 'h21,
+                 REQ_SET_CONTROL_LINE_STATE = 'h22,
+                 REQ_SEND_BREAK = 'h23;
+
+localparam [1:0] DEFAULT_STATE = 2'd0,
+                 ADDRESS_STATE = 2'd1,
+                 CONFIGURED_STATE = 2'd2;
+
+localparam       IN_BULK_MAXPACKETSIZE = 'd8;
+localparam       OUT_BULK_MAXPACKETSIZE = 'd8;
+localparam       CTRL_MAXPACKETSIZE = 'd8;
+localparam       VENDORID = 16'h1D50;
+localparam       PRODUCTID = 16'h6130;
+localparam [3:0] ENDP_CTRL = 'd0,
+                 ENDP_BULK = 'd1,
+                 ENDP_INT = 'd2;
+
+localparam [8*'h12-1:0] DEV_DESCR = {8'h12, // bLength
+                                     8'h01, // bDescriptorType (DEVICE)
+                                     8'h00, // bcdUSB[0]
+                                     8'h02, // bcdUSB[1] (2.00)
+                                     8'h02, // bDeviceClass (Communications Device Class)
+                                     8'h00, // bDeviceSubClass (specified at interface level)
+                                     8'h00, // bDeviceProtocol (specified at interface level)
+                                     CTRL_MAXPACKETSIZE[7:0], // bMaxPacketSize0
+                                     VENDORID[7:0], // idVendor[0]
+                                     VENDORID[15:8], // idVendor[1]
+                                     PRODUCTID[7:0], // idProduct[0]
+                                     PRODUCTID[15:8], // idProduct[1]
+                                     8'h00, // bcdDevice[0]
+                                     8'h01, // bcdDevice[1] (1.00)
+                                     8'h00, // iManufacturer (no string)
+                                     8'h00, // iProduct (no string)
+                                     8'h00, // iSerialNumber (no string)
+                                     8'h01}; // bNumConfigurations
+
+localparam [8*'h43-1:0] CONF_DESCR = {8'h09, // bLength
+                                      8'h02, // bDescriptorType (CONFIGURATION)
+                                      8'h43, // wTotalLength[0]
+                                      8'h00, // wTotalLength[1]
+                                      8'h02, // bNumInterfaces
+                                      8'h01, // bConfigurationValue
+                                      8'h00, // iConfiguration (no string)
+                                      8'h80, // bmAttributes (bus powered, no remote wakeup)
+                                      8'h32, // bMaxPower (100mA)
+
+                                      // interface descriptor, USB spec 9.6.5, page 267-269, Table 9-12
+                                      8'h09, // bLength
+                                      8'h04, // bDescriptorType (INTERFACE)
+                                      8'h00, // bInterfaceNumber
+                                      8'h00, // bAlternateSetting
+                                      8'h01, // bNumEndpoints
+                                      8'h02, // bInterfaceClass (Communications Device Class)
+                                      8'h02, // bInterfaceSubClass (Abstract Control Model)
+                                      8'h01, // bInterfaceProtocol (AT Commands in ITU V.25ter)
+                                      8'h00, // iInterface (no string)
+
+                                      // Header Functional Descriptor, CDC Spec 5.2.3.1, Table 26
+                                      8'h05, // bFunctionLength
+                                      8'h24, // bDescriptorType (CS_INTERFACE)
+                                      8'h00, // bDescriptorSubtype (header)
+                                      8'h10, // bcdCDC[0]
+                                      8'h01, // bcdCDC[1] (1.1)
+
+                                      // Abstract Control Management Functional Descriptor, CDC Spec 5.2.3.3, Table 28
+                                      8'h04, // bFunctionLength
+                                      8'h24, // bDescriptorType (CS_INTERFACE)
+                                      8'h02, // bDescriptorSubtype (Abstract Control Management)
+                                      8'h00, // bmCapabilities (none)
+
+                                      // Union Functional Descriptor, CDC Spec 5.2.3.8, Table 33
+                                      8'h05, // bFunctionLength
+                                      8'h24, // bDescriptorType (CS_INTERFACE)
+                                      8'h06, // bDescriptorSubtype (union)
+                                      8'h00, // bMasterInterface
+                                      8'h01, // bSlaveInterface0
+
+                                      // Call Management Functional Descriptor, CDC Spec 5.2.3.2, Table 27
+                                      8'h05, // bFunctionLength
+                                      8'h24, // bDescriptorType (CS_INTERFACE)
+                                      8'h01, // bDescriptorSubtype (Call Management)
+                                      8'h00, // bmCapabilities (no call mgmnt)
+                                      8'h01, // bDataInterface
+
+                                      // endpoint descriptor, USB spec 9.6.6, page 269-271, Table 9-13
+                                      8'h07, // bLength
+                                      8'h05, // bDescriptorType (ENDPOINT)
+                                      {4'h8, ENDP_INT}, // bEndpointAddress (2 IN)
+                                      8'h03, // bmAttributes (interrupt)
+                                      8'h08, // wMaxPacketSize[0]
+                                      8'h00, // wMaxPacketSize[1]
+                                      8'hFF, // bInterval (255 ms)
+
+                                      // interface descriptor, USB spec 9.6.5, page 267-269, Table 9-12
+                                      8'h09, // bLength
+                                      8'h04, // bDescriptorType (INTERFACE)
+                                      8'h01, // bInterfaceNumber
+                                      8'h00, // bAlternateSetting
+                                      8'h02, // bNumEndpoints
+                                      8'h0A, // bInterfaceClass (data)
+                                      8'h00, // bInterfaceSubClass
+                                      8'h00, // bInterfaceProtocol
+                                      8'h00, // iInterface (no string)
+
+                                      // endpoint descriptor, USB spec 9.6.6, page 269-271, Table 9-13
+                                      8'h07, // bLength
+                                      8'h05, // bDescriptorType (ENDPOINT)
+                                      {4'h0, ENDP_BULK}, // bEndpointAddress (1 OUT)
+                                      8'h02, // bmAttributes (bulk)
+                                      OUT_BULK_MAXPACKETSIZE[7:0], // wMaxPacketSize[0]
+                                      8'h00, // wMaxPacketSize[1]
+                                      8'h00, // bInterval
+
+                                      // endpoint descriptor, USB spec 9.6.6, page 269-271, Table 9-13
+                                      8'h07, // bLength
+                                      8'h05, // bDescriptorType (ENDPOINT)
+                                      {4'h8, ENDP_BULK}, // bEndpointAddress (1 IN)
+                                      8'h02, // bmAttributes (bulk)
+                                      IN_BULK_MAXPACKETSIZE[7:0], // wMaxPacketSize[0]
+                                      8'h00, // wMaxPacketSize[1]
+                                      8'h00}; // bInterval
+
+task automatic raw_tx
+  (
+   input integer         length,
+   input [`MAX_BITS-1:0] dp_data,
+   input [`MAX_BITS-1:0] dn_data,
+   input time            bit_time
+   );
+   integer               i;
+   begin
+      #bit_time;
+      for (i = length-1; i >= 0; i = i-1) begin
+         dp_force = dp_data[i];
+         dn_force = dn_data[i];
+         #bit_time;
+      end
+      dp_force = 1'bZ;
+      dn_force = 1'bZ;
+   end
+endtask
+
+task automatic nrzi_tx
+  (
+   input [8*`MAX_BITS-1:0] nrzi_data,
+   input time              bit_time
+   );
+   integer                 i;
+   begin
+      #bit_time;
+      for (i = `MAX_BITS-1; i >= 0; i = i-1) begin
+         if (nrzi_data[8*i +:8] == "J" || nrzi_data[8*i +:8] == "j") begin
+            dp_force = 1'b1;
+            dn_force = 1'b0;
+            #bit_time;
+         end if (nrzi_data[8*i +:8] == "K" || nrzi_data[8*i +:8] == "k") begin
+            dp_force = 1'b0;
+            dn_force = 1'b1;
+            #bit_time;
+         end if (nrzi_data[8*i +:8] == "0") begin
+            dp_force = 1'b0;
+            dn_force = 1'b0;
+            #bit_time;
+         end if (nrzi_data[8*i +:8] == "1") begin
+            dp_force = 1'b1;
+            dn_force = 1'b1;
+            #bit_time;
+         end
+      end
+      dp_force = 1'bZ;
+      dn_force = 1'bZ;
+   end
+endtask
+
+task automatic usb_tx
+  (
+   input [8*`MAX_BYTES-1:0] data,
+   input integer            bytes,
+   input integer            sync_length,
+   input time               bit_time
+   );
+   reg                      nrzi_bit;
+   integer                  bit_counter;
+   integer                  i,j;
+   begin
+      #bit_time;
+      if (!(dp_sense === 1 && dn_sense === 0)) begin
+         `assert_error("usb_tx(): Data lines must be Idle before Start Of Packet");
+      end
+
+      // Start Of Packet and sync pattern
+      nrzi_bit = 1;
+      for (i = 1; i < sync_length; i = i+1) begin
+         nrzi_bit = ~nrzi_bit;
+         dp_force = nrzi_bit;
+         dn_force = ~nrzi_bit;
+         #bit_time;
+      end
+      bit_counter = 1;
+      #bit_time;
+      
+      // data transmission
+      for (j = bytes-1; j >= 0; j = j-1) begin
+         for (i = 0; i < 8; i = i+1) begin
+            if (data[8*j+i] == 0) begin
+               nrzi_bit = ~nrzi_bit;
+               bit_counter = 0;
+            end else
+              bit_counter = bit_counter + 1;
+            dp_force = nrzi_bit;
+            dn_force = ~nrzi_bit;
+            #bit_time;
+            if (bit_counter == 6) begin
+               nrzi_bit = ~nrzi_bit;
+               bit_counter = 0;
+               dp_force = nrzi_bit;
+               dn_force = ~nrzi_bit;
+               #bit_time;
+            end
+         end
+      end
+
+      // End Of Packet
+      dp_force = 0;
+      dn_force = 0;
+      #(2*bit_time); // USB 2.0 Table 7-2
+      dp_force = 1;
+      dn_force = 0;
+      #bit_time;
+      dp_force = 1'bZ;
+      dn_force = 1'bZ;
+   end
+endtask
+
+task automatic wait_bit
+  (
+   input time    bit_time,
+   input integer timeout // number of bit_time periods
+   );
+   localparam real STABLE_RATIO = 0.5; // stable time / bit_time
+   time            start_time;
+   time            wait_time;
+   reg             exit;
+   
+   begin
+      start_time = $time;
+      wait_time = bit_time;
+      exit = 0;
+      while (~exit) begin
+         fork : u_fork
+            begin
+               #wait_time;
+               exit = 1;
+               disable u_fork;
+            end
+            begin
+               @(dp_sense or dn_sense);
+               wait_time = bit_time*STABLE_RATIO/2;
+               if ($time-start_time > timeout*bit_time) begin
+                  `assert_error("wait_bit(): Data lines are instable");
+                  exit = 1;
+               end
+               disable u_fork;
+            end
+         join
+      end
+   end
+endtask
+
+task automatic wait_idle
+  (
+   input time timeout
+   );
+   time       start_time;
+   time       wait_time;
+   reg        exit;
+   
+   begin
+      start_time = $time;
+      wait_time = timeout;
+      exit = 0;
+      while (~exit) begin
+         fork : u_fork
+            begin
+               #wait_time;
+               exit = 1;
+               disable u_fork;
+            end
+            begin
+               @(dp_sense or dn_sense);
+               wait_time = timeout-($time-start_time);
+               if (dp_sense === 1'b1 && dn_sense === 1'b0)
+                 exit = 1;
+               disable u_fork;
+            end
+         join
+      end
+   end
+endtask
+
+task automatic usb_rx
+  (
+   output [8*`MAX_BYTES-1:0] data,
+   output integer            bytes,
+   inout                     fail,
+   input time                bit_time,
+   input integer             timeout // number of bit_time periods
+   );
+   time                      start_time;
+   integer                   byte_index;
+   integer                   bit_index;
+   integer                   bit_counter;
+   reg                       nrzi_bit;
+   reg                       last_nrzi_bit;
+   reg                       exit;
+
+   begin
+      data = 'bX;
+      bytes = 0;
+
+      // sync pattern
+      bit_counter = 0;
+      last_nrzi_bit = 1'bX;
+      exit = 1'b0;
+      start_time = $time;
+      while (~exit) begin
+         wait_bit(bit_time, timeout);
+         if ((dp_sense === 1'b1 && dn_sense === 1'b0) ||
+             (dp_sense === 1'b0 && dn_sense === 1'b1)) begin
+            nrzi_bit = dp_sense;
+            if (bit_counter == 7 && nrzi_bit === 1'b0 && last_nrzi_bit === 1'b0)
+              exit = 1'b1;
+            else if (nrzi_bit === ~last_nrzi_bit)
+              bit_counter = bit_counter + 1;
+            else
+              bit_counter = 0;
+         end else
+           bit_counter = 0;
+         last_nrzi_bit = nrzi_bit;
+         if (bit_counter > 20 || ($time-start_time > timeout*bit_time)) begin
+            fail = 1'b1;
+            `assert_error("usb_rx(): timeout");
+         end else if (bit_counter != 0)
+           start_time = $time;
+      end
+
+      // data transmission
+      bit_counter = 1;
+      byte_index = `MAX_BYTES-1;
+      exit = 1'b0;
+      while (byte_index >= -1 && exit == 1'b0) begin : u_byte
+         bit_index = 0;
+         while (bit_index < 8) begin : u_bit
+            wait_bit(bit_time, timeout);
+            if ((dp_sense === 1'b1 && dn_sense === 1'b0) ||
+                (dp_sense === 1'b0 && dn_sense === 1'b1)) begin
+               if (byte_index >= 0 || bit_counter == 6)
+                 nrzi_bit = dp_sense;
+               else begin
+                  fail = 1'b1;
+                  `assert_error("usb_rx(): Data overflow");
+               end
+            end else if (dp_sense === 1'b0 && dn_sense === 1'b0 && bit_index == 0) begin
+               if (bit_counter == 6) begin
+                  fail = 1'b1;
+                  `assert_error("usb_rx(): Bit stuffing error (last toggle missing)");
+               end
+               bit_index = bit_index + 1;
+               disable u_bit;
+            end else if (dp_sense === 1'b0 && dn_sense === 1'b0 && bit_index == 1) begin
+               exit = 1'b1;
+               disable u_byte;
+            end else begin
+               fail = 1'b1;
+               `assert_error("usb_rx(): Not allowed data lines value");
+            end
+            if (nrzi_bit === last_nrzi_bit) begin
+               if (bit_counter == 6) begin
+                  fail = 1'b1;
+                  `assert_error("usb_rx(): Bit stuffing error (7 bits at '1')");
+               end
+               data[8*byte_index+bit_index] = 1'b1;
+               bit_index = bit_index + 1;
+               bit_counter = bit_counter + 1;
+            end else begin
+               if (bit_counter != 6) begin
+                  data[8*byte_index+bit_index] = 1'b0;
+                  bit_index = bit_index + 1;
+               end
+               bit_counter = 0;
+            end
+            last_nrzi_bit = nrzi_bit;
+         end
+         byte_index = byte_index - 1;
+         bytes = bytes + 1;
+      end
+
+      // End Of Packet
+      wait_bit(bit_time, timeout);
+      if (dp_sense !== 1'b1 || dn_sense !== 1'b0) begin
+         fail = 1'b1;
+         `assert_error("usb_rx(): Eye timing violation on EOP");
+      end
+   end
+endtask
+
+function automatic [4:0] crc5;
+   input [`MAX_BITS-1:0] data;
+   input integer         bits;
+   localparam [4:0]      POLY5 = 5'b00101;
+   integer               i;
+   begin
+      crc5 = 5'b11111;
+      for (i = 0; i <= bits-1; i = i + 1) begin
+         if ((data[i] ^ crc5[4]) == 1'b1)
+           crc5 = {crc5[3:0], 1'b0} ^ POLY5;
+         else
+           crc5 = {crc5[3:0], 1'b0};
+      end
+   end
+endfunction
+
+function automatic [15:0] crc16;
+   input [8*`MAX_BYTES-1:0] data;
+   input integer            bytes;
+   localparam [15:0]        POLY16 = 16'h8005;
+   integer                  i,j;
+   begin
+      crc16 = 16'hFFFF;
+      for (j = bytes-1; j >= 0; j = j-1) begin
+         for (i = 0; i <= 7; i = i+1) begin
+            if ((data[8*j+i] ^ crc16[15]) == 1'b1)
+              crc16 = {crc16[14:0], 1'b0} ^ POLY16;
+            else
+              crc16 = {crc16[14:0], 1'b0};
+         end
+      end
+   end
+endfunction
+
+`define rev(n) \
+   function automatic [n-1:0] rev``n;\
+      input [n-1:0] data;\
+      integer       i;\
+      begin\
+         for (i = 0; i <= n-1; i = i + 1) begin\
+            rev``n[i] = data[n-1-i];\
+         end\
+      end\
+   endfunction
+
+`rev(5)
+`rev(8)
+`rev(16)
+
+task automatic handshake_tx
+  (
+   input [3:0]   pid,
+   input integer sync_length,
+   input time    bit_time
+   );
+   begin
+      usb_tx ({~pid, pid}, 1, sync_length, bit_time);
+   end
+endtask
+
+task automatic token_tx
+  (
+   input [3:0]   pid,
+   input [6:0]   addr,
+   input [3:0]   endp,
+   input integer sync_length,
+   input time    bit_time
+   );
+   reg [4:0]     crc;
+   begin
+      crc = ~rev5(crc5({endp, addr}, 11));
+      usb_tx ({~pid, pid, endp[0], addr, crc, endp[3:1]}, 3, sync_length, bit_time);
+   end
+endtask
+
+task automatic sof_tx
+  (
+   input [10:0]  frame,
+   input integer sync_length,
+   input time    bit_time
+   );
+   reg [4:0]     crc;
+   begin
+      crc = ~rev5(crc5(frame, 11));
+      usb_tx ({~PID_SOF, PID_SOF, frame[7:0], crc, frame[10:8]}, 3, sync_length, bit_time);
+   end
+endtask
+
+task automatic data_tx
+  (
+   input [3:0]              pid,
+   input [8*`MAX_BYTES-1:0] data,
+   input integer            bytes,
+   input integer            sync_length,
+   input time               bit_time
+   );
+   reg [15:0]               crc;
+   begin
+      if (bytes > 0)
+        crc = ~rev16(crc16(data, bytes));
+      else
+        crc = 16'h0000;
+      if (bytes == `MAX_BYTES)
+        usb_tx ({~pid, pid, data, crc}, bytes+3, sync_length, bit_time);
+      else begin
+         data[8*bytes +:8] = {~pid, pid};
+         usb_tx ({data, crc[7:0], crc[15:8]}, bytes+3, sync_length, bit_time);
+      end
+   end
+endtask
+
+task automatic zlp_tx
+  (
+   input [3:0]   pid,
+   input integer sync_length,
+   input time    bit_time
+   );
+   begin
+      data_tx (pid, 'd0, 0, sync_length, bit_time);
+   end
+endtask
+
+task automatic handshake_rx
+  (
+   output [3:0]  pid,
+   inout         fail,
+   input time    bit_time,
+   input integer timeout // number of bit_time periods
+   );
+   reg [8*`MAX_BYTES-1:0] raw_data;
+   integer                raw_bytes;
+   begin : u_task
+      pid = 'bX;
+      usb_rx (raw_data, raw_bytes, fail, bit_time, timeout);
+      if (fail)
+        disable u_task;
+      else if (raw_bytes != 1) begin
+         fail = 1'b1;
+         `assert_error("handshake_rx(): Received bytes doesn't match Handshake size");
+         disable u_task;
+      end
+      if (raw_data[8*(`MAX_BYTES-1) +:4] == ~raw_data[8*(`MAX_BYTES-1)+4 +:4])
+        pid = raw_data[8*(`MAX_BYTES-1) +:4];
+      else begin
+         fail = 1'b1;
+         `assert_error("handshake_rx(): PID field check error");
+         disable u_task;
+      end
+   end
+endtask
+
+task automatic token_rx
+  (
+   output [3:0]  pid,
+   output [6:0]  addr,
+   output [3:0]  endp,
+   inout         fail,
+   input time    bit_time,
+   input integer timeout // number of bit_time periods
+   );
+   localparam [4:0] POLY_RESIDUAL = 5'b01100;
+   reg [8*`MAX_BYTES-1:0] raw_data;
+   integer                raw_bytes;
+   begin : u_task
+      pid = 'bX;
+      addr = 'bX;
+      endp = 'bX;
+      usb_rx (raw_data, raw_bytes, fail, bit_time, timeout);
+      if (fail)
+        disable u_task;
+      else if (raw_bytes != 3) begin
+         fail = 1'b1;
+         `assert_error("token_rx(): Received bytes doesn't match Token size");
+         disable u_task;
+      end
+      if (raw_data[8*(`MAX_BYTES-1) +:4] == ~raw_data[8*(`MAX_BYTES-1)+4 +:4])
+        pid = raw_data[8*(`MAX_BYTES-1) +:4];
+      else begin
+         fail = 1'b1;
+         `assert_error("token_rx(): PID field check error");
+         disable u_task;
+      end
+      if (crc5({rev8(raw_data[8*(`MAX_BYTES-2) +:8]), rev8(raw_data[8*(`MAX_BYTES-3) +:8])}, 16) == POLY_RESIDUAL) begin
+         addr = raw_data[8*(`MAX_BYTES-2) +:7];
+         endp = {raw_data[8*(`MAX_BYTES-3) +:3], raw_data[8*(`MAX_BYTES-2)+7]};
+      end else begin
+         fail = 1'b1;
+         `assert_error("token_rx(): CRC error");
+         disable u_task;
+      end
+   end
+endtask
+
+task automatic data_rx
+  (
+   output [3:0]              pid,
+   output [8*`MAX_BYTES-1:0] data,
+   output integer            bytes,
+   inout                     fail,
+   input time                bit_time,
+   input integer             timeout // number of bit_time periods
+   );
+   localparam [15:0]         POLY_RESIDUAL = 16'b1000000000001101;
+   reg [8*`MAX_BYTES-1:0]    raw_data;
+   integer                   raw_bytes;
+   integer                   i;
+   begin : u_task
+      pid = 'bX;
+      data = 'bX;
+      bytes = 0;
+      usb_rx (raw_data, raw_bytes, fail, bit_time, timeout);
+      if (fail)
+        disable u_task;
+      else if (raw_bytes < 3) begin
+         fail = 1'b1;
+         `assert_error("data_rx(): Received bytes doesn't match Packed Data size");
+         disable u_task;
+      end
+      if (raw_data[8*(`MAX_BYTES-1) +:4] == ~raw_data[8*(`MAX_BYTES-1)+4 +:4])
+        pid = raw_data[8*(`MAX_BYTES-1) +:4];
+      else begin
+         fail = 1'b1;
+         `assert_error("data_rx(): PID field check error");
+         disable u_task;
+      end
+      for (i = 1; i <= raw_bytes-1; i = i+1)
+        data[8*(raw_bytes-1-i) +:8] = raw_data[8*(`MAX_BYTES-1-i) +:8];
+      if (crc16(data, raw_bytes-1) == POLY_RESIDUAL) begin
+         bytes = raw_bytes-3;
+         data = 'bX;
+         for (i = 1; i <= raw_bytes-3; i = i+1)
+           data[8*(`MAX_BYTES-i) +:8] = raw_data[8*(`MAX_BYTES-1-i) +:8];
+      end else begin
+         data = 'bX;
+         fail = 1'b1;
+         `assert_error("data_rx(): CRC error");
+         disable u_task;
+      end
+   end
+endtask
+
+task automatic usb_monitor
+  (
+   output [3:0]               pid,
+   output [6:0]               addr,
+   output [3:0]               endp,
+   output [10:0]              frame,
+   output [8*`MAX_BYTES-1:0]  data,
+   output integer             bytes,
+   output [8*`MAX_STRING-1:0] info,
+   inout                      fail,
+   input time                 bit_time,
+   input integer              timeout // number of bit_time periods
+   );
+   localparam [4:0]           POLY5_RESIDUAL = 5'b01100;
+   localparam [15:0]          POLY16_RESIDUAL = 16'b1000000000001101;
+   reg [8*`MAX_BYTES-1:0]     raw_data;
+   integer                    raw_bytes;
+   integer                    i;
+   begin : u_task
+      pid = 'bX;
+      addr = 'bX;
+      endp = 'bX;
+      frame = 'bX;
+      data = 'bX;
+      bytes = 0;
+      info = {`MAX_STRING{" "}};
+      usb_rx (raw_data, raw_bytes, fail, bit_time, timeout);
+      if (fail)
+        disable u_task;
+      if (raw_data[8*(`MAX_BYTES-1) +:4] == ~raw_data[8*(`MAX_BYTES-1)+4 +:4]) begin
+         pid = raw_data[8*(`MAX_BYTES-1) +:4];
+         case (pid)
+           PID_OUT : info[8*(`MAX_STRING-3) +:8*3] = "OUT";
+           PID_IN : info[8*(`MAX_STRING-2) +:8*2] = "IN";
+           PID_SOF : info[8*(`MAX_STRING-3) +:8*3] = "SOF";
+           PID_SETUP : info[8*(`MAX_STRING-5) +:8*5] = "SETUP";
+           PID_DATA0 : info[8*(`MAX_STRING-5) +:8*5] = "DATA0";
+           PID_DATA1 : info[8*(`MAX_STRING-5) +:8*5] = "DATA1";
+           PID_ACK : info[8*(`MAX_STRING-3) +:8*3] = "ACK";
+           PID_NAK : info[8*(`MAX_STRING-3) +:8*3] = "NAK";
+           PID_STALL : info[8*(`MAX_STRING-4) +:8*4] = "STALL";
+           default : ;
+         endcase
+      end else begin
+         fail = 1'b1;
+         `assert_error("usb_monitor(): PID field check error");
+         disable u_task;
+      end
+      case (pid)
+        PID_OUT, PID_IN, PID_SOF, PID_SETUP :
+          if (crc5({rev8(raw_data[8*(`MAX_BYTES-2) +:8]), rev8(raw_data[8*(`MAX_BYTES-3) +:8])}, 16) == POLY5_RESIDUAL) begin
+             if (pid == PID_SOF) begin
+                frame = {raw_data[8*(`MAX_BYTES-3) +:3], raw_data[8*(`MAX_BYTES-2) +:8]};
+             end else begin
+                addr = raw_data[8*(`MAX_BYTES-2) +:7];
+                endp = {raw_data[8*(`MAX_BYTES-3) +:3], raw_data[8*(`MAX_BYTES-2)+7]};
+             end
+          end else begin
+             fail = 1'b1;
+             `assert_error("usb_monitor(): token CRC error");
+             disable u_task;
+          end
+        PID_DATA0, PID_DATA1 : begin
+           for (i = 1; i <= raw_bytes-1; i = i+1)
+             data[8*(raw_bytes-1-i) +:8] = raw_data[8*(`MAX_BYTES-1-i) +:8];
+           if (crc16(data, raw_bytes-1) == POLY16_RESIDUAL) begin
+              bytes = raw_bytes-3;
+              data = 'bX;
+              for (i = 1; i <= raw_bytes-3; i = i+1)
+                data[8*(`MAX_BYTES-i) +:8] = raw_data[8*(`MAX_BYTES-1-i) +:8];
+           end else begin
+              data = 'bX;
+              fail = 1'b1;
+              `assert_error("usb_monitor(): CRC error");
+              disable u_task;
+           end
+        end
+        PID_ACK, PID_NAK, PID_STALL : ;
+        default : ;
+      endcase
+   end
+endtask
+
+task automatic test_sof
+  (
+   input [10:0] frame
+   );
+   begin
+      sof_tx(frame, 8, `BIT_TIME);
+      #(4*`BIT_TIME);
+      `assert("SOF packet", `USB_CDC_INST.u_sie.frame_o, frame)
+   end
+endtask
+
+task automatic test_sof_crc_error
+  (
+   input [10:0] frame
+   );
+   begin
+      usb_tx('hA50378, 3, 8, `BIT_TIME); // A50379 => frame=11'h103
+      #(4*`BIT_TIME);
+      `assert("SOF packet accepted with CRC error", `USB_CDC_INST.u_sie.frame_o, frame)
+   end
+endtask
+
+task automatic test_data_out
+  (
+   input [6:0]              address,
+   input [3:0]              endp,
+   input [8*`MAX_BYTES-1:0] data,
+   input integer            bytes,
+   input integer            max_transactions,
+   input integer            correct_transactions, 
+   input [3:0]              rx_pid,
+   input integer            wMaxPacketSize,
+   input time               wait_time, 
+   inout [15:0]             dataout_toggle
+   );
+   localparam               TIMEOUT = 6; // TRSPIPD1 (USB2.0 Tab.7-14 pag.188)
+   reg [3:0]                pid;
+   integer                  i;
+   begin : u_task
+      for (i=0; (i<(bytes+wMaxPacketSize-1)/wMaxPacketSize) && i<max_transactions; i=i+1) begin
+         token_tx(PID_OUT, address, endp, 8, `BIT_TIME);
+         data_tx(dataout_toggle[endp]? PID_DATA1: PID_DATA0,
+                 data >> 8*`max(0, bytes-wMaxPacketSize*(i+1)),
+                 `min(wMaxPacketSize, (bytes-wMaxPacketSize*i)), 8, `BIT_TIME);
+         // device ACK
+         handshake_rx(pid, device_fail, `BIT_TIME, TIMEOUT);
+         #(1*`BIT_TIME);
+         if (i >= correct_transactions) begin
+            `assert("Device handshake PID error", pid, rx_pid)
+         end else begin
+            `assert("Device handshake PID error", pid, PID_ACK)
+            dataout_toggle[endp] = ~dataout_toggle[endp];
+         end
+         #(wait_time);
+      end
+   end
+endtask
+
+task automatic test_data_in
+  (
+   input [6:0]              address,
+   input [3:0]              endp,
+   input [8*`MAX_BYTES-1:0] data,
+   input integer            bytes,
+   input integer            max_transactions,
+   input integer            correct_transactions, 
+   input [3:0]              rx_pid,
+   input integer            wMaxPacketSize,
+   input time               wait_time, 
+   inout [15:0]             datain_toggle
+   );
+   localparam               TIMEOUT = 6; // TRSPIPD1 (USB2.0 Tab.7-14 pag.188)
+   reg [3:0]                pid;
+   reg [8*`MAX_BYTES-1:0]   device_data;
+   integer                  device_bytes;
+   integer                  i;
+   begin : u_task
+      for (i=0; i<(bytes/wMaxPacketSize+1) && i<max_transactions; i=i+1) begin
+         token_tx(PID_IN, address, endp, 8, `BIT_TIME);
+         if (i >= correct_transactions) begin
+            // device NAK/STALL
+            handshake_rx(pid, device_fail, `BIT_TIME, TIMEOUT);
+            #(1*`BIT_TIME);
+            `assert("Device handshake PID error", pid, rx_pid)
+            disable u_task;
+         end else begin
+            // device DATAx
+            data_rx(pid, device_data, device_bytes, device_fail, `BIT_TIME, TIMEOUT);
+            #(1*`BIT_TIME);
+            `assert("Device DATAx missing", pid, datain_toggle[endp]? PID_DATA1: PID_DATA0)
+            `assert("Unexpected device data",
+                    device_data >> 8*`max(0, `MAX_BYTES-device_bytes-1),
+                    {((data << 8*(`MAX_BYTES-bytes+wMaxPacketSize*i)) >> 8*(`MAX_BYTES-bytes+wMaxPacketSize*i)) >> 8*`max(0, bytes-wMaxPacketSize*(i+1)), 8'hXX})
+            handshake_tx(PID_ACK, 8, `BIT_TIME);
+            datain_toggle[endp] = ~datain_toggle[endp];
+         end
+         #(wait_time);
+      end
+   end
+endtask
+
+task automatic test_setup_transaction
+  (
+   input [6:0]  address,
+   input [7:0]  bmRequestType,
+   input [7:0]  bRequest,
+   input [15:0] wValue,
+   input [15:0] wIndex,
+   input [15:0] wLength,
+   inout [15:0] datain_toggle,
+   inout [15:0] dataout_toggle
+   );
+   localparam   TIMEOUT = 6; // TRSPIPD1 (USB2.0 Tab.7-14 pag.188)
+   reg [3:0]    pid;
+   begin : u_task
+      token_tx(PID_SETUP, address, ENDP_CTRL, 8, `BIT_TIME);
+      dataout_toggle = 'd0;
+      datain_toggle = 'd0;
+      datain_toggle[ENDP_CTRL] = ~datain_toggle[ENDP_CTRL];
+      data_tx(dataout_toggle[ENDP_CTRL]? PID_DATA1: PID_DATA0,
+              {bmRequestType, bRequest, {wValue[7:0], wValue[15:8]}, {wIndex[7:0], wIndex[15:8]}, {wLength[7:0], wLength[15:8]}},
+              8, 8, `BIT_TIME);
+      // device ACK
+      handshake_rx(pid, device_fail, `BIT_TIME, TIMEOUT);
+      #(1*`BIT_TIME);
+      `assert("Device ACK missing", pid, PID_ACK)
+      dataout_toggle[ENDP_CTRL] = ~dataout_toggle[ENDP_CTRL];
+   end
+endtask
+
+task automatic test_setup_in
+  (
+   input [6:0]              address,
+   input [7:0]              bmRequestType,
+   input [7:0]              bRequest,
+   input [15:0]             wValue,
+   input [15:0]             wIndex,
+   input [15:0]             wLength,
+   input [8*`MAX_BYTES-1:0] data,
+   input integer            bytes,
+   input integer            max_data_transactions,
+   input                    device_stall, 
+   inout [15:0]             datain_toggle,
+   inout [15:0]             dataout_toggle
+   );
+   localparam               TIMEOUT = 6; // TRSPIPD1 (USB2.0 Tab.7-14 pag.188)
+   reg [3:0]                pid;
+   reg [8*`MAX_BYTES-1:0]   device_data;
+   integer                  device_bytes;
+   begin : u_task
+      test_setup_transaction(address, bmRequestType, bRequest, wValue, wIndex, wLength, datain_toggle, dataout_toggle);
+      test_data_in(address, ENDP_CTRL, data, bytes, max_data_transactions,
+                   device_stall ? 0 : max_data_transactions, PID_STALL,
+                   CTRL_MAXPACKETSIZE, 0, datain_toggle);
+      if (~device_stall) begin
+         token_tx(PID_OUT, address, ENDP_CTRL, 8, `BIT_TIME);
+         zlp_tx(dataout_toggle[ENDP_CTRL]? PID_DATA1: PID_DATA0, 8, `BIT_TIME);
+         // device ACK
+         handshake_rx(pid, device_fail, `BIT_TIME, TIMEOUT);
+         #(1*`BIT_TIME);
+         `assert("Device ACK missing", pid, PID_ACK)
+      end
+   end
+endtask
+
+task automatic test_setup_out
+  (
+   input [6:0]              address,
+   input [7:0]              bmRequestType,
+   input [7:0]              bRequest,
+   input [15:0]             wValue,
+   input [15:0]             wIndex,
+   input [15:0]             wLength,
+   input [8*`MAX_BYTES-1:0] data,
+   input integer            bytes,
+   input integer            max_data_transactions,
+   input                    device_stall, 
+   inout [15:0]             datain_toggle,
+   inout [15:0]             dataout_toggle
+   );
+   localparam               TIMEOUT = 6; // TRSPIPD1 (USB2.0 Tab.7-14 pag.188)
+   reg [3:0]                pid;
+   reg [8*`MAX_BYTES-1:0]   device_data;
+   integer                  device_bytes;
+   begin : u_task
+      test_setup_transaction(address, bmRequestType, bRequest, wValue, wIndex, wLength, datain_toggle, dataout_toggle);
+      test_data_out(address, ENDP_CTRL, data, bytes, max_data_transactions,
+                    256, PID_NAK, CTRL_MAXPACKETSIZE, 0, dataout_toggle);
+      token_tx(PID_IN, address, ENDP_CTRL, 8, `BIT_TIME);
+      if (device_stall) begin
+         // device STALL
+         handshake_rx(pid, device_fail, `BIT_TIME, TIMEOUT);
+         #(1*`BIT_TIME);
+         `assert("Device STALL missing", pid, PID_STALL)
+         disable u_task;
+      end else begin
+         // device DATA1
+         data_rx(pid, device_data, device_bytes, device_fail, `BIT_TIME, TIMEOUT);
+         #(1*`BIT_TIME);
+         `assert("Device DATAx missing", pid, datain_toggle[ENDP_CTRL]? PID_DATA1: PID_DATA0)
+         `assert("Unexpected device data", device_bytes, 'd0)
+         handshake_tx(PID_ACK, 8, `BIT_TIME);
+      end
+   end
+endtask
+
+task automatic test_set_address
+  (
+   input [6:0]  new_address,
+   inout [6:0]  address,
+   inout [15:0] datain_toggle,
+   inout [15:0] dataout_toggle
+   );
+   begin
+      test_setup_out(address, 8'h00, REQ_SET_ADDRESS, new_address, 16'h0000, 16'h0000,
+                     8'd0, 0, 0, 0, datain_toggle, dataout_toggle);
+      #(10*`BIT_TIME);
+      address = new_address;
+      `assert("Device address error", `USB_CDC_INST.u_ctrl_endp.addr_o, address)
+      `assert("Device state error", `USB_CDC_INST.u_ctrl_endp.dev_state_qq, ADDRESS_STATE)
+   end
+endtask
+
+task automatic test_usb_reset
+  (
+   inout [6:0] address
+   );
+   begin
+      dp_force = 1'b0;
+      dn_force = 1'b0;
+      #(10000/83*`BIT_TIME); // TDETRST (USB2.0 Tab.7-14 pag.188)
+      dp_force = 1'bZ;
+      dn_force = 1'bZ;
+      #(1*`BIT_TIME);
+      address = 'd0;
+      `assert("Device address error", `USB_CDC_INST.u_ctrl_endp.addr_o, address)
+      `assert("Device state error", `USB_CDC_INST.u_ctrl_endp.dev_state_qq, DEFAULT_STATE)
+   end
+endtask
+
+task automatic test_poweron_reset
+  (
+   inout [6:0] address
+   );
+   begin
+      power_on = 1'b0;
+      #(10000/83*`BIT_TIME);
+      power_on = 1'b1;
+      #(20000000/83*`BIT_TIME);
+      address = 'd0;
+      `assert("Device address error", `USB_CDC_INST.u_ctrl_endp.addr_o, address)
+      `assert("Device state error", `USB_CDC_INST.u_ctrl_endp.dev_state_qq, DEFAULT_STATE)
+   end
+endtask
+
+task automatic test_set_configuration
+  (
+   inout [6:0]  address,
+   inout [15:0] datain_toggle,
+   inout [15:0] dataout_toggle
+   );
+   begin
+      test_setup_out(address, 8'h00, REQ_SET_CONFIGURATION, 16'h0001, 16'h0000, 16'h0000,
+                     8'd0, 0, 0, 0, datain_toggle, dataout_toggle);
+      #(10*`BIT_TIME);
+      `assert("Device state error", `USB_CDC_INST.u_ctrl_endp.dev_state_qq, CONFIGURED_STATE)
+   end
+endtask
+
+task automatic test_usb
+  (
+   inout [6:0]  address,
+   inout [15:0] datain_toggle,
+   inout [15:0] dataout_toggle
+   );
+   reg [10:0]   frame;
+   begin
+
+      test = "SOF packet";
+      frame = 11'h113;
+      test_sof(frame);
+
+      test = "SOF packet with CRC error";
+      test_sof_crc_error(frame);
+
+      test = "GET_DESCRIPTOR Device";
+      test_setup_in(address, 8'h80, REQ_GET_DESCRIPTOR, 16'h0100, 16'h0000, 16'h0040,
+                    DEV_DESCR, 'h12, 1, 0, datain_toggle, dataout_toggle);
+
+      test = "SET_ADDRESS";
+      test_set_address('d2, address, datain_toggle, dataout_toggle);
+
+      test = "USB reset";
+      test_usb_reset(address);
+
+      test = "SET_ADDRESS";
+      test_set_address('d7, address, datain_toggle, dataout_toggle);
+
+      test = "Power-on reset";
+      test_poweron_reset(address);
+
+      test = "SET_ADDRESS";
+      test_set_address('d3, address, datain_toggle, dataout_toggle);
+
+      test = "GET_DESCRIPTOR Configuration";
+      test_setup_in(address, 8'h80, REQ_GET_DESCRIPTOR, 16'h0200, 16'h0000, 16'h00FF,
+                    CONF_DESCR, 'h43, 256, 0, datain_toggle, dataout_toggle);
+      
+      test = "GET_DESCRIPTOR String not supported";
+      test_setup_in(address, 8'h80, REQ_GET_DESCRIPTOR, 16'h0300, 16'h0000, 16'h00FF,
+                    8'd0, 'h8, 1, 1, datain_toggle, dataout_toggle);
+
+      test = "SET_CONFIGURATION";
+      test_set_configuration(address, datain_toggle, dataout_toggle);
+
+      test = "GET_LINE_CODING";
+      test_setup_in(address, 8'hA1, REQ_GET_LINE_CODING, 16'h0000, 16'h0000, 16'h0007,
+                    {7{8'd0}}, 7, 256, 0, datain_toggle, dataout_toggle);
+
+      test = "SET_LINE_CODING";
+      test_setup_out(address, 8'h21, REQ_SET_LINE_CODING, 16'h0000, 16'h0000, 16'h0007,
+                     {7{8'd0}}, 7, 256, 0, datain_toggle, dataout_toggle);
+
+      test = "SET_CONTROL_LINE_STATE";
+      test_setup_out(address, 8'h21, REQ_SET_CONTROL_LINE_STATE, 16'h0000, 16'h0000, 16'h0000,
+                     8'd0, 0, 0, 0, datain_toggle, dataout_toggle);
+
+      test = "GET_INTERFACE";
+      test_setup_in(address, 8'h81, REQ_GET_INTERFACE, 16'h0000, 16'h0001, 16'h0001,
+                    8'd0, 1, 256, 0, datain_toggle, dataout_toggle);
+
+      test = "SET_INTERFACE not supported";
+      test_setup_out(address, 8'h01, REQ_SET_INTERFACE, 16'h0001, 16'h0001, 16'h0000,
+                     8'd0, 0, 0, 1, datain_toggle, dataout_toggle);
+
+      test = "IN INT DATA";
+      test_data_in(address, ENDP_INT,
+                   8'd0, 1, 256, 0, PID_NAK, 8, 0, datain_toggle);
+   end
+endtask

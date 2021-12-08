@@ -34,7 +34,9 @@ module phy_rx
     // While rx_valid_o and rx_err_o are both low, rx_ready_o shall be high to signal the
     //   end of packet (EOP).
     input        clk_i,
+    // clk_i clock shall have a frequency of 12MHz*BIT_SAMPLES
     input        rstn_i,
+    // While rstn_i is low (active low), the module shall be reset
 
     // ---- from USB bus physical receivers ----------------------
     input        rx_dp_i,

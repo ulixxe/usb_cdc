@@ -31,7 +31,9 @@ module ctrl_endp
    (
     // ---- from USB_CDC module ------------------------------------
     input        clk_i,
+    // clk_i clock shall have a frequency of 12MHz*BIT_SAMPLES
     input        rstn_i,
+    // While rstn_i is low (active low), the module shall be reset
 
     // ---- to/from SIE module ------------------------------------
     output [6:0] addr_o,

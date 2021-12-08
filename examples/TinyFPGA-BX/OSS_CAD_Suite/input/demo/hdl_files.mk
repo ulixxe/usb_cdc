@@ -15,4 +15,7 @@ demo.v \
 
 
 # list of HDL files directories separated by ":"
-VPATH = ../../../usb_cdc:../hdl/demo:
+VPATH = ../../../usb_cdc: \
+        ../hdl/demo: \
+        ../../common/hdl: \
+        ../../common/hdl/ice40: \

@@ -1,0 +1,10 @@
+# 
+## name ## phy_tx.tx_state_q
+## name ## phy_tx.tx_state_d
+## color ## Blue
+## data ## Decimal
+
+0 ST_IDLE
+1 ST_SYNC
+2 ST_DATA
+3 ST_EOP

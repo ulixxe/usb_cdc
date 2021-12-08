@@ -15,7 +15,9 @@ module usb_cdc
     parameter APP_CLK_RATIO = 'd4)
    (
     input        clk_i,
+    // clk_i clock shall have a frequency of 12MHz*BIT_SAMPLES
     input        rstn_i,
+    // While rstn_i is low (active low), the module shall be reset
 
     // ---- to/from Application ------------------------------------
     input        app_clk_i,

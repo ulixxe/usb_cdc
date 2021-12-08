@@ -33,7 +33,9 @@ module bulk_endp
 
     // ---- from USB_CDC module ------------------------------------
     input        clk_i,
+    // clk_i clock shall have a frequency of 12MHz*BIT_SAMPLES
     input        rstn_i,
+    // While rstn_i is low (active low), the module shall be reset
 
     // ---- to/from SIE module ------------------------------------
     output [7:0] in_data_o,
@@ -225,7 +227,7 @@ module bulk_endp
    assign in_full = (in_last_q == ((in_first_q == 'd0) ? IN_LENGTH-1: in_first_q-1) ? 1'b1 : 1'b0);
 
    generate
-      if (USE_APP_CLK == 0) begin : u_data_sync
+      if (USE_APP_CLK == 0) begin : u_sync_data
          assign app_out_valid_o = ((out_empty == 1'b0 && {1'b0, delay_out_cnt_q} == BIT_SAMPLES-1) ? 1'b1 : 1'b0);
 
          always @(posedge clk_i or negedge rstn_i) begin
@@ -275,7 +277,7 @@ module bulk_endp
                end
             end
          end
-      end else begin : u_data_sync
+      end else begin : u_async_data
          reg                                  out_valid_q;
          reg                                  out_consumed_q;
          reg [2:0]                            app_clk_sq;

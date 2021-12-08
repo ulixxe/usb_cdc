@@ -13,4 +13,7 @@ soc.v \
 
 
 # list of HDL files directories separated by ":"
-VPATH = ../../../usb_cdc:../hdl/soc:
+VPATH = ../../../usb_cdc: \
+        ../hdl/soc: \
+        ../../common/hdl: \
+        ../../common/hdl/ice40: \

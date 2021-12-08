@@ -1,0 +1,8 @@
+# 
+## name ## ctrl_endp.dev_state
+## color ## Blue
+## data ## Decimal
+
+0 DEFAULT_STATE
+1 ADDRESS_STATE
+2 CONFIGURED_STATE

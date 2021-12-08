@@ -45,7 +45,7 @@ module demo
           .PLLOUTCORE(),
           .PLLOUTGLOBAL(clk_pll),
           .EXTFEEDBACK(1'b0),
-          .DYNAMICDELAY('d0),
+          .DYNAMICDELAY(8'd0),
           .LOCK(lock),
           .BYPASS(1'b0),
           .RESETB(1'b1),
@@ -54,17 +54,18 @@ module demo
           .SCLK(1'b0),
           .LATCHINPUTVALUE(1'b1));
 
-   prescaler u_prescaler (.clk_16mhz_i(clk),
+   prescaler u_prescaler (.clk_i(clk),
                           .rstn_i(lock),
-                          .clk_1mhz_o(clk_1mhz),
-                          .clk_2mhz_o(clk_2mhz),
-                          .clk_4mhz_o(clk_4mhz),
-                          .clk_8mhz_o(clk_8mhz));
+                          .clk_div16_o(clk_1mhz),
+                          .clk_div8_o(clk_2mhz),
+                          .clk_div4_o(clk_4mhz),
+                          .clk_div2_o(clk_8mhz));
 
    reg [1:0]        rstn_sync;
-   reg [20:0]       up_cnt;
 
    wire             rstn;
+
+   assign rstn = rstn_sync[0];
 
    always @(posedge clk_1mhz or negedge lock) begin
       if (~lock) begin
@@ -74,19 +75,23 @@ module demo
       end
    end
 
-   assign rstn = rstn_sync[0];
+   reg [20:0] up_cnt;
+   reg        usb_pu_q;
 
    always @(posedge clk_1mhz or negedge rstn) begin
       if (~rstn) begin
          up_cnt <= 'd0;
+         usb_pu_q <= 1'b0;
       end else begin
+         if (up_cnt[14] == 1'b1)
+           usb_pu_q <= 1'b1; // TSIGATT < 100ms (USB2.0 Tab.7-14 pag.188)
          if (up_cnt[20] == 1'b0)
            up_cnt <= up_cnt + 1;
       end
    end
 
    assign led = ~up_cnt[20];
-   assign usb_pu = up_cnt[20];
+   assign usb_pu = usb_pu_q;
 
    app u_app (.clk_i(clk_2mhz),
               .rstn_i(rstn),

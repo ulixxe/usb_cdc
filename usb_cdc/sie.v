@@ -34,7 +34,9 @@ module sie
     // frame_o shall be last recognized frame number and shall be
     //   updated at the end of next valid Start-of-Frame token packet.
     input         clk_i,
+    // clk_i clock shall have a frequency of 12MHz*BIT_SAMPLES
     input         rstn_i,
+    // While rstn_i is low (active low), the module shall be reset
 
     // ---- to/from OUT Endpoints ------------------------------------
     output [7:0]  out_data_o,
@@ -274,8 +276,10 @@ module sie
             frame_q <= frame_d;
             data_q <= data_d;
             crc16_q <= crc16_d;
+            datain_toggle_q <= 16'd0;
             datain_toggle_q[ENDP_CTRL] <= datain_toggle_d[ENDP_CTRL];
             datain_toggle_q[ENDP_BULK] <= datain_toggle_d[ENDP_BULK];
+            dataout_toggle_q <= 16'd0;
             dataout_toggle_q[ENDP_CTRL] <= dataout_toggle_d[ENDP_CTRL];
             dataout_toggle_q[ENDP_BULK] <= dataout_toggle_d[ENDP_BULK];
             in_byte_q <= in_byte_d;
