@@ -117,8 +117,8 @@ module tb_loopback ( );
       test_data_out(address, ENDP_BULK,
                     {8'h41, 8'h42, 8'h43, 8'h44, 8'h45, 8'h46, 8'h47, 8'h48,
                      8'h51, 8'h52, 8'h53, 8'h54, 8'h55, 8'h56, 8'h57, 8'h58,
-                     8'h61},
-                    17, 256, 2, PID_NAK, OUT_BULK_MAXPACKETSIZE, 0, dataout_toggle);
+                     8'h61, 8'h62, 8'h63},
+                    19, 256, 2, PID_NAK, OUT_BULK_MAXPACKETSIZE, 0, dataout_toggle);
 
       test = "IN BULK DATA with ZLP";
       test_data_in(address, ENDP_BULK,

@@ -62,7 +62,7 @@ Successfully finished Verilog frontend.
 5. Executing Verilog-2005 frontend: ../../../usb_cdc/bulk_endp.v
 Parsing Verilog input from `../../../usb_cdc/bulk_endp.v' to AST representation.
 Generating RTLIL representation for module `\bulk_endp'.
-Note: Assuming pure combinatorial block at ../../../usb_cdc/bulk_endp.v:117.4-148.7 in
+Note: Assuming pure combinatorial block at ../../../usb_cdc/bulk_endp.v:116.4-147.7 in
 compliance with IEC 62142(E):2005 / IEEE Std. 1364.1(E):2002. Recommending
 use of @* instead of @(...) for better match of synthesis and simulation.
 Successfully finished Verilog frontend.
@@ -210,7 +210,7 @@ Parameter \BIT_SAMPLES = 4
 Parameter \USE_APP_CLK = 0
 Parameter \APP_CLK_RATIO = 4
 Generating RTLIL representation for module `$paramod$d596b195528d29703fb8c1c33e126f33b7d4dd31\bulk_endp'.
-Note: Assuming pure combinatorial block at ../../../usb_cdc/bulk_endp.v:117.4-148.7 in
+Note: Assuming pure combinatorial block at ../../../usb_cdc/bulk_endp.v:116.4-147.7 in
 compliance with IEC 62142(E):2005 / IEEE Std. 1364.1(E):2002. Recommending
 use of @* instead of @(...) for better match of synthesis and simulation.
 Parameter \VENDORID = 16'0000000000000000
@@ -519,7 +519,7 @@ Parameter \BIT_SAMPLES = 4
 Parameter \USE_APP_CLK = 1
 Parameter \APP_CLK_RATIO = 24
 Generating RTLIL representation for module `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp'.
-Note: Assuming pure combinatorial block at ../../../usb_cdc/bulk_endp.v:117.4-148.7 in
+Note: Assuming pure combinatorial block at ../../../usb_cdc/bulk_endp.v:116.4-147.7 in
 compliance with IEC 62142(E):2005 / IEEE Std. 1364.1(E):2002. Recommending
 use of @* instead of @(...) for better match of synthesis and simulation.
 Parameter \VENDORID = 16'0001110101010000
@@ -622,15 +622,15 @@ Removed 11 unused modules.
 Cleaned up 0 empty switches.
 
 13.3.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
-Marked 1 switch rules as full_case in process $proc$../../../usb_cdc/bulk_endp.v:377$2702 in module $paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.
-Marked 6 switch rules as full_case in process $proc$../../../usb_cdc/bulk_endp.v:346$2663 in module $paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.
-Marked 1 switch rules as full_case in process $proc$../../../usb_cdc/bulk_endp.v:332$2659 in module $paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.
-Marked 3 switch rules as full_case in process $proc$../../../usb_cdc/bulk_endp.v:299$2643 in module $paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.
-Marked 1 switch rules as full_case in process $proc$../../../usb_cdc/bulk_endp.v:291$2641 in module $paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.
-Marked 4 switch rules as full_case in process $proc$../../../usb_cdc/bulk_endp.v:197$2627 in module $paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.
-Marked 4 switch rules as full_case in process $proc$../../../usb_cdc/bulk_endp.v:165$2611 in module $paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.
-Marked 5 switch rules as full_case in process $proc$../../../usb_cdc/bulk_endp.v:117$2581 in module $paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.
-Marked 1 switch rules as full_case in process $proc$../../../usb_cdc/bulk_endp.v:99$2579 in module $paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.
+Marked 1 switch rules as full_case in process $proc$../../../usb_cdc/bulk_endp.v:380$2702 in module $paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.
+Marked 6 switch rules as full_case in process $proc$../../../usb_cdc/bulk_endp.v:349$2663 in module $paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.
+Marked 1 switch rules as full_case in process $proc$../../../usb_cdc/bulk_endp.v:335$2659 in module $paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.
+Marked 3 switch rules as full_case in process $proc$../../../usb_cdc/bulk_endp.v:302$2643 in module $paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.
+Marked 1 switch rules as full_case in process $proc$../../../usb_cdc/bulk_endp.v:287$2638 in module $paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.
+Marked 4 switch rules as full_case in process $proc$../../../usb_cdc/bulk_endp.v:196$2624 in module $paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.
+Marked 4 switch rules as full_case in process $proc$../../../usb_cdc/bulk_endp.v:164$2608 in module $paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.
+Marked 5 switch rules as full_case in process $proc$../../../usb_cdc/bulk_endp.v:116$2578 in module $paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.
+Marked 1 switch rules as full_case in process $proc$../../../usb_cdc/bulk_endp.v:98$2576 in module $paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.
 Marked 15 switch rules as full_case in process $proc$../../../usb_cdc/phy_rx.v:167$1663 in module $paramod\phy_rx\BIT_SAMPLES=32'00000000000000000000000000000100.
 Marked 5 switch rules as full_case in process $proc$../../../usb_cdc/phy_rx.v:134$1653 in module $paramod\phy_rx\BIT_SAMPLES=32'00000000000000000000000000000100.
 Marked 3 switch rules as full_case in process $proc$../../../usb_cdc/phy_rx.v:86$1630 in module $paramod\phy_rx\BIT_SAMPLES=32'00000000000000000000000000000100.
@@ -656,8 +656,8 @@ Marked 1 switch rules as full_case in process $proc$/home/santo/rep/oss-cad-suit
 Marked 1 switch rules as full_case in process $proc$/home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_sim.v:475$1377 in module SB_DFFSS.
 Marked 1 switch rules as full_case in process $proc$/home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_sim.v:404$1374 in module SB_DFFR.
 Marked 1 switch rules as full_case in process $proc$/home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_sim.v:354$1371 in module SB_DFFSR.
-Marked 1 switch rules as full_case in process $proc$../hdl/demo/demo.v:81$1193 in module demo.
-Marked 1 switch rules as full_case in process $proc$../hdl/demo/demo.v:70$1191 in module demo.
+Marked 1 switch rules as full_case in process $proc$../hdl/demo/demo.v:83$1193 in module demo.
+Marked 1 switch rules as full_case in process $proc$../hdl/demo/demo.v:72$1191 in module demo.
 Marked 54 switch rules as full_case in process $proc$../hdl/demo/app.v:170$1002 in module app.
 Marked 1 switch rules as full_case in process $proc$../hdl/demo/app.v:127$1000 in module app.
 Marked 1 switch rules as full_case in process $proc$../hdl/demo/app.v:80$998 in module app.
@@ -717,14 +717,14 @@ Found init rule in `\SB_DFF.$proc$/home/santo/rep/oss-cad-suite/lib/../share/yos
   Set init value: \Q = 1'0
 
 13.3.5. Executing PROC_ARST pass (detect async resets in processes).
-Found async reset \u_async_data.data_rstn in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:377$2702'.
-Found async reset \rstn_i in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:346$2663'.
-Found async reset \u_async_data.data_rstn in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:332$2659'.
-Found async reset \rstn_i in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:299$2643'.
-Found async reset \rstn_i in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:291$2641'.
-Found async reset \rstn_i in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:197$2627'.
-Found async reset \rstn_i in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:165$2611'.
-Found async reset \rstn_i in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:99$2579'.
+Found async reset \genblk1.u_gtex4_async_data.data_rstn in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:380$2702'.
+Found async reset \rstn_i in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:349$2663'.
+Found async reset \genblk1.u_gtex4_async_data.data_rstn in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:335$2659'.
+Found async reset \rstn_i in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:302$2643'.
+Found async reset \rstn_i in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:287$2638'.
+Found async reset \rstn_i in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:196$2624'.
+Found async reset \rstn_i in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:164$2608'.
+Found async reset \rstn_i in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:98$2576'.
 Found async reset \rstn_i in `$paramod\phy_rx\BIT_SAMPLES=32'00000000000000000000000000000100.$proc$../../../usb_cdc/phy_rx.v:134$1653'.
 Found async reset \rstn_i in `$paramod\phy_rx\BIT_SAMPLES=32'00000000000000000000000000000100.$proc$../../../usb_cdc/phy_rx.v:86$1630'.
 Found async reset \rstn_i in `$paramod\phy_rx\BIT_SAMPLES=32'00000000000000000000000000000100.$proc$../../../usb_cdc/phy_rx.v:57$1618'.
@@ -738,8 +738,8 @@ Found async reset \S in `\SB_DFFES.$proc$/home/santo/rep/oss-cad-suite/lib/../sh
 Found async reset \R in `\SB_DFFER.$proc$/home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_sim.v:654$1390'.
 Found async reset \S in `\SB_DFFS.$proc$/home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_sim.v:525$1380'.
 Found async reset \R in `\SB_DFFR.$proc$/home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_sim.v:404$1374'.
-Found async reset \rstn in `\demo.$proc$../hdl/demo/demo.v:81$1193'.
-Found async reset \lock in `\demo.$proc$../hdl/demo/demo.v:70$1191'.
+Found async reset \rstn in `\demo.$proc$../hdl/demo/demo.v:83$1193'.
+Found async reset \lock in `\demo.$proc$../hdl/demo/demo.v:72$1191'.
 Found async reset \rstn in `\app.$proc$../hdl/demo/app.v:127$1000'.
 Found async reset \rstn_i in `\app.$proc$../hdl/demo/app.v:80$998'.
 Found async reset \rstn_i in `$paramod$d7cfe14563c7968b75597733f3e1cebd98f6a5ba\usb_cdc.$proc$../../../usb_cdc/usb_cdc.v:84$2560'.
@@ -749,51 +749,51 @@ Found async reset \rstn in `$paramod$d2854b5be7686a0be88aa62f986690c47219a732\si
 Found async reset \rstn_i in `$paramod$48e033b55fc65b1f4f1b845fcaec5bc8ff8de0d3\ctrl_endp.$proc$../../../usb_cdc/ctrl_endp.v:244$2711'.
 
 13.3.6. Executing PROC_MUX pass (convert decision trees to multiplexers).
-Creating decoders for process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:377$2702'.
-     1/2: $0\u_async_data.in_consumed_q[0:0]
-     2/2: $0\u_async_data.in_data_q[7:0]
-Creating decoders for process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:346$2663'.
+Creating decoders for process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:380$2702'.
+     1/2: $0\genblk1.u_gtex4_async_data.in_consumed_q[0:0]
+     2/2: $0\genblk1.u_gtex4_async_data.in_data_q[7:0]
+Creating decoders for process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:349$2663'.
      1/18: $5$lookahead\in_fifo_q$2662[71:0]$2687
-     2/18: $5$bitselwrite$data$../../../usb_cdc/bulk_endp.v:360$2575[71:0]$2686
-     3/18: $5$bitselwrite$mask$../../../usb_cdc/bulk_endp.v:360$2574[71:0]$2685
+     2/18: $5$bitselwrite$data$../../../usb_cdc/bulk_endp.v:363$2575[71:0]$2686
+     3/18: $5$bitselwrite$mask$../../../usb_cdc/bulk_endp.v:363$2574[71:0]$2685
      4/18: $4$lookahead\in_fifo_q$2662[71:0]$2683
-     5/18: $4$bitselwrite$data$../../../usb_cdc/bulk_endp.v:360$2575[71:0]$2682
-     6/18: $4$bitselwrite$mask$../../../usb_cdc/bulk_endp.v:360$2574[71:0]$2681
+     5/18: $4$bitselwrite$data$../../../usb_cdc/bulk_endp.v:363$2575[71:0]$2682
+     6/18: $4$bitselwrite$mask$../../../usb_cdc/bulk_endp.v:363$2574[71:0]$2681
      7/18: $3$lookahead\in_fifo_q$2662[71:0]$2679
-     8/18: $3$bitselwrite$data$../../../usb_cdc/bulk_endp.v:360$2575[71:0]$2678
-     9/18: $3$bitselwrite$mask$../../../usb_cdc/bulk_endp.v:360$2574[71:0]$2677
+     8/18: $3$bitselwrite$data$../../../usb_cdc/bulk_endp.v:363$2575[71:0]$2678
+     9/18: $3$bitselwrite$mask$../../../usb_cdc/bulk_endp.v:363$2574[71:0]$2677
     10/18: $2$lookahead\in_fifo_q$2662[71:0]$2674
-    11/18: $2$bitselwrite$data$../../../usb_cdc/bulk_endp.v:360$2575[71:0]$2673
-    12/18: $2$bitselwrite$mask$../../../usb_cdc/bulk_endp.v:360$2574[71:0]$2672
+    11/18: $2$bitselwrite$data$../../../usb_cdc/bulk_endp.v:363$2575[71:0]$2673
+    12/18: $2$bitselwrite$mask$../../../usb_cdc/bulk_endp.v:363$2574[71:0]$2672
     13/18: $1$lookahead\in_fifo_q$2662[71:0]$2670
-    14/18: $1$bitselwrite$data$../../../usb_cdc/bulk_endp.v:360$2575[71:0]$2669
-    15/18: $1$bitselwrite$mask$../../../usb_cdc/bulk_endp.v:360$2574[71:0]$2668
-    16/18: $0\u_async_data.in_ready_q[0:0]
+    14/18: $1$bitselwrite$data$../../../usb_cdc/bulk_endp.v:363$2575[71:0]$2669
+    15/18: $1$bitselwrite$mask$../../../usb_cdc/bulk_endp.v:363$2574[71:0]$2668
+    16/18: $0\genblk1.u_gtex4_async_data.in_ready_q[0:0]
     17/18: $0\delay_in_cnt_q[1:0]
     18/18: $0\in_last_q[3:0]
-Creating decoders for process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:332$2659'.
-     1/1: $0\u_async_data.out_consumed_q[0:0]
-Creating decoders for process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:299$2643'.
-     1/5: $0\u_async_data.app_clk_sq[2:0]
-     2/5: $0\u_async_data.out_valid_q[0:0]
+Creating decoders for process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:335$2659'.
+     1/1: $0\genblk1.u_gtex4_async_data.out_consumed_q[0:0]
+Creating decoders for process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:302$2643'.
+     1/5: $0\genblk1.u_gtex4_async_data.app_clk_sq[2:0]
+     2/5: $0\genblk1.u_gtex4_async_data.out_valid_q[0:0]
      3/5: $0\delay_out_cnt_q[1:0]
      4/5: $0\out_full_q[0:0]
      5/5: $0\out_first_q[3:0]
-Creating decoders for process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:291$2641'.
-     1/1: $0\u_async_data.data_rstn_sq[1:0]
-Creating decoders for process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:197$2627'.
+Creating decoders for process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:287$2638'.
+     1/1: $0\genblk1.u_gtex4_async_data.data_rstn_sq[1:0]
+Creating decoders for process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:196$2624'.
      1/2: $0\in_first_qq[3:0]
      2/2: $0\in_first_q[3:0]
-Creating decoders for process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:165$2611'.
+Creating decoders for process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:164$2608'.
      1/3: $0\in_req_q[0:0]
      2/3: $0\in_valid_q[0:0]
      3/3: $0\in_state_q[0:0]
-Creating decoders for process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:117$2581'.
+Creating decoders for process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:116$2578'.
      1/23: $5\out_last_dd[3:0]
      2/23: $3\out_nak_d[0:0]
      3/23: $3\out_state_d[1:0]
-     4/23: $3$bitselwrite$data$../../../usb_cdc/bulk_endp.v:141$2573[71:0]$2595
-     5/23: $3$bitselwrite$mask$../../../usb_cdc/bulk_endp.v:141$2572[71:0]$2594
+     4/23: $3$bitselwrite$data$../../../usb_cdc/bulk_endp.v:140$2573[71:0]$2592
+     5/23: $3$bitselwrite$mask$../../../usb_cdc/bulk_endp.v:140$2572[71:0]$2591
      6/23: $4\out_last_dd[3:0]
      7/23: $3\out_fifo_d[71:0]
      8/23: $3\out_last_dd[3:0]
@@ -801,18 +801,18 @@ Creating decoders for process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58
     10/23: $2\out_last_dd[3:0]
     11/23: $2\out_last_d[3:0]
     12/23: $2\out_state_d[1:0]
-    13/23: $2$bitselwrite$data$../../../usb_cdc/bulk_endp.v:141$2573[71:0]$2589
-    14/23: $2$bitselwrite$mask$../../../usb_cdc/bulk_endp.v:141$2572[71:0]$2588
+    13/23: $2$bitselwrite$data$../../../usb_cdc/bulk_endp.v:140$2573[71:0]$2586
+    14/23: $2$bitselwrite$mask$../../../usb_cdc/bulk_endp.v:140$2572[71:0]$2585
     15/23: $2\out_nak_d[0:0]
     16/23: $2\out_fifo_d[71:0]
     17/23: $1\out_nak_d[0:0]
     18/23: $1\out_last_dd[3:0]
     19/23: $1\out_state_d[1:0]
-    20/23: $1$bitselwrite$data$../../../usb_cdc/bulk_endp.v:141$2573[71:0]$2586
-    21/23: $1$bitselwrite$mask$../../../usb_cdc/bulk_endp.v:141$2572[71:0]$2585
+    20/23: $1$bitselwrite$data$../../../usb_cdc/bulk_endp.v:140$2573[71:0]$2583
+    21/23: $1$bitselwrite$mask$../../../usb_cdc/bulk_endp.v:140$2572[71:0]$2582
     22/23: $1\out_last_d[3:0]
     23/23: $1\out_fifo_d[71:0]
-Creating decoders for process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:99$2579'.
+Creating decoders for process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:98$2576'.
      1/5: $0\out_nak_q[0:0]
      2/5: $0\out_last_qq[3:0]
      3/5: $0\out_last_q[3:0]
@@ -993,10 +993,10 @@ Creating decoders for process `\SB_DFFE.$proc$/home/santo/rep/oss-cad-suite/lib/
      1/1: $0\Q[0:0]
 Creating decoders for process `\SB_DFF.$proc$/home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_sim.v:0$1368'.
 Creating decoders for process `\SB_DFF.$proc$/home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_sim.v:271$1367'.
-Creating decoders for process `\demo.$proc$../hdl/demo/demo.v:81$1193'.
+Creating decoders for process `\demo.$proc$../hdl/demo/demo.v:83$1193'.
      1/2: $0\usb_pu_q[0:0]
      2/2: $0\up_cnt[20:0]
-Creating decoders for process `\demo.$proc$../hdl/demo/demo.v:70$1191'.
+Creating decoders for process `\demo.$proc$../hdl/demo/demo.v:72$1191'.
      1/1: $0\rstn_sync[1:0]
 Creating decoders for process `\app.$proc$../hdl/demo/app.v:170$1002'.
      1/229: $2\data_valid_d[0:0]
@@ -1790,13 +1790,13 @@ Creating decoders for process `$paramod$48e033b55fc65b1f4f1b845fcaec5bc8ff8de0d3
     11/11: $0\addr_q[6:0]
 
 13.3.7. Executing PROC_DLATCH pass (convert process syncs to latches).
-No latch inferred for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_state_d' from process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:117$2581'.
-No latch inferred for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_fifo_d' from process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:117$2581'.
-No latch inferred for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_last_d' from process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:117$2581'.
-No latch inferred for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_last_dd' from process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:117$2581'.
-No latch inferred for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_nak_d' from process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:117$2581'.
-No latch inferred for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$bitselwrite$mask$../../../usb_cdc/bulk_endp.v:141$2572' from process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:117$2581'.
-No latch inferred for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$bitselwrite$data$../../../usb_cdc/bulk_endp.v:141$2573' from process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:117$2581'.
+No latch inferred for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_state_d' from process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:116$2578'.
+No latch inferred for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_fifo_d' from process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:116$2578'.
+No latch inferred for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_last_d' from process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:116$2578'.
+No latch inferred for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_last_dd' from process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:116$2578'.
+No latch inferred for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_nak_d' from process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:116$2578'.
+No latch inferred for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$bitselwrite$mask$../../../usb_cdc/bulk_endp.v:140$2572' from process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:116$2578'.
+No latch inferred for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$bitselwrite$data$../../../usb_cdc/bulk_endp.v:140$2573' from process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:116$2578'.
 No latch inferred for signal `$paramod\phy_rx\BIT_SAMPLES=32'00000000000000000000000000000100.\data_d' from process `$paramod\phy_rx\BIT_SAMPLES=32'00000000000000000000000000000100.$proc$../../../usb_cdc/phy_rx.v:167$1663'.
 No latch inferred for signal `$paramod\phy_rx\BIT_SAMPLES=32'00000000000000000000000000000100.\stuffing_cnt_d' from process `$paramod\phy_rx\BIT_SAMPLES=32'00000000000000000000000000000100.$proc$../../../usb_cdc/phy_rx.v:167$1663'.
 No latch inferred for signal `$paramod\phy_rx\BIT_SAMPLES=32'00000000000000000000000000000100.\rx_state_d' from process `$paramod\phy_rx\BIT_SAMPLES=32'00000000000000000000000000000100.$proc$../../../usb_cdc/phy_rx.v:167$1663'.
@@ -1916,57 +1916,57 @@ No latch inferred for signal `$paramod$48e033b55fc65b1f4f1b845fcaec5bc8ff8de0d3\
 No latch inferred for signal `$paramod$48e033b55fc65b1f4f1b845fcaec5bc8ff8de0d3\ctrl_endp.\out_toggle_reset' from process `$paramod$48e033b55fc65b1f4f1b845fcaec5bc8ff8de0d3\ctrl_endp.$proc$../../../usb_cdc/ctrl_endp.v:274$2713'.
 
 13.3.8. Executing PROC_DFF pass (convert process syncs to FFs).
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\u_async_data.in_data_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:377$2702'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\genblk1.u_gtex4_async_data.in_data_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:380$2702'.
   created $adff cell `$procdff$15387' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\u_async_data.in_consumed_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:377$2702'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\genblk1.u_gtex4_async_data.in_consumed_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:380$2702'.
   created $adff cell `$procdff$15388' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\in_fifo_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:346$2663'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\in_fifo_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:349$2663'.
   created $adff cell `$procdff$15389' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\in_last_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:346$2663'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\in_last_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:349$2663'.
   created $adff cell `$procdff$15390' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\delay_in_cnt_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:346$2663'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\delay_in_cnt_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:349$2663'.
   created $adff cell `$procdff$15391' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\u_async_data.in_ready_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:346$2663'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\genblk1.u_gtex4_async_data.in_ready_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:349$2663'.
   created $adff cell `$procdff$15392' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$bitselwrite$mask$../../../usb_cdc/bulk_endp.v:360$2574' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:346$2663'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$bitselwrite$mask$../../../usb_cdc/bulk_endp.v:363$2574' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:349$2663'.
   created $adff cell `$procdff$15393' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$bitselwrite$data$../../../usb_cdc/bulk_endp.v:360$2575' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:346$2663'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$bitselwrite$data$../../../usb_cdc/bulk_endp.v:363$2575' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:349$2663'.
   created $adff cell `$procdff$15394' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$lookahead\in_fifo_q$2662' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:346$2663'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$lookahead\in_fifo_q$2662' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:349$2663'.
   created $adff cell `$procdff$15395' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\u_async_data.out_consumed_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:332$2659'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\genblk1.u_gtex4_async_data.out_consumed_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:335$2659'.
   created $adff cell `$procdff$15396' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_first_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:299$2643'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_first_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:302$2643'.
   created $adff cell `$procdff$15397' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_full_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:299$2643'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_full_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:302$2643'.
   created $adff cell `$procdff$15398' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\delay_out_cnt_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:299$2643'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\delay_out_cnt_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:302$2643'.
   created $adff cell `$procdff$15399' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\u_async_data.out_valid_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:299$2643'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\genblk1.u_gtex4_async_data.app_clk_sq' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:302$2643'.
   created $adff cell `$procdff$15400' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\u_async_data.app_clk_sq' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:299$2643'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\genblk1.u_gtex4_async_data.out_valid_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:302$2643'.
   created $adff cell `$procdff$15401' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\u_async_data.data_rstn_sq' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:291$2641'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\genblk1.u_gtex4_async_data.data_rstn_sq' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:287$2638'.
   created $adff cell `$procdff$15402' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\in_first_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:197$2627'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\in_first_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:196$2624'.
   created $adff cell `$procdff$15403' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\in_first_qq' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:197$2627'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\in_first_qq' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:196$2624'.
   created $adff cell `$procdff$15404' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\in_state_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:165$2611'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\in_state_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:164$2608'.
   created $adff cell `$procdff$15405' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\in_req_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:165$2611'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\in_req_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:164$2608'.
   created $adff cell `$procdff$15406' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\in_valid_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:165$2611'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\in_valid_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:164$2608'.
   created $adff cell `$procdff$15407' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_state_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:99$2579'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_state_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:98$2576'.
   created $adff cell `$procdff$15408' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_fifo_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:99$2579'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_fifo_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:98$2576'.
   created $adff cell `$procdff$15409' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_last_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:99$2579'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_last_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:98$2576'.
   created $adff cell `$procdff$15410' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_last_qq' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:99$2579'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_last_qq' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:98$2576'.
   created $adff cell `$procdff$15411' with positive edge clock and negative level reset.
-Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_nak_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:99$2579'.
+Creating register for signal `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.\out_nak_q' using process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:98$2576'.
   created $adff cell `$procdff$15412' with positive edge clock and negative level reset.
 Creating register for signal `$paramod\phy_rx\BIT_SAMPLES=32'00000000000000000000000000000100.\data_q' using process `$paramod\phy_rx\BIT_SAMPLES=32'00000000000000000000000000000100.$proc$../../../usb_cdc/phy_rx.v:134$1653'.
   created $adff cell `$procdff$15413' with positive edge clock and negative level reset.
@@ -2042,11 +2042,11 @@ Creating register for signal `\SB_DFFE.\Q' using process `\SB_DFFE.$proc$/home/s
   created $dff cell `$procdff$15448' with positive edge clock.
 Creating register for signal `\SB_DFF.\Q' using process `\SB_DFF.$proc$/home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_sim.v:271$1367'.
   created $dff cell `$procdff$15449' with positive edge clock.
-Creating register for signal `\demo.\up_cnt' using process `\demo.$proc$../hdl/demo/demo.v:81$1193'.
+Creating register for signal `\demo.\up_cnt' using process `\demo.$proc$../hdl/demo/demo.v:83$1193'.
   created $adff cell `$procdff$15450' with positive edge clock and negative level reset.
-Creating register for signal `\demo.\usb_pu_q' using process `\demo.$proc$../hdl/demo/demo.v:81$1193'.
+Creating register for signal `\demo.\usb_pu_q' using process `\demo.$proc$../hdl/demo/demo.v:83$1193'.
   created $adff cell `$procdff$15451' with positive edge clock and negative level reset.
-Creating register for signal `\demo.\rstn_sync' using process `\demo.$proc$../hdl/demo/demo.v:70$1191'.
+Creating register for signal `\demo.\rstn_sync' using process `\demo.$proc$../hdl/demo/demo.v:72$1191'.
   created $adff cell `$procdff$15452' with positive edge clock and negative level reset.
 Creating register for signal `\app.\data_q' using process `\app.$proc$../hdl/demo/app.v:127$1000'.
   created $adff cell `$procdff$15453' with positive edge clock and negative level reset.
@@ -2136,22 +2136,22 @@ Creating register for signal `$paramod$48e033b55fc65b1f4f1b845fcaec5bc8ff8de0d3\
 13.3.9. Executing PROC_MEMWR pass (convert process memory writes to cells).
 
 13.3.10. Executing PROC_CLEAN pass (remove empty switches from decision trees).
-Found and cleaned up 1 empty switch in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:377$2702'.
-Removing empty process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:377$2702'.
-Found and cleaned up 6 empty switches in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:346$2663'.
-Removing empty process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:346$2663'.
-Removing empty process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:332$2659'.
-Found and cleaned up 6 empty switches in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:299$2643'.
-Removing empty process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:299$2643'.
-Removing empty process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:291$2641'.
-Found and cleaned up 5 empty switches in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:197$2627'.
-Removing empty process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:197$2627'.
-Found and cleaned up 6 empty switches in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:165$2611'.
-Removing empty process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:165$2611'.
-Found and cleaned up 5 empty switches in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:117$2581'.
-Removing empty process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:117$2581'.
-Found and cleaned up 1 empty switch in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:99$2579'.
-Removing empty process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:99$2579'.
+Found and cleaned up 1 empty switch in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:380$2702'.
+Removing empty process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:380$2702'.
+Found and cleaned up 6 empty switches in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:349$2663'.
+Removing empty process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:349$2663'.
+Removing empty process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:335$2659'.
+Found and cleaned up 6 empty switches in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:302$2643'.
+Removing empty process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:302$2643'.
+Removing empty process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:287$2638'.
+Found and cleaned up 5 empty switches in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:196$2624'.
+Removing empty process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:196$2624'.
+Found and cleaned up 6 empty switches in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:164$2608'.
+Removing empty process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:164$2608'.
+Found and cleaned up 5 empty switches in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:116$2578'.
+Removing empty process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:116$2578'.
+Found and cleaned up 1 empty switch in `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:98$2576'.
+Removing empty process `$paramod$1cd02470892778eaa348d3fdd9fb3a9113cf4e58\bulk_endp.$proc$../../../usb_cdc/bulk_endp.v:98$2576'.
 Found and cleaned up 15 empty switches in `$paramod\phy_rx\BIT_SAMPLES=32'00000000000000000000000000000100.$proc$../../../usb_cdc/phy_rx.v:167$1663'.
 Removing empty process `$paramod\phy_rx\BIT_SAMPLES=32'00000000000000000000000000000100.$proc$../../../usb_cdc/phy_rx.v:167$1663'.
 Found and cleaned up 5 empty switches in `$paramod\phy_rx\BIT_SAMPLES=32'00000000000000000000000000000100.$proc$../../../usb_cdc/phy_rx.v:134$1653'.
@@ -2221,9 +2221,9 @@ Found and cleaned up 1 empty switch in `\SB_DFFE.$proc$/home/santo/rep/oss-cad-s
 Removing empty process `SB_DFFE.$proc$/home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_sim.v:309$1369'.
 Removing empty process `SB_DFF.$proc$/home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_sim.v:0$1368'.
 Removing empty process `SB_DFF.$proc$/home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_sim.v:271$1367'.
-Found and cleaned up 2 empty switches in `\demo.$proc$../hdl/demo/demo.v:81$1193'.
-Removing empty process `demo.$proc$../hdl/demo/demo.v:81$1193'.
-Removing empty process `demo.$proc$../hdl/demo/demo.v:70$1191'.
+Found and cleaned up 2 empty switches in `\demo.$proc$../hdl/demo/demo.v:83$1193'.
+Removing empty process `demo.$proc$../hdl/demo/demo.v:83$1193'.
+Removing empty process `demo.$proc$../hdl/demo/demo.v:72$1191'.
 Found and cleaned up 54 empty switches in `\app.$proc$../hdl/demo/app.v:170$1002'.
 Removing empty process `app.$proc$../hdl/demo/app.v:170$1002'.
 Removing empty process `app.$proc$../hdl/demo/app.v:127$1000'.
@@ -4173,7 +4173,7 @@ Extracting FSM `\u_app.state_q' from module `\demo'.
   found ctrl input: $flatten\u_app.$logic_and$../hdl/demo/app.v:378$1170_Y
   found ctrl input: $flatten\u_app.$eq$../hdl/demo/app.v:311$1100_Y
   found state code: 4'0001
-  found ctrl input: \u_usb_cdc.u_bulk_endp.u_async_data.in_ready_q
+  found ctrl input: \u_usb_cdc.u_bulk_endp.genblk1.u_gtex4_async_data.in_ready_q
   found state code: 4'1011
   found state code: 4'1010
   found state code: 4'1001
@@ -4209,7 +4209,7 @@ Extracting FSM `\u_app.state_q' from module `\demo'.
   found ctrl output: $flatten\u_app.$procmux$4415_CMP
   found ctrl output: $flatten\u_app.$procmux$4403_CMP
   found ctrl output: $flatten\u_app.$procmux$4402_CMP
-  ctrl inputs: { $auto$opt_reduce.cc:134:opt_mux$15512 $auto$opt_reduce.cc:134:opt_mux$15520 \u_usb_cdc.u_bulk_endp.u_async_data.in_ready_q \u_app.data_valid_q $flatten\u_app.$eq$../hdl/demo/app.v:203$1047_Y $flatten\u_app.$eq$../hdl/demo/app.v:307$1056_Y $flatten\u_app.$eq$../hdl/demo/app.v:311$1100_Y $flatten\u_app.$eq$../hdl/demo/app.v:335$1142_Y $flatten\u_app.$logic_and$../hdl/demo/app.v:378$1170_Y $flatten\u_app.$procmux$5929_CMP $flatten\u_app.$procmux$5930_CMP $flatten\u_app.$procmux$5931_CMP $flatten\u_app.$procmux$5932_CMP $flatten\u_app.$procmux$6226_CMP }
+  ctrl inputs: { $auto$opt_reduce.cc:134:opt_mux$15512 $auto$opt_reduce.cc:134:opt_mux$15520 \u_usb_cdc.u_bulk_endp.genblk1.u_gtex4_async_data.in_ready_q \u_app.data_valid_q $flatten\u_app.$eq$../hdl/demo/app.v:203$1047_Y $flatten\u_app.$eq$../hdl/demo/app.v:307$1056_Y $flatten\u_app.$eq$../hdl/demo/app.v:311$1100_Y $flatten\u_app.$eq$../hdl/demo/app.v:335$1142_Y $flatten\u_app.$logic_and$../hdl/demo/app.v:378$1170_Y $flatten\u_app.$procmux$5929_CMP $flatten\u_app.$procmux$5930_CMP $flatten\u_app.$procmux$5931_CMP $flatten\u_app.$procmux$5932_CMP $flatten\u_app.$procmux$6226_CMP }
   ctrl outputs: { \u_app.state_d $flatten\u_app.$procmux$4402_CMP $flatten\u_app.$procmux$4403_CMP $flatten\u_app.$procmux$4415_CMP $flatten\u_app.$procmux$4569_CMP $flatten\u_app.$procmux$4570_CMP $flatten\u_app.$procmux$4572_CMP $flatten\u_app.$procmux$4761_CMP $flatten\u_app.$procmux$4841_CMP $flatten\u_app.$procmux$4946_CMP $flatten\u_app.$procmux$5068_CMP $flatten\u_app.$procmux$5196_CMP $flatten\u_app.$procmux$6491_CMP $flatten\u_app.$procmux$6532_CMP $flatten\u_app.$procmux$6833_CMP }
   transition:     4'0000 14'---0---------- ->     4'0000 18'000000000000000001
   transition:     4'0000 14'---1---------- ->     4'0001 18'000100000000000001
@@ -4263,12 +4263,12 @@ Extracting FSM `\u_usb_cdc.u_bulk_endp.out_state_q' from module `\demo'.
   found ctrl input: \u_usb_cdc.u_bulk_endp.out_ready_i
   found ctrl input: \u_usb_cdc.u_sie.out_err_q
   found ctrl input: \u_usb_cdc.u_bulk_endp.out_valid_i
-  found ctrl input: $flatten\u_usb_cdc.\u_bulk_endp.$logic_or$../../../usb_cdc/bulk_endp.v:136$2593_Y
+  found ctrl input: $flatten\u_usb_cdc.\u_bulk_endp.$logic_or$../../../usb_cdc/bulk_endp.v:135$2590_Y
   found state code: 2'01
   found state code: 2'10
-  found ctrl output: $flatten\u_usb_cdc.\u_bulk_endp.$eq$../../../usb_cdc/bulk_endp.v:136$2592_Y
-  ctrl inputs: { \u_usb_cdc.u_sie.out_err_q $flatten\u_usb_cdc.\u_bulk_endp.$logic_or$../../../usb_cdc/bulk_endp.v:136$2593_Y \u_usb_cdc.u_bulk_endp.out_ready_i \u_usb_cdc.u_bulk_endp.out_valid_i }
-  ctrl outputs: { $flatten\u_usb_cdc.\u_bulk_endp.$eq$../../../usb_cdc/bulk_endp.v:136$2592_Y $flatten\u_usb_cdc.\u_bulk_endp.$0\out_state_q[1:0] }
+  found ctrl output: $flatten\u_usb_cdc.\u_bulk_endp.$eq$../../../usb_cdc/bulk_endp.v:135$2589_Y
+  ctrl inputs: { \u_usb_cdc.u_sie.out_err_q $flatten\u_usb_cdc.\u_bulk_endp.$logic_or$../../../usb_cdc/bulk_endp.v:135$2590_Y \u_usb_cdc.u_bulk_endp.out_ready_i \u_usb_cdc.u_bulk_endp.out_valid_i }
+  ctrl outputs: { $flatten\u_usb_cdc.\u_bulk_endp.$eq$../../../usb_cdc/bulk_endp.v:135$2589_Y $flatten\u_usb_cdc.\u_bulk_endp.$0\out_state_q[1:0] }
   transition:       2'00 4'--0- ->       2'00 3'000
   transition:       2'00 4'0-10 ->       2'00 3'000
   transition:       2'00 4'0011 ->       2'01 3'001
@@ -4706,7 +4706,7 @@ FSM `$fsm$\u_app.state_q$15563' from module `demo':
     8: $flatten\u_app.$eq$../hdl/demo/app.v:307$1056_Y
     9: $flatten\u_app.$eq$../hdl/demo/app.v:203$1047_Y
    10: \u_app.data_valid_q
-   11: \u_usb_cdc.u_bulk_endp.u_async_data.in_ready_q
+   11: \u_usb_cdc.u_bulk_endp.genblk1.u_gtex4_async_data.in_ready_q
    12: $auto$opt_reduce.cc:134:opt_mux$15512
 
   Output signals:
@@ -4801,11 +4801,11 @@ FSM `$fsm$\u_usb_cdc.u_bulk_endp.out_state_q$15579' from module `demo':
   Input signals:
     0: \u_usb_cdc.u_bulk_endp.out_valid_i
     1: \u_usb_cdc.u_bulk_endp.out_ready_i
-    2: $flatten\u_usb_cdc.\u_bulk_endp.$logic_or$../../../usb_cdc/bulk_endp.v:136$2593_Y
+    2: $flatten\u_usb_cdc.\u_bulk_endp.$logic_or$../../../usb_cdc/bulk_endp.v:135$2590_Y
     3: \u_usb_cdc.u_sie.out_err_q
 
   Output signals:
-    0: $flatten\u_usb_cdc.\u_bulk_endp.$eq$../../../usb_cdc/bulk_endp.v:136$2592_Y
+    0: $flatten\u_usb_cdc.\u_bulk_endp.$eq$../../../usb_cdc/bulk_endp.v:135$2589_Y
 
   State encoding:
     0:      3'--1  <RESET STATE>
@@ -5186,7 +5186,7 @@ Removed a total of 0 cells.
 
 13.12.6. Executing OPT_DFF pass (perform DFF optimizations).
 Adding EN signal on $procdff$15451 ($adff) from module demo (D = 1'1, Q = \usb_pu_q).
-Adding EN signal on $procdff$15450 ($adff) from module demo (D = $add$../hdl/demo/demo.v:89$1197_Y [19:0], Q = \up_cnt [19:0]).
+Adding EN signal on $procdff$15450 ($adff) from module demo (D = $add$../hdl/demo/demo.v:91$1197_Y [19:0], Q = \up_cnt [19:0]).
 Adding EN signal on $flatten\u_usb_cdc.\u_sie.\u_phy_tx.$procdff$15428 ($adff) from module demo (D = \u_usb_cdc.u_sie.u_phy_tx.tx_valid_i, Q = \u_usb_cdc.u_sie.u_phy_tx.tx_valid_q).
 Adding EN signal on $flatten\u_usb_cdc.\u_sie.\u_phy_tx.$procdff$15427 ($adff) from module demo (D = \u_usb_cdc.u_sie.u_phy_tx.nrzi_d, Q = \u_usb_cdc.u_sie.u_phy_tx.nrzi_q).
 Adding EN signal on $flatten\u_usb_cdc.\u_sie.\u_phy_tx.$procdff$15426 ($adff) from module demo (D = \u_usb_cdc.u_sie.u_phy_tx.stuffing_cnt_d, Q = \u_usb_cdc.u_sie.u_phy_tx.stuffing_cnt_q).
@@ -5252,19 +5252,19 @@ Adding EN signal on $flatten\u_usb_cdc.\u_ctrl_endp.$procdff$15484 ($adff) from 
 Adding EN signal on $flatten\u_usb_cdc.\u_bulk_endp.$procdff$15412 ($adff) from module demo (D = \u_usb_cdc.u_bulk_endp.out_nak_d, Q = \u_usb_cdc.u_bulk_endp.out_nak_q).
 Adding EN signal on $flatten\u_usb_cdc.\u_bulk_endp.$procdff$15411 ($adff) from module demo (D = \u_usb_cdc.u_bulk_endp.out_last_dd, Q = \u_usb_cdc.u_bulk_endp.out_last_qq).
 Adding EN signal on $flatten\u_usb_cdc.\u_bulk_endp.$procdff$15410 ($adff) from module demo (D = $flatten\u_usb_cdc.\u_bulk_endp.$3\out_last_d[3:0], Q = \u_usb_cdc.u_bulk_endp.out_last_q).
-Adding EN signal on $flatten\u_usb_cdc.\u_bulk_endp.$procdff$15409 ($adff) from module demo (D = $flatten\u_usb_cdc.\u_bulk_endp.$or$../../../usb_cdc/bulk_endp.v:0$2605_Y, Q = \u_usb_cdc.u_bulk_endp.out_fifo_q).
+Adding EN signal on $flatten\u_usb_cdc.\u_bulk_endp.$procdff$15409 ($adff) from module demo (D = $flatten\u_usb_cdc.\u_bulk_endp.$or$../../../usb_cdc/bulk_endp.v:0$2602_Y, Q = \u_usb_cdc.u_bulk_endp.out_fifo_q).
 Adding EN signal on $flatten\u_usb_cdc.\u_bulk_endp.$procdff$15407 ($adff) from module demo (D = $flatten\u_usb_cdc.\u_bulk_endp.$0\in_valid_q[0:0], Q = \u_usb_cdc.u_bulk_endp.in_valid_q).
 Adding EN signal on $flatten\u_usb_cdc.\u_bulk_endp.$procdff$15404 ($adff) from module demo (D = $flatten\u_usb_cdc.\u_bulk_endp.$procmux$3092_Y, Q = \u_usb_cdc.u_bulk_endp.in_first_qq).
 Adding EN signal on $flatten\u_usb_cdc.\u_bulk_endp.$procdff$15403 ($adff) from module demo (D = \u_usb_cdc.u_bulk_endp.in_first_qq, Q = \u_usb_cdc.u_bulk_endp.in_first_q).
-Adding EN signal on $flatten\u_usb_cdc.\u_bulk_endp.$procdff$15400 ($adff) from module demo (D = $flatten\u_usb_cdc.\u_bulk_endp.$procmux$3056_Y, Q = \u_usb_cdc.u_bulk_endp.u_async_data.out_valid_q).
+Adding EN signal on $flatten\u_usb_cdc.\u_bulk_endp.$procdff$15401 ($adff) from module demo (D = $flatten\u_usb_cdc.\u_bulk_endp.$procmux$3056_Y, Q = \u_usb_cdc.u_bulk_endp.genblk1.u_gtex4_async_data.out_valid_q).
 Adding EN signal on $flatten\u_usb_cdc.\u_bulk_endp.$procdff$15399 ($adff) from module demo (D = $flatten\u_usb_cdc.\u_bulk_endp.$0\delay_out_cnt_q[1:0], Q = \u_usb_cdc.u_bulk_endp.delay_out_cnt_q).
-Adding EN signal on $flatten\u_usb_cdc.\u_bulk_endp.$procdff$15398 ($adff) from module demo (D = $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2651_Y, Q = \u_usb_cdc.u_bulk_endp.out_full_q).
+Adding EN signal on $flatten\u_usb_cdc.\u_bulk_endp.$procdff$15398 ($adff) from module demo (D = $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2651_Y, Q = \u_usb_cdc.u_bulk_endp.out_full_q).
 Adding EN signal on $flatten\u_usb_cdc.\u_bulk_endp.$procdff$15397 ($adff) from module demo (D = $flatten\u_usb_cdc.\u_bulk_endp.$procmux$3076_Y, Q = \u_usb_cdc.u_bulk_endp.out_first_q).
-Adding EN signal on $flatten\u_usb_cdc.\u_bulk_endp.$procdff$15392 ($adff) from module demo (D = $flatten\u_usb_cdc.\u_bulk_endp.$procmux$3018_Y, Q = \u_usb_cdc.u_bulk_endp.u_async_data.in_ready_q).
+Adding EN signal on $flatten\u_usb_cdc.\u_bulk_endp.$procdff$15392 ($adff) from module demo (D = $flatten\u_usb_cdc.\u_bulk_endp.$procmux$3018_Y, Q = \u_usb_cdc.u_bulk_endp.genblk1.u_gtex4_async_data.in_ready_q).
 Adding EN signal on $flatten\u_usb_cdc.\u_bulk_endp.$procdff$15391 ($adff) from module demo (D = $flatten\u_usb_cdc.\u_bulk_endp.$0\delay_in_cnt_q[1:0], Q = \u_usb_cdc.u_bulk_endp.delay_in_cnt_q).
 Adding EN signal on $flatten\u_usb_cdc.\u_bulk_endp.$procdff$15390 ($adff) from module demo (D = $flatten\u_usb_cdc.\u_bulk_endp.$procmux$3041_Y, Q = \u_usb_cdc.u_bulk_endp.in_last_q).
 Adding EN signal on $flatten\u_usb_cdc.\u_bulk_endp.$procdff$15389 ($adff) from module demo (D = $flatten\u_usb_cdc.\u_bulk_endp.$or$../../../usb_cdc/bulk_endp.v:0$2697_Y, Q = \u_usb_cdc.u_bulk_endp.in_fifo_q).
-Adding EN signal on $flatten\u_usb_cdc.\u_bulk_endp.$procdff$15387 ($adff) from module demo (D = \u_usb_cdc.u_bulk_endp.app_in_data_i, Q = \u_usb_cdc.u_bulk_endp.u_async_data.in_data_q).
+Adding EN signal on $flatten\u_usb_cdc.\u_bulk_endp.$procdff$15387 ($adff) from module demo (D = \u_usb_cdc.u_bulk_endp.app_in_data_i, Q = \u_usb_cdc.u_bulk_endp.genblk1.u_gtex4_async_data.in_data_q).
 Adding EN signal on $flatten\u_app.\u_rom.$procdff$15467 ($dff) from module demo (D = \u_app.mem_addr_q [0], Q = \u_app.u_rom.u_8bit.byte_addr_q).
 Adding EN signal on $flatten\u_app.\u_rom.$procdff$15466 ($dff) from module demo (D = \u_app.mem_addr_q [9], Q = \u_app.u_rom.u_multi_bank.block_addr_q).
 Adding EN signal on $flatten\u_app.\u_ram.$procdff$15469 ($dff) from module demo (D = \u_app.mem_addr_q [0], Q = \u_app.u_ram.u_8bit.byte_addr_q).
@@ -5350,8 +5350,8 @@ Optimizing module demo.
 13.12.23. Finished OPT passes. (There is nothing left to do.)
 
 13.13. Executing WREDUCE pass (reducing word size of cells).
-Removed top 31 bits (of 32) from port B of cell demo.$add$../hdl/demo/demo.v:89$1197 ($add).
-Removed top 11 bits (of 32) from port Y of cell demo.$add$../hdl/demo/demo.v:89$1197 ($add).
+Removed top 31 bits (of 32) from port B of cell demo.$add$../hdl/demo/demo.v:91$1197 ($add).
+Removed top 11 bits (of 32) from port Y of cell demo.$add$../hdl/demo/demo.v:91$1197 ($add).
 Removed top 31 bits (of 32) from port B of cell demo.$flatten\u_prescaler.$add$../../common/hdl/prescaler.v:18$942 ($add).
 Removed top 28 bits (of 32) from port Y of cell demo.$flatten\u_prescaler.$add$../../common/hdl/prescaler.v:18$942 ($add).
 Removed top 1 bits (of 4) from port B of cell demo.$auto$fsm_map.cc:77:implement_pattern_cache$16188 ($eq).
@@ -5527,34 +5527,34 @@ Removed top 1 bits (of 3) from port B of cell demo.$auto$opt_dff.cc:198:make_pat
 Removed top 1 bits (of 2) from port B of cell demo.$auto$opt_dff.cc:198:make_patterns_logic$16869 ($ne).
 Removed top 1 bits (of 2) from port B of cell demo.$auto$fsm_map.cc:77:implement_pattern_cache$15730 ($eq).
 Removed top 1 bits (of 3) from port B of cell demo.$auto$fsm_map.cc:77:implement_pattern_cache$16306 ($eq).
-Removed top 24 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$shiftx$../../../usb_cdc/bulk_endp.v:0$2578 ($shiftx).
-Removed top 25 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$shl$../../../usb_cdc/bulk_endp.v:0$2598 ($shl).
-Removed top 64 bits (of 72) from port Y of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$and$../../../usb_cdc/bulk_endp.v:0$2599 ($and).
-Removed top 64 bits (of 72) from port A of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$shl$../../../usb_cdc/bulk_endp.v:0$2602 ($shl).
-Removed top 25 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$shl$../../../usb_cdc/bulk_endp.v:0$2602 ($shl).
-Removed top 31 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:145$2607 ($add).
-Removed top 28 bits (of 32) from port Y of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:145$2607 ($add).
-Removed top 24 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$shiftx$../../../usb_cdc/bulk_endp.v:0$2610 ($shiftx).
-Removed top 31 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:210$2632 ($add).
-Removed top 28 bits (of 32) from port Y of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:210$2632 ($add).
+Removed top 25 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$shl$../../../usb_cdc/bulk_endp.v:0$2595 ($shl).
+Removed top 64 bits (of 72) from port Y of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$and$../../../usb_cdc/bulk_endp.v:0$2596 ($and).
+Removed top 64 bits (of 72) from port A of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$shl$../../../usb_cdc/bulk_endp.v:0$2599 ($shl).
+Removed top 25 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$shl$../../../usb_cdc/bulk_endp.v:0$2599 ($shl).
+Removed top 31 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:144$2604 ($add).
+Removed top 28 bits (of 32) from port Y of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:144$2604 ($add).
+Removed top 24 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$shiftx$../../../usb_cdc/bulk_endp.v:0$2607 ($shiftx).
+Removed top 31 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:209$2629 ($add).
+Removed top 28 bits (of 32) from port Y of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:209$2629 ($add).
 Removed top 2 bits (of 8) from port B of cell demo.$auto$fsm_map.cc:77:implement_pattern_cache$15865 ($eq).
-Removed top 31 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637 ($sub).
-Removed top 27 bits (of 32) from port Y of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637 ($sub).
-Removed top 31 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:309$2646 ($add).
-Removed top 30 bits (of 32) from port Y of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:309$2646 ($add).
-Removed top 31 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648 ($sub).
-Removed top 27 bits (of 32) from port Y of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648 ($sub).
-Removed top 31 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:321$2656 ($add).
-Removed top 28 bits (of 32) from port Y of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:321$2656 ($add).
-Removed top 1 bits (of 2) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$eq$../../../usb_cdc/bulk_endp.v:324$2657 ($eq).
-Removed top 31 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:354$2675 ($add).
-Removed top 30 bits (of 32) from port Y of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:354$2675 ($add).
+Removed top 31 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634 ($sub).
+Removed top 27 bits (of 32) from port Y of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634 ($sub).
+Removed top 24 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$shiftx$../../../usb_cdc/bulk_endp.v:0$2642 ($shiftx).
+Removed top 31 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:312$2646 ($add).
+Removed top 30 bits (of 32) from port Y of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:312$2646 ($add).
+Removed top 31 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648 ($sub).
+Removed top 27 bits (of 32) from port Y of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648 ($sub).
+Removed top 31 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:324$2656 ($add).
+Removed top 28 bits (of 32) from port Y of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:324$2656 ($add).
+Removed top 1 bits (of 2) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$eq$../../../usb_cdc/bulk_endp.v:327$2657 ($eq).
+Removed top 31 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:357$2675 ($add).
+Removed top 30 bits (of 32) from port Y of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:357$2675 ($add).
 Removed top 25 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$shl$../../../usb_cdc/bulk_endp.v:0$2690 ($shl).
 Removed top 64 bits (of 72) from port Y of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$and$../../../usb_cdc/bulk_endp.v:0$2691 ($and).
 Removed top 64 bits (of 72) from port A of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$shl$../../../usb_cdc/bulk_endp.v:0$2694 ($shl).
 Removed top 25 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$shl$../../../usb_cdc/bulk_endp.v:0$2694 ($shl).
-Removed top 31 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:366$2699 ($add).
-Removed top 28 bits (of 32) from port Y of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:366$2699 ($add).
+Removed top 31 bits (of 32) from port B of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:369$2699 ($add).
+Removed top 28 bits (of 32) from port Y of cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:369$2699 ($add).
 Removed cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$procmux$3016 ($mux).
 Removed cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$procmux$3028 ($mux).
 Removed cell demo.$flatten\u_usb_cdc.\u_bulk_endp.$procmux$3030 ($mux).
@@ -5831,10 +5831,10 @@ Removed top 14 bits (of 16) from port B of cell demo.$flatten\u_usb_cdc.\u_sie.$
 Removed top 14 bits (of 16) from port Y of cell demo.$flatten\u_usb_cdc.\u_sie.$not$../../../usb_cdc/sie.v:0$2216 ($not).
 Removed top 14 bits (of 16) from port A of cell demo.$flatten\u_usb_cdc.\u_sie.$not$../../../usb_cdc/sie.v:0$2216 ($not).
 Removed top 14 bits (of 16) from port Y of cell demo.$flatten\u_usb_cdc.\u_sie.$shl$../../../usb_cdc/sie.v:0$2210 ($shl).
-Removed top 11 bits (of 32) from wire demo.$add$../hdl/demo/demo.v:89$1197_Y.
+Removed top 11 bits (of 32) from wire demo.$add$../hdl/demo/demo.v:91$1197_Y.
 Removed top 24 bits (of 32) from wire demo.$flatten\u_app.$sub$../hdl/demo/app.v:183$1024_Y.
 Removed top 8 bits (of 32) from wire demo.$flatten\u_app.$sub$../hdl/demo/app.v:314$1101_Y.
-Removed top 28 bits (of 32) from wire demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:366$2699_Y.
+Removed top 28 bits (of 32) from wire demo.$flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:369$2699_Y.
 Removed top 64 bits (of 72) from wire demo.$flatten\u_usb_cdc.\u_bulk_endp.$and$../../../usb_cdc/bulk_endp.v:0$2691_Y.
 
 13.14. Executing PEEPOPT pass (run peephole optimizers).
@@ -5868,19 +5868,19 @@ Removed 1 unused cells and 5 unused wires.
 
 13.20. Executing ALUMACC pass (create $alu and $macc cells).
 Extracting $alu and $macc cells in module demo:
-  creating $macc model for $add$../hdl/demo/demo.v:89$1197 ($add).
+  creating $macc model for $add$../hdl/demo/demo.v:91$1197 ($add).
   creating $macc model for $flatten\u_app.$add$../hdl/demo/app.v:212$1049 ($add).
   creating $macc model for $flatten\u_app.$sub$../hdl/demo/app.v:183$1024 ($sub).
   creating $macc model for $flatten\u_app.$sub$../hdl/demo/app.v:314$1101 ($sub).
   creating $macc model for $flatten\u_prescaler.$add$../../common/hdl/prescaler.v:18$942 ($add).
-  creating $macc model for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:145$2607 ($add).
-  creating $macc model for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:210$2632 ($add).
-  creating $macc model for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:309$2646 ($add).
-  creating $macc model for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:321$2656 ($add).
-  creating $macc model for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:354$2675 ($add).
-  creating $macc model for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:366$2699 ($add).
-  creating $macc model for $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637 ($sub).
-  creating $macc model for $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648 ($sub).
+  creating $macc model for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:144$2604 ($add).
+  creating $macc model for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:209$2629 ($add).
+  creating $macc model for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:312$2646 ($add).
+  creating $macc model for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:324$2656 ($add).
+  creating $macc model for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:357$2675 ($add).
+  creating $macc model for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:369$2699 ($add).
+  creating $macc model for $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634 ($sub).
+  creating $macc model for $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648 ($sub).
   creating $macc model for $flatten\u_usb_cdc.\u_ctrl_endp.$add$../../../usb_cdc/ctrl_endp.v:307$2718 ($add).
   creating $macc model for $flatten\u_usb_cdc.\u_sie.$add$../../../usb_cdc/sie.v:248$2073 ($add).
   creating $macc model for $flatten\u_usb_cdc.\u_sie.$add$../../../usb_cdc/sie.v:504$2481 ($add).
@@ -5899,36 +5899,36 @@ Extracting $alu and $macc cells in module demo:
   creating $alu model for $macc $flatten\u_usb_cdc.\u_sie.$add$../../../usb_cdc/sie.v:504$2481.
   creating $alu model for $macc $flatten\u_usb_cdc.\u_sie.$add$../../../usb_cdc/sie.v:248$2073.
   creating $alu model for $macc $flatten\u_usb_cdc.\u_ctrl_endp.$add$../../../usb_cdc/ctrl_endp.v:307$2718.
-  creating $alu model for $macc $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648.
-  creating $alu model for $macc $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637.
-  creating $alu model for $macc $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:366$2699.
-  creating $alu model for $macc $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:354$2675.
-  creating $alu model for $macc $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:321$2656.
-  creating $alu model for $macc $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:309$2646.
-  creating $alu model for $macc $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:210$2632.
-  creating $alu model for $macc $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:145$2607.
+  creating $alu model for $macc $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648.
+  creating $alu model for $macc $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634.
+  creating $alu model for $macc $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:369$2699.
+  creating $alu model for $macc $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:357$2675.
+  creating $alu model for $macc $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:324$2656.
+  creating $alu model for $macc $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:312$2646.
+  creating $alu model for $macc $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:209$2629.
+  creating $alu model for $macc $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:144$2604.
   creating $alu model for $macc $flatten\u_prescaler.$add$../../common/hdl/prescaler.v:18$942.
   creating $alu model for $macc $flatten\u_app.$sub$../hdl/demo/app.v:314$1101.
   creating $alu model for $macc $flatten\u_app.$sub$../hdl/demo/app.v:183$1024.
   creating $alu model for $macc $flatten\u_app.$add$../hdl/demo/app.v:212$1049.
-  creating $alu model for $macc $add$../hdl/demo/demo.v:89$1197.
+  creating $alu model for $macc $add$../hdl/demo/demo.v:91$1197.
   creating $alu model for $flatten\u_usb_cdc.\u_ctrl_endp.$gt$../../../usb_cdc/ctrl_endp.v:574$2862 ($gt): new $alu
   creating $alu model for $flatten\u_usb_cdc.\u_ctrl_endp.$gt$../../../usb_cdc/ctrl_endp.v:578$2866 ($gt): new $alu
   creating $alu cell for $flatten\u_usb_cdc.\u_ctrl_endp.$gt$../../../usb_cdc/ctrl_endp.v:578$2866: $auto$alumacc.cc:485:replace_alu$16889
   creating $alu cell for $flatten\u_usb_cdc.\u_ctrl_endp.$gt$../../../usb_cdc/ctrl_endp.v:574$2862: $auto$alumacc.cc:485:replace_alu$16900
-  creating $alu cell for $add$../hdl/demo/demo.v:89$1197: $auto$alumacc.cc:485:replace_alu$16905
+  creating $alu cell for $add$../hdl/demo/demo.v:91$1197: $auto$alumacc.cc:485:replace_alu$16905
   creating $alu cell for $flatten\u_app.$add$../hdl/demo/app.v:212$1049: $auto$alumacc.cc:485:replace_alu$16908
   creating $alu cell for $flatten\u_app.$sub$../hdl/demo/app.v:183$1024: $auto$alumacc.cc:485:replace_alu$16911
   creating $alu cell for $flatten\u_app.$sub$../hdl/demo/app.v:314$1101: $auto$alumacc.cc:485:replace_alu$16914
   creating $alu cell for $flatten\u_prescaler.$add$../../common/hdl/prescaler.v:18$942: $auto$alumacc.cc:485:replace_alu$16917
-  creating $alu cell for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:145$2607: $auto$alumacc.cc:485:replace_alu$16920
-  creating $alu cell for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:210$2632: $auto$alumacc.cc:485:replace_alu$16923
-  creating $alu cell for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:309$2646: $auto$alumacc.cc:485:replace_alu$16926
-  creating $alu cell for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:321$2656: $auto$alumacc.cc:485:replace_alu$16929
-  creating $alu cell for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:354$2675: $auto$alumacc.cc:485:replace_alu$16932
-  creating $alu cell for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:366$2699: $auto$alumacc.cc:485:replace_alu$16935
-  creating $alu cell for $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637: $auto$alumacc.cc:485:replace_alu$16938
-  creating $alu cell for $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648: $auto$alumacc.cc:485:replace_alu$16941
+  creating $alu cell for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:144$2604: $auto$alumacc.cc:485:replace_alu$16920
+  creating $alu cell for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:209$2629: $auto$alumacc.cc:485:replace_alu$16923
+  creating $alu cell for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:312$2646: $auto$alumacc.cc:485:replace_alu$16926
+  creating $alu cell for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:324$2656: $auto$alumacc.cc:485:replace_alu$16929
+  creating $alu cell for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:357$2675: $auto$alumacc.cc:485:replace_alu$16932
+  creating $alu cell for $flatten\u_usb_cdc.\u_bulk_endp.$add$../../../usb_cdc/bulk_endp.v:369$2699: $auto$alumacc.cc:485:replace_alu$16935
+  creating $alu cell for $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634: $auto$alumacc.cc:485:replace_alu$16938
+  creating $alu cell for $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648: $auto$alumacc.cc:485:replace_alu$16941
   creating $alu cell for $flatten\u_usb_cdc.\u_ctrl_endp.$add$../../../usb_cdc/ctrl_endp.v:307$2718: $auto$alumacc.cc:485:replace_alu$16944
   creating $alu cell for $flatten\u_usb_cdc.\u_sie.$add$../../../usb_cdc/sie.v:248$2073: $auto$alumacc.cc:485:replace_alu$16947
   creating $alu cell for $flatten\u_usb_cdc.\u_sie.$add$../../../usb_cdc/sie.v:504$2481: $auto$alumacc.cc:485:replace_alu$16950
@@ -6104,7 +6104,7 @@ No more expansions possible.
 
 13.27.1. Executing OPT_EXPR pass (perform const folding).
 Optimizing module demo.
-<suppressed ~308 debug messages>
+<suppressed ~306 debug messages>
 
 13.27.2. Executing OPT_MERGE pass (detect identical cells).
 Finding identical cells in module `\demo'.
@@ -6208,14 +6208,14 @@ Removed 0 multiplexer ports.
       Old ports: A=16'1111111100000000, B=16'0000000011111111, Y=\u_app.u_ram.u_ram_blocks[0].u_ram_words[0].u_ram256x16.MASK
       New ports: A=2'10, B=2'01, Y={ \u_app.u_ram.u_ram_blocks[0].u_ram_words[0].u_ram256x16.MASK [8] \u_app.u_ram.u_ram_blocks[0].u_ram_words[0].u_ram256x16.MASK [0] }
       New connections: { \u_app.u_ram.u_ram_blocks[0].u_ram_words[0].u_ram256x16.MASK [15:9] \u_app.u_ram.u_ram_blocks[0].u_ram_words[0].u_ram256x16.MASK [7:1] } = { \u_app.u_ram.u_ram_blocks[0].u_ram_words[0].u_ram256x16.MASK [8] \u_app.u_ram.u_ram_blocks[0].u_ram_words[0].u_ram256x16.MASK [8] \u_app.u_ram.u_ram_blocks[0].u_ram_words[0].u_ram256x16.MASK [8] \u_app.u_ram.u_ram_blocks[0].u_ram_words[0].u_ram256x16.MASK [8] \u_app.u_ram.u_ram_blocks[0].u_ram_words[0].u_ram256x16.MASK [8] \u_app.u_ram.u_ram_blocks[0].u_ram_words[0].u_ram256x16.MASK [8] \u_app.u_ram.u_ram_blocks[0].u_ram_words[0].u_ram256x16.MASK [8] \u_app.u_ram.u_ram_blocks[0].u_ram_words[0].u_ram256x16.MASK [0] \u_app.u_ram.u_ram_blocks[0].u_ram_words[0].u_ram256x16.MASK [0] \u_app.u_ram.u_ram_blocks[0].u_ram_words[0].u_ram256x16.MASK [0] \u_app.u_ram.u_ram_blocks[0].u_ram_words[0].u_ram256x16.MASK [0] \u_app.u_ram.u_ram_blocks[0].u_ram_words[0].u_ram256x16.MASK [0] \u_app.u_ram.u_ram_blocks[0].u_ram_words[0].u_ram256x16.MASK [0] \u_app.u_ram.u_ram_blocks[0].u_ram_words[0].u_ram256x16.MASK [0] }
-    Consolidated identical input bits for $mux cell $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638:
-      Old ports: A={ $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [3:0] }, B=8, Y=$flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y
-      New ports: A={ $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:227$2637_Y [3:0] }, B=5'01000, Y=$flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4:0]
-      New connections: $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [31:5] = { $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:227$2638_Y [4] }
-    Consolidated identical input bits for $mux cell $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649:
-      Old ports: A={ $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [3:0] }, B=8, Y=$flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y
-      New ports: A={ $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:311$2648_Y [3:0] }, B=5'01000, Y=$flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4:0]
-      New connections: $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [31:5] = { $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:311$2649_Y [4] }
+    Consolidated identical input bits for $mux cell $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635:
+      Old ports: A={ $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [3:0] }, B=8, Y=$flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y
+      New ports: A={ $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:226$2634_Y [3:0] }, B=5'01000, Y=$flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4:0]
+      New connections: $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [31:5] = { $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:226$2635_Y [4] }
+    Consolidated identical input bits for $mux cell $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649:
+      Old ports: A={ $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [3:0] }, B=8, Y=$flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y
+      New ports: A={ $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [31] $flatten\u_usb_cdc.\u_bulk_endp.$sub$../../../usb_cdc/bulk_endp.v:314$2648_Y [3:0] }, B=5'01000, Y=$flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4:0]
+      New connections: $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [31:5] = { $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] $flatten\u_usb_cdc.\u_bulk_endp.$ternary$../../../usb_cdc/bulk_endp.v:314$2649_Y [4] }
     Consolidated identical input bits for $mux cell $flatten\u_usb_cdc.\u_ctrl_endp.$procmux$12882:
       Old ports: A=7'0010010, B=7'1000011, Y=$flatten\u_usb_cdc.\u_ctrl_endp.$8\max_length_d[6:0]
       New ports: A=2'10, B=2'01, Y={ $flatten\u_usb_cdc.\u_ctrl_endp.$8\max_length_d[6:0] [4] $flatten\u_usb_cdc.\u_ctrl_endp.$8\max_length_d[6:0] [0] }
@@ -6503,7 +6503,6 @@ Using template $paramod$d7387fdb214042e5ef2d69a3f74948694b4bb65e\_90_pmux for ce
 Using template $paramod$403a3c2fa431a154c52a6a5429d7a6260b5d144f\_80_ice40_alu for cells of type $alu.
 Using template $paramod$c9511eeb847f2aa95252b1013477609463f67ee0\_80_ice40_alu for cells of type $alu.
 Using template $paramod$dbcdc7e8aa1a4080cea2deda6fdc8772064f4d90\_80_ice40_alu for cells of type $alu.
-Using template $paramod$constmap:a613a988efaee6fe68bd2154434accbfa7125b32$paramod$c414f9c4e0e82e8c11577c1142e59cbae97a9ea8\_90_shift_shiftx for cells of type $shiftx.
 Using template $paramod$constmap:055ddd148d72874b0eef92b3fb8db7ea91555f2d$paramod$9797c0808113a9330398efac506bd8e3f4e47381\_90_shift_ops_shr_shl_sshl_sshr for cells of type $shl.
 Analyzing pattern of constant bits for this cell:
   Constant input on bit 0 of port B: 1'0
@@ -6511,19 +6510,20 @@ Analyzing pattern of constant bits for this cell:
   Constant input on bit 2 of port B: 1'0
 Creating constmapped module `$paramod$constmap:3555643cddff0d795770d37b7b8c8a682ebe0767$paramod$9797c0808113a9330398efac506bd8e3f4e47381\_90_shift_ops_shr_shl_sshl_sshr'.
 
-13.31.43. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+13.31.38. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
 Running muxtree optimizer on module $paramod$constmap:3555643cddff0d795770d37b7b8c8a682ebe0767$paramod$9797c0808113a9330398efac506bd8e3f4e47381\_90_shift_ops_shr_shl_sshl_sshr..
   Creating internal representation of mux trees.
   No muxes found in this module.
 Removed 0 multiplexer ports.
-<suppressed ~2250 debug messages>
+<suppressed ~2093 debug messages>
 
-13.31.44. Executing OPT_EXPR pass (perform const folding).
+13.31.39. Executing OPT_EXPR pass (perform const folding).
 Optimizing module $paramod$constmap:3555643cddff0d795770d37b7b8c8a682ebe0767$paramod$9797c0808113a9330398efac506bd8e3f4e47381\_90_shift_ops_shr_shl_sshl_sshr.
 <suppressed ~824 debug messages>
 Removed 0 unused cells and 15 unused wires.
 Using template $paramod$constmap:3555643cddff0d795770d37b7b8c8a682ebe0767$paramod$9797c0808113a9330398efac506bd8e3f4e47381\_90_shift_ops_shr_shl_sshl_sshr for cells of type $shl.
 Using extmapper simplemap for cells of type $or.
+Using template $paramod$constmap:a613a988efaee6fe68bd2154434accbfa7125b32$paramod$c414f9c4e0e82e8c11577c1142e59cbae97a9ea8\_90_shift_shiftx for cells of type $shiftx.
 Using template $paramod$175e67c02b86e96b1288b9dc100122520d7240d8\_90_alu for cells of type $alu.
 Using template $paramod$dde52db7035cb02b3cc5e73865788532339e3bcb\_80_ice40_alu for cells of type $alu.
 Using template $paramod$103b4016182df467cceab67bcf3e18e6361ec0fd\_80_ice40_alu for cells of type $alu.
@@ -6548,7 +6548,7 @@ Running muxtree optimizer on module $paramod$constmap:990335307493dcd5df99900cee
   Creating internal representation of mux trees.
   No muxes found in this module.
 Removed 0 multiplexer ports.
-<suppressed ~2044 debug messages>
+<suppressed ~2201 debug messages>
 
 13.31.94. Executing OPT_EXPR pass (perform const folding).
 Optimizing module $paramod$constmap:990335307493dcd5df99900ceece5449454920cb$paramod$1896406123e17fbe261b00fc5de7eecd0def4bdd\_90_shift_ops_shr_shl_sshl_sshr.
@@ -6782,17 +6782,17 @@ ABC: + if
 ABC: + mfs2 
 ABC: + lutpack -S 1 
 ABC: + dress 
-ABC: Total number of equiv classes                =     862.
-ABC: Participating nodes from both networks       =    1905.
-ABC: Participating nodes from the first network   =     862. (  62.65 % of nodes)
-ABC: Participating nodes from the second network  =    1043. (  75.80 % of nodes)
-ABC: Node pairs (any polarity)                    =     862. (  62.65 % of names can be moved)
-ABC: Node pairs (same polarity)                   =     717. (  52.11 % of names can be moved)
-ABC: Total runtime =     0.15 sec
+ABC: Total number of equiv classes                =     855.
+ABC: Participating nodes from both networks       =    1882.
+ABC: Participating nodes from the first network   =     855. (  62.45 % of nodes)
+ABC: Participating nodes from the second network  =    1027. (  75.02 % of nodes)
+ABC: Node pairs (any polarity)                    =     855. (  62.45 % of names can be moved)
+ABC: Node pairs (same polarity)                   =     715. (  52.23 % of names can be moved)
+ABC: Total runtime =     0.14 sec
 ABC: + write_blif <abc-temp-dir>/output.blif 
 
 13.40.1.2. Re-integrating ABC results.
-ABC RESULTS:              $lut cells:     1375
+ABC RESULTS:              $lut cells:     1368
 ABC RESULTS:        internal signals:     4264
 ABC RESULTS:           input signals:      666
 ABC RESULTS:          output signals:      529
@@ -6833,35 +6833,35 @@ Removed 28 unused cells and 2721 unused wires.
 
 13.43. Executing OPT_LUT pass (optimize LUTs).
 Discovering LUTs.
-Number of LUTs:     1476
+Number of LUTs:     1469
   1-LUT               22
-  2-LUT              270
-  3-LUT              452
-  4-LUT              732
+  2-LUT              249
+  3-LUT              459
+  4-LUT              739
   with \SB_CARRY    (#0)   88
   with \SB_CARRY    (#1)   86
 
 Eliminating LUTs.
-Number of LUTs:     1476
+Number of LUTs:     1469
   1-LUT               22
-  2-LUT              270
-  3-LUT              452
-  4-LUT              732
+  2-LUT              249
+  3-LUT              459
+  4-LUT              739
   with \SB_CARRY    (#0)   88
   with \SB_CARRY    (#1)   86
 
 Combining LUTs.
-Number of LUTs:     1453
+Number of LUTs:     1446
   1-LUT               22
-  2-LUT              242
-  3-LUT              442
-  4-LUT              747
+  2-LUT              221
+  3-LUT              449
+  4-LUT              754
   with \SB_CARRY    (#0)   88
   with \SB_CARRY    (#1)   86
 
 Eliminated 0 LUTs.
 Combined 23 LUTs.
-<suppressed ~7850 debug messages>
+<suppressed ~7762 debug messages>
 
 13.44. Executing TECHMAP pass (map to technology primitives).
 
@@ -6874,226 +6874,226 @@ Successfully finished Verilog frontend.
 Using template $paramod$de3d8c0ac9a85f776878d56395b6e0bf04ae72e7\$lut for cells of type $lut.
 Using template $paramod$bdb7f9ed72fd4f5c7ad81c376f2d8a5c72a0098d\$lut for cells of type $lut.
 Using template $paramod$658b9ed803f0d3d335616d3858b53e0a2522f1e8\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'01000000 for cells of type $lut.
-Using template $paramod$1bf62ab10e48d71d6497bccacf5c70420c470fe9\$lut for cells of type $lut.
-Using template $paramod$43779580bfffd5d5a9f321249a174febf1dac288\$lut for cells of type $lut.
-Using template $paramod$608f40069c27841a5b3bdf03643a34bdc8974072\$lut for cells of type $lut.
-Using template $paramod$e0bde73e598487237493c8a43ca52c95a3727354\$lut for cells of type $lut.
 Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000010\LUT=4'0001 for cells of type $lut.
 Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000010\LUT=4'1000 for cells of type $lut.
+Using template $paramod$6d23198eb2b8f79a41c7626605a61009695893b1\$lut for cells of type $lut.
+Using template $paramod$8b24407096beec47292ddeb1567a058197a320b9\$lut for cells of type $lut.
+Using template $paramod$38f9bf4dd2329347b8471f0a98443dd323386889\$lut for cells of type $lut.
+Using template $paramod$e9c77024ca501b890c641f9c0b10e27242db8730\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'01000000 for cells of type $lut.
+Using template $paramod$048d4aa2263b685fba6c6b0d38f6224df0dc3042\$lut for cells of type $lut.
 Using template $paramod$179512a187da069f3b79ef6612a41e494e7d54b6\$lut for cells of type $lut.
-Using template $paramod$53ce561f80f32d4298a3beadc88b6c5c78293221\$lut for cells of type $lut.
+Using template $paramod$703a13a751e631ef123f38f7d2125aeabec0f94c\$lut for cells of type $lut.
+Using template $paramod$e7a8630f8da31353e21a44336053bd8a39db95b1\$lut for cells of type $lut.
+Using template $paramod$60d39bdd645923a67c3654c78630dadb7c46fddf\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'01001011 for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000010\LUT=4'0100 for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'00000001 for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'10000000 for cells of type $lut.
+Using template $paramod$ed10455c824c2a3761aabdeb1e31dad905f66e6e\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'00010000 for cells of type $lut.
+Using template $paramod$368887f60ccee882960866ce81cb4250106048b1\$lut for cells of type $lut.
+Using template $paramod$7bcf8a0acb4facd1dfe70d22caec4edc2292bba2\$lut for cells of type $lut.
+Using template $paramod$3039c7f41767c4672f4e3f22ad78f16d42720fbf\$lut for cells of type $lut.
+Using template $paramod$e13d53d2f7f4329c814f78d8202f66066122bbc4\$lut for cells of type $lut.
+Using template $paramod$43779580bfffd5d5a9f321249a174febf1dac288\$lut for cells of type $lut.
+Using template $paramod$a54d8b8d2c90a828ee71c2d82e7e1612992a7ab8\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'11010000 for cells of type $lut.
+Using template $paramod$7e0f13b24331d86defd78f0927b4b3b8c2a44cba\$lut for cells of type $lut.
+Using template $paramod$b4f15f202f50520dbc381cd0880ac94f830f05a8\$lut for cells of type $lut.
+Using template $paramod$6d6beead1425af15cf78b27fd9b11b41b5d4bce8\$lut for cells of type $lut.
+Using template $paramod$332a399730bfc61adea04021a76b1c4e4030f37d\$lut for cells of type $lut.
+Using template $paramod$571404c0889eaf57f492cb5e37f8acb5df5852f9\$lut for cells of type $lut.
+Using template $paramod$6b0849254d6c87461fb93e37cc18f089f61eb912\$lut for cells of type $lut.
+Using template $paramod$8379cb6cc067198df3735466802bba2672d8d35f\$lut for cells of type $lut.
+Using template $paramod$ab8bb87959c5d7cfa27886cee1355b38e054a61a\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'01110000 for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'00000111 for cells of type $lut.
+Using template $paramod$baa939b0bd5b3e0c8760492528669bd58f640542\$lut for cells of type $lut.
+Using template $paramod$bba54c1ef87367812b4c15f4aed5ac70773df775\$lut for cells of type $lut.
+Using template $paramod$070ad9d1ddbf89389161ba7e9ac58b9c0e081923\$lut for cells of type $lut.
+Using template $paramod$2d07c1a6c53c7b878509360922c4fa5ebedc3011\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000010\LUT=4'0110 for cells of type $lut.
+Using template $paramod$7843e8c123bb8acf2cb35298776a29dcf1524827\$lut for cells of type $lut.
+Using template $paramod$81d8a60fd95b1a9f9ef71c12a774ae6988cb9fd5\$lut for cells of type $lut.
+Using template $paramod$272652f6c6fbe9a75eff76e45cc7e2788835518b\$lut for cells of type $lut.
+Using template $paramod$b93d1ea7a612a32c185108f67a153d44ffb9aac2\$lut for cells of type $lut.
+Using template $paramod$f3e1547c4b47e64c590e75cf09078b2507c8cc75\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000010\LUT=4'1001 for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'11100000 for cells of type $lut.
+Using template $paramod$a670b08a47dd8a34f954c50cd06e9996d77e8467\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'00001110 for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'00110101 for cells of type $lut.
+Using template $paramod$19ec49f31a8d230a567aa44ce3ea81a03c101e2b\$lut for cells of type $lut.
+Using template $paramod$f9b715fbf1040e81e900b2461c2390d17ed5e988\$lut for cells of type $lut.
+Using template $paramod$4b2297966ddb718657b80566604f97685ffc0120\$lut for cells of type $lut.
+Using template $paramod$7a9d9396461df152f697894fa3b294ad1b285e08\$lut for cells of type $lut.
+Using template $paramod$d6d3aaeac1b9aa2c4b652c48e0deb565040dda72\$lut for cells of type $lut.
 Using template $paramod$fd904e9e35cfd343a9df248824bd3f1408724879\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'01101001 for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'10010110 for cells of type $lut.
+Using template $paramod$8afe9f9396e222eb1bca50c99e9bab03367fbe83\$lut for cells of type $lut.
+Using template $paramod$bc6dfbb9c5badfa11502af7a34b388438462c8f3\$lut for cells of type $lut.
+Using template $paramod$a8b2b0f3a3fd7b01c99e8d61bb72f602bd41af54\$lut for cells of type $lut.
+Using template $paramod$2cb309ebe1b1da294a7f13ac0b8c3ecac17fa8dc\$lut for cells of type $lut.
+Using template $paramod$fd1e68d43235621014e35437b4508a97628b7e8f\$lut for cells of type $lut.
+Using template $paramod$627a8109614c11f6e5d263ec03869552c905c175\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'00001011 for cells of type $lut.
+Using template $paramod$971d9f355db327680e1d04e8596be00cb67fa78c\$lut for cells of type $lut.
+Using template $paramod$6e238df02989b317f10820a22773676e71120644\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'01001111 for cells of type $lut.
+Using template $paramod$7fcc2f13195f27c397064377984d87a90c06749d\$lut for cells of type $lut.
+Using template $paramod$17353202acd85413c157354269332acedc0139e0\$lut for cells of type $lut.
+Using template $paramod$987693cbecb4a281b23724d472f575ceae2391bd\$lut for cells of type $lut.
+Using template $paramod$933f4f3e373a784da64d137def3625bdd36d1695\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'10010000 for cells of type $lut.
+Using template $paramod$ba86195c3b3cda8fda4995dd068f92aae4d4e178\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'01011100 for cells of type $lut.
+Using template $paramod$93f88d1396db449b71126dcb19be37c7227722f9\$lut for cells of type $lut.
+Using template $paramod$4cf5305612d86489c1a6171729557670bf08582e\$lut for cells of type $lut.
+Using template $paramod$59c595af41d4a5cce2d588c3a5f1342749ce7a77\$lut for cells of type $lut.
+Using template $paramod$4282def8dbd6df3d1248ad282c629bee684502c2\$lut for cells of type $lut.
+Using template $paramod$b4410865e8124402796f9dfbf73ef8d279fdbd08\$lut for cells of type $lut.
+Using template $paramod$13f2c5b0523e79b72a363375f9fa85da998b4b0e\$lut for cells of type $lut.
+Using template $paramod$85b779ce5ab505dbf25e5e046fb43ca2b76b878b\$lut for cells of type $lut.
+Using template $paramod$df196ed0a1da5c4a58c5e08a1dac304fd3fccaab\$lut for cells of type $lut.
+Using template $paramod$82b4a585d1edcb5c6e755dc9bd3392228a1c1304\$lut for cells of type $lut.
+Using template $paramod$5fdec1444119e1c56273c4ef5ae20b21e34c0e47\$lut for cells of type $lut.
+Using template $paramod$5766b753e513aa2393ffc25ef94ebc79dc098484\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'00010100 for cells of type $lut.
+Using template $paramod$0a94662b0161fc067fc2a1123fd5ac94da2ec1db\$lut for cells of type $lut.
+Using template $paramod$c5f3c57a6d466a2f42208bafb8985b96ce884440\$lut for cells of type $lut.
+Using template $paramod$b297295e19b03521716155b85537bbe86d6a9ae6\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'10101100 for cells of type $lut.
 Using template $paramod$fec5a3e586b1930427fa7af9f5aac7fd41e707a1\$lut for cells of type $lut.
 Using template $paramod$d3afbb90878580c83bdadaa1b3571bf27380c44c\$lut for cells of type $lut.
 Using template $paramod$38a207c707820f72f67386d2619ee46ee88964f9\$lut for cells of type $lut.
 Using template $paramod$10b0fe3049cfd7e6d38533387eb2b0cfded868cf\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'00010000 for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000010\LUT=4'0100 for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'00000001 for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'10000000 for cells of type $lut.
-Using template $paramod$b4f15f202f50520dbc381cd0880ac94f830f05a8\$lut for cells of type $lut.
-Using template $paramod$6d6beead1425af15cf78b27fd9b11b41b5d4bce8\$lut for cells of type $lut.
-Using template $paramod$2d07c1a6c53c7b878509360922c4fa5ebedc3011\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000010\LUT=4'0110 for cells of type $lut.
-Using template $paramod$cc08dba3aac8677e797984bdf18a09dd37547dd3\$lut for cells of type $lut.
-Using template $paramod$9119230fb968102e295516c9a2b2b6b11cf52499\$lut for cells of type $lut.
-Using template $paramod$e7757b2d317771cca578effc1d1433759b825f83\$lut for cells of type $lut.
-Using template $paramod$53c0b3b82f4f4d8ffde421af54443d5fbcbf42c1\$lut for cells of type $lut.
-Using template $paramod$7ad543fbb6fe0c906f0dc5b0453e91682774df4f\$lut for cells of type $lut.
-Using template $paramod$7a9d9396461df152f697894fa3b294ad1b285e08\$lut for cells of type $lut.
-Using template $paramod$d6d3aaeac1b9aa2c4b652c48e0deb565040dda72\$lut for cells of type $lut.
-Using template $paramod$6b0849254d6c87461fb93e37cc18f089f61eb912\$lut for cells of type $lut.
-Using template $paramod$7843e8c123bb8acf2cb35298776a29dcf1524827\$lut for cells of type $lut.
-Using template $paramod$81d8a60fd95b1a9f9ef71c12a774ae6988cb9fd5\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000010\LUT=4'1001 for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'00110101 for cells of type $lut.
-Using template $paramod$d35161d1d7976dcc02e7c7d51172431be85143b4\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'10110000 for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'00001110 for cells of type $lut.
-Using template $paramod$5a621b016c894274d07edef48c49b401a15fd796\$lut for cells of type $lut.
-Using template $paramod$272652f6c6fbe9a75eff76e45cc7e2788835518b\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'00000111 for cells of type $lut.
-Using template $paramod$b93d1ea7a612a32c185108f67a153d44ffb9aac2\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'11100000 for cells of type $lut.
-Using template $paramod$ab8bb87959c5d7cfa27886cee1355b38e054a61a\$lut for cells of type $lut.
-Using template $paramod$a670b08a47dd8a34f954c50cd06e9996d77e8467\$lut for cells of type $lut.
-Using template $paramod$edf97c54dcd467ef804e3b110a7e5b8873f8cf6b\$lut for cells of type $lut.
-Using template $paramod$571404c0889eaf57f492cb5e37f8acb5df5852f9\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'01001111 for cells of type $lut.
-Using template $paramod$41326ad8644342a66dfb051d050f2b6fbf15015b\$lut for cells of type $lut.
-Using template $paramod$7299f2246d1a80c33c807bc8bb00c5b5d234d530\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000010\LUT=4'1011 for cells of type $lut.
-Using template $paramod$17353202acd85413c157354269332acedc0139e0\$lut for cells of type $lut.
-Using template $paramod$933f4f3e373a784da64d137def3625bdd36d1695\$lut for cells of type $lut.
-Using template $paramod$0abd15216e9f7267b12622e844e59d4691fca73a\$lut for cells of type $lut.
-Using template $paramod$2167383712a3ef5a7aa9a279cd8db29e1fc2db5f\$lut for cells of type $lut.
-Using template $paramod$2324b0e350424694c2cb686bea5ec83546d3979c\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'10010000 for cells of type $lut.
-Using template $paramod$d96bc836a2b69aefc36f997cbf30cf5f94e1df6c\$lut for cells of type $lut.
-Using template $paramod$64669a7e87c28e39425dffff48145545533b4971\$lut for cells of type $lut.
-Using template $paramod$f740ebdda65cd0b8323d705f16d6dbb0d2771805\$lut for cells of type $lut.
-Using template $paramod$d53578aacfd93124244778d88be0e90eb09c1b1b\$lut for cells of type $lut.
-Using template $paramod$8b24407096beec47292ddeb1567a058197a320b9\$lut for cells of type $lut.
-Using template $paramod$38f9bf4dd2329347b8471f0a98443dd323386889\$lut for cells of type $lut.
+Using template $paramod$bb4fff1cc3b827238aa40993cafede1c5beecbe3\$lut for cells of type $lut.
+Using template $paramod$575b200168b9e109c2ed99df4359056f2c6696ac\$lut for cells of type $lut.
 Using template $paramod$45d617c2ce0041e27b541f62b0fc3c3ce441a616\$lut for cells of type $lut.
 Using template $paramod$2ea69c779d6c1b79ac5a87b0d1523c67d5628dba\$lut for cells of type $lut.
-Using template $paramod$d6cf0a4b6f6ccd87588da28c41b5b6c258da2509\$lut for cells of type $lut.
-Using template $paramod$59c595af41d4a5cce2d588c3a5f1342749ce7a77\$lut for cells of type $lut.
-Using template $paramod$4cf5305612d86489c1a6171729557670bf08582e\$lut for cells of type $lut.
-Using template $paramod$df196ed0a1da5c4a58c5e08a1dac304fd3fccaab\$lut for cells of type $lut.
-Using template $paramod$4282def8dbd6df3d1248ad282c629bee684502c2\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'10010110 for cells of type $lut.
-Using template $paramod$ebe302cf675f04f2cc698a4f6888fe67d7e9866d\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'01101001 for cells of type $lut.
-Using template $paramod$a8b2b0f3a3fd7b01c99e8d61bb72f602bd41af54\$lut for cells of type $lut.
-Using template $paramod$82b4a585d1edcb5c6e755dc9bd3392228a1c1304\$lut for cells of type $lut.
-Using template $paramod$0a94662b0161fc067fc2a1123fd5ac94da2ec1db\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'00010100 for cells of type $lut.
-Using template $paramod$97e449d15b607612c49291044eca4e2c8b59088e\$lut for cells of type $lut.
-Using template $paramod$85b779ce5ab505dbf25e5e046fb43ca2b76b878b\$lut for cells of type $lut.
-Using template $paramod$c5f3c57a6d466a2f42208bafb8985b96ce884440\$lut for cells of type $lut.
-Using template $paramod$b297295e19b03521716155b85537bbe86d6a9ae6\$lut for cells of type $lut.
 Using template $paramod$59de045429641615f9fe556a2af28d0739e5972e\$lut for cells of type $lut.
-Using template $paramod$0544e369df70197d8a5ca8c90ec5354803916e16\$lut for cells of type $lut.
-Using template $paramod$5c32c59025c0b98f20e63f249d83e7ebb4b085e3\$lut for cells of type $lut.
 Using template $paramod$3bc026de04535b25786da249981f824248a39a05\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'01111111 for cells of type $lut.
-Using template $paramod$973818279bc95792902f3c09371fd2407d04a2a5\$lut for cells of type $lut.
-Using template $paramod$e5759512db67494ff77fbdfc66dff4006376568f\$lut for cells of type $lut.
-Using template $paramod$7e0f13b24331d86defd78f0927b4b3b8c2a44cba\$lut for cells of type $lut.
-Using template $paramod$d119410bab96963da0139669592048db2c09198b\$lut for cells of type $lut.
-Using template $paramod$8c007365114302fd8ed873a632601104897aa115\$lut for cells of type $lut.
-Using template $paramod$bb07aa4c6c95211b927837b9073769ffabb3aaa5\$lut for cells of type $lut.
-Using template $paramod$6e238df02989b317f10820a22773676e71120644\$lut for cells of type $lut.
-Using template $paramod$3039c7f41767c4672f4e3f22ad78f16d42720fbf\$lut for cells of type $lut.
-Using template $paramod$bba54c1ef87367812b4c15f4aed5ac70773df775\$lut for cells of type $lut.
-Using template $paramod$f3e1547c4b47e64c590e75cf09078b2507c8cc75\$lut for cells of type $lut.
-Using template $paramod$b4f85a6321a00b090afc4e21d68e7b99eb94d149\$lut for cells of type $lut.
-Using template $paramod$baa939b0bd5b3e0c8760492528669bd58f640542\$lut for cells of type $lut.
-Using template $paramod$b4410865e8124402796f9dfbf73ef8d279fdbd08\$lut for cells of type $lut.
-Using template $paramod$ec68da5892a57dd3ef23273063c77fe922ac8307\$lut for cells of type $lut.
-Using template $paramod$368887f60ccee882960866ce81cb4250106048b1\$lut for cells of type $lut.
-Using template $paramod$b4c86683de329b1d5e65e43bb5a60d929bddd3da\$lut for cells of type $lut.
-Using template $paramod$bb4fff1cc3b827238aa40993cafede1c5beecbe3\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'01110000 for cells of type $lut.
-Using template $paramod$71309a2bd1495753926706a75a30f2830ecec385\$lut for cells of type $lut.
-Using template $paramod$722bfd9af0ae56ca9d1d12a221cb5ede16461f26\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000001\LUT=2'01 for cells of type $lut.
+Using template $paramod$148c2f64a7587eebffdb9ac0548ca0db5bc11e88\$lut for cells of type $lut.
+Using template $paramod$ae9b8abdb4f811ce37985dd5106af9cd21223954\$lut for cells of type $lut.
 Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'11001010 for cells of type $lut.
-Using template $paramod$aff3a645bb9f572421a4f0f49cf8987ceb4bcdc5\$lut for cells of type $lut.
+Using template $paramod$e49f6e3576ef1a6d2f58c54414dbb786af8cc869\$lut for cells of type $lut.
+Using template $paramod$5c32c59025c0b98f20e63f249d83e7ebb4b085e3\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'10001111 for cells of type $lut.
 Using template $paramod$b4d0f4738a5ce50c7f36c2aa2ecc09cfb874f2b6\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'10111111 for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000001\LUT=2'01 for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000010\LUT=4'1011 for cells of type $lut.
+Using template $paramod$aff3a645bb9f572421a4f0f49cf8987ceb4bcdc5\$lut for cells of type $lut.
 Using template $paramod$965f8f2fa1a796a6c51222eabb50fbd26e97d98b\$lut for cells of type $lut.
+Using template $paramod$d35161d1d7976dcc02e7c7d51172431be85143b4\$lut for cells of type $lut.
 Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'10100011 for cells of type $lut.
-Using template $paramod$a9f5a04efe71156d9a1acb777d452a8dd4d379fa\$lut for cells of type $lut.
-Using template $paramod$88403721e7a9195608031e594ab311129d9372ad\$lut for cells of type $lut.
 Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'01100000 for cells of type $lut.
 Using template $paramod$7f88ae8b0ca78f7b736f446522956805c49fb79f\$lut for cells of type $lut.
 Using template $paramod$c9994e2a733aa21e4bfe57075af37a9c5257c791\$lut for cells of type $lut.
-Using template $paramod$82ac4228e04c92c7b8c133bfa256dd480e0cef1d\$lut for cells of type $lut.
-Using template $paramod$93a62495103ad230ce6bb69d9d3b02a71377727e\$lut for cells of type $lut.
-Using template $paramod$4c07181132d053bb43ff2133785b3c80ebe9a283\$lut for cells of type $lut.
 Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'11100111 for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'10111101 for cells of type $lut.
+Using template $paramod$88403721e7a9195608031e594ab311129d9372ad\$lut for cells of type $lut.
 Using template $paramod$b212ed9fff0ef04494d0a2749a793f265dd2e870\$lut for cells of type $lut.
-Using template $paramod$69f20e0703606f2ffd2ee27cd26f815bd5eeb6e9\$lut for cells of type $lut.
+Using template $paramod$a9f5a04efe71156d9a1acb777d452a8dd4d379fa\$lut for cells of type $lut.
 Using template $paramod$cc14edb43bcbbd83b718cef08414cb23048bb6d0\$lut for cells of type $lut.
-Using template $paramod$987693cbecb4a281b23724d472f575ceae2391bd\$lut for cells of type $lut.
-Using template $paramod$fa960b0ced687dd93c15ed8130e27eea044c58f6\$lut for cells of type $lut.
+Using template $paramod$608f40069c27841a5b3bdf03643a34bdc8974072\$lut for cells of type $lut.
+Using template $paramod$82ac4228e04c92c7b8c133bfa256dd480e0cef1d\$lut for cells of type $lut.
 Using template $paramod$acf49cb7bd2805dee4b4ebb218aa5924b1be7704\$lut for cells of type $lut.
-Using template $paramod$2f99e7dde0142f5eb4336d05fd90a596d3f2e038\$lut for cells of type $lut.
-Using template $paramod$7db80a93c7c798c00e91ddd3fe6394daec80a6c1\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'11010000 for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'10101100 for cells of type $lut.
-Using template $paramod$70ebb6cf5bc7d63c5c1a98ccefefa2af79e8f2a9\$lut for cells of type $lut.
-Using template $paramod$971d9f355db327680e1d04e8596be00cb67fa78c\$lut for cells of type $lut.
-Using template $paramod$fd0c475e3e6f20ad225673464af09a8de603ab71\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'00001011 for cells of type $lut.
-Using template $paramod$627a8109614c11f6e5d263ec03869552c905c175\$lut for cells of type $lut.
-Using template $paramod$2cb309ebe1b1da294a7f13ac0b8c3ecac17fa8dc\$lut for cells of type $lut.
-Using template $paramod$6e46ec5a196ba1a24b8e69ab094cadc07c13ac1f\$lut for cells of type $lut.
-Using template $paramod$332a399730bfc61adea04021a76b1c4e4030f37d\$lut for cells of type $lut.
-Using template $paramod$4f69d4d033e11c2ad5507aac664c04ab2a1cdc76\$lut for cells of type $lut.
+Using template $paramod$93a62495103ad230ce6bb69d9d3b02a71377727e\$lut for cells of type $lut.
+Using template $paramod$e5e9da8fed769f971686eed8c5eea50e61f73aaa\$lut for cells of type $lut.
 Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'11101111 for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'00111010 for cells of type $lut.
-Using template $paramod$e9c77024ca501b890c641f9c0b10e27242db8730\$lut for cells of type $lut.
-Using template $paramod$a3cdc1eb771a2c6a16f64da161e11100ac409d2b\$lut for cells of type $lut.
-Using template $paramod$2e7a95e82db1d690ae9ba5d10f68b175fa2cb467\$lut for cells of type $lut.
-Using template $paramod$20798777255c214e32de3304ce8faa1fdfa2f474\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'01010011 for cells of type $lut.
-Using template $paramod$aabc38448f9289a9f09f7f433eb20ae11e3f6ed9\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000010\LUT=4'1110 for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'00011111 for cells of type $lut.
+Using template $paramod$fa960b0ced687dd93c15ed8130e27eea044c58f6\$lut for cells of type $lut.
+Using template $paramod$4c07181132d053bb43ff2133785b3c80ebe9a283\$lut for cells of type $lut.
+Using template $paramod$7db80a93c7c798c00e91ddd3fe6394daec80a6c1\$lut for cells of type $lut.
+Using template $paramod$70ebb6cf5bc7d63c5c1a98ccefefa2af79e8f2a9\$lut for cells of type $lut.
+Using template $paramod$99a2a175d178a040bb1ffceb53184fb0f59423c6\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'10110000 for cells of type $lut.
+Using template $paramod$5a621b016c894274d07edef48c49b401a15fd796\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000010\LUT=4'0111 for cells of type $lut.
+Using template $paramod$04b674496422df8889c01c3744b94097628ccfbc\$lut for cells of type $lut.
+Using template $paramod$cd6c4b4da6d8737b72fd2dc8f5d83d8967445809\$lut for cells of type $lut.
+Using template $paramod$1bf62ab10e48d71d6497bccacf5c70420c470fe9\$lut for cells of type $lut.
 Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'11111000 for cells of type $lut.
+Using template $paramod$20798777255c214e32de3304ce8faa1fdfa2f474\$lut for cells of type $lut.
+Using template $paramod$fc318a7df7fe07fd6e06d67fcbc358e9823ea389\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'01010011 for cells of type $lut.
+Using template $paramod$12879138d1e376f344e47ea40be66b776233be75\$lut for cells of type $lut.
+Using template $paramod$d53578aacfd93124244778d88be0e90eb09c1b1b\$lut for cells of type $lut.
 Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'00001101 for cells of type $lut.
 Using template $paramod$d0bf26260eea0e8530fb2e72eb38c60e28a47da8\$lut for cells of type $lut.
-Using template $paramod$7fcc2f13195f27c397064377984d87a90c06749d\$lut for cells of type $lut.
-Using template $paramod$a50be0e6fa3a01511bb234559cb74fb8bd3e2061\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'00011111 for cells of type $lut.
+Using template $paramod$71cb81cd7ec213b39129c5f3867d1aa22dffde1b\$lut for cells of type $lut.
+Using template $paramod$e5759512db67494ff77fbdfc66dff4006376568f\$lut for cells of type $lut.
+Using template $paramod$722bfd9af0ae56ca9d1d12a221cb5ede16461f26\$lut for cells of type $lut.
 Using template $paramod$11ec7271d8e6e5aeaace08c13e4c601f10e31038\$lut for cells of type $lut.
+Using template $paramod$8002feb72fff90c4a4afc593a63ffae81c8e5c37\$lut for cells of type $lut.
+Using template $paramod$a50be0e6fa3a01511bb234559cb74fb8bd3e2061\$lut for cells of type $lut.
 Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'10111110 for cells of type $lut.
-Using template $paramod$9ce83c401f07863ef6c07aa36141bf86d010bac8\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000010\LUT=4'1110 for cells of type $lut.
 Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'11101011 for cells of type $lut.
 Using template $paramod$0bd56cf5130d265bdf3651844aad5160126b46af\$lut for cells of type $lut.
 Using template $paramod$11781671c6bae59d79685e36100b1ce439cbbaf5\$lut for cells of type $lut.
+Using template $paramod$30234ddca80ec18fbcf4d45d8bd1821aad47e8fd\$lut for cells of type $lut.
 Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'00011100 for cells of type $lut.
-Using template $paramod$19ec49f31a8d230a567aa44ce3ea81a03c101e2b\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'00111010 for cells of type $lut.
+Using template $paramod$b4f85a6321a00b090afc4e21d68e7b99eb94d149\$lut for cells of type $lut.
 Using template $paramod$e053a22d78e6bd5ea33183ea69976f0db741be0e\$lut for cells of type $lut.
-Using template $paramod$50666a8f9d622ca1f027a4587dfd5f2a7d8810c9\$lut for cells of type $lut.
+Using template $paramod$973818279bc95792902f3c09371fd2407d04a2a5\$lut for cells of type $lut.
+Using template $paramod$ea0faad69a26c91786a25961ea149d0e0961eb1f\$lut for cells of type $lut.
 Using template $paramod$99eb1ea876c2fcd2463282e1d08fa89d31eb901c\$lut for cells of type $lut.
-Using template $paramod$f29ab3f487c3ac7aad5e05e3e8df05ec3af78511\$lut for cells of type $lut.
-Using template $paramod$e49f6e3576ef1a6d2f58c54414dbb786af8cc869\$lut for cells of type $lut.
-Using template $paramod$c227f721a44fefdada39f6c9acbbd79680d6e12a\$lut for cells of type $lut.
-Using template $paramod$674fd5d048f970d10cf8fe6a971ea4047b83d3e6\$lut for cells of type $lut.
-Using template $paramod$044e8b1893c94f717651c5cd428e71c892566f52\$lut for cells of type $lut.
-Using template $paramod$d76856c88fdca5609a1600b549559282bda8a7dc\$lut for cells of type $lut.
-Using template $paramod$ae347116bc360385d91d8ca06cb98dfa0d4de417\$lut for cells of type $lut.
+Using template $paramod$6e46ec5a196ba1a24b8e69ab094cadc07c13ac1f\$lut for cells of type $lut.
+Using template $paramod$c5b694ec89d7629b942ccf6a9be1d39e24f8edec\$lut for cells of type $lut.
+Using template $paramod$50666a8f9d622ca1f027a4587dfd5f2a7d8810c9\$lut for cells of type $lut.
+Using template $paramod$aa38b4fa8c17a0edbff2dfbd7d7bf3cfafef41ae\$lut for cells of type $lut.
+Using template $paramod$57e5788123bb4ddd10687fa4fbcf21da5232704f\$lut for cells of type $lut.
+Using template $paramod$dd14e67ccaef897e1542de006ca919d0d5eec0c8\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'11010011 for cells of type $lut.
+Using template $paramod$d96bc836a2b69aefc36f997cbf30cf5f94e1df6c\$lut for cells of type $lut.
+Using template $paramod$64669a7e87c28e39425dffff48145545533b4971\$lut for cells of type $lut.
+Using template $paramod$f740ebdda65cd0b8323d705f16d6dbb0d2771805\$lut for cells of type $lut.
 Using template $paramod$94ac66a11090dca84889e55fcf03297912a5b7ec\$lut for cells of type $lut.
 Using template $paramod$441de597d9318495d3225f370c9f7379b3b0fd0d\$lut for cells of type $lut.
 Using template $paramod$a4df2b5be2b644499880e088a11556935f22b401\$lut for cells of type $lut.
-Using template $paramod$f63fe32f78d5f3c5de711945c592c8c5ec2303ae\$lut for cells of type $lut.
-Using template $paramod$4972722c284f07fee673f7cb99e6a36ce4a244f0\$lut for cells of type $lut.
-Using template $paramod$0f52647588235a7349ddd3f3432c9ac1e33ad9e1\$lut for cells of type $lut.
-Using template $paramod$8c24dc0cdd336b7fb88bbf7eed45cec5cbae862b\$lut for cells of type $lut.
-Using template $paramod$ae9b8abdb4f811ce37985dd5106af9cd21223954\$lut for cells of type $lut.
-Using template $paramod$a59507d273cd827eb6c46c37820d50a1b717efdf\$lut for cells of type $lut.
-Using template $paramod$077697c0823fe82b6627463f707c928db07bbca8\$lut for cells of type $lut.
-Using template $paramod$70e260b11d61c2beb07d1dff789df1caf45cc3d9\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000010\LUT=4'0111 for cells of type $lut.
-Using template $paramod$a54d8b8d2c90a828ee71c2d82e7e1612992a7ab8\$lut for cells of type $lut.
 Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'11110100 for cells of type $lut.
-Using template $paramod$161491d8314cab9d5d32db4aa31f31f4ef4f6dc6\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'11110001 for cells of type $lut.
-Using template $paramod$05e1aa03f4032f091e9babe2ae153c9bb3e7b396\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'11000101 for cells of type $lut.
+Using template $paramod$077697c0823fe82b6627463f707c928db07bbca8\$lut for cells of type $lut.
 Using template $paramod$9d707d218adbd63b6f9a0c79d7ee037306fb6296\$lut for cells of type $lut.
-Using template $paramod$40882341c54dcd36f630f00dd7e46a35652abd36\$lut for cells of type $lut.
-Using template $paramod$cde3aa23c1efa60a470cf0f0281347d6ba585afa\$lut for cells of type $lut.
-Using template $paramod$733dfd4d209dc1a6e016c6f00703d3ad45999a76\$lut for cells of type $lut.
-Using template $paramod$edc3c77d6d0cfa370b4c94131cecc413b4b0ef1c\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'11111110 for cells of type $lut.
+Using template $paramod$161491d8314cab9d5d32db4aa31f31f4ef4f6dc6\$lut for cells of type $lut.
+Using template $paramod$ef26adabe6060e01077b576cfe34e95e55a26aef\$lut for cells of type $lut.
+Using template $paramod$d2e6d37235ab843778c678747f5760d5e87de899\$lut for cells of type $lut.
+Using template $paramod$b431bfd938e35871dd0b7668e1503c7e8b9d491c\$lut for cells of type $lut.
+Using template $paramod$41326ad8644342a66dfb051d050f2b6fbf15015b\$lut for cells of type $lut.
 Using template $paramod$9850450c7f2ce6ec6d61697515f47872a7c4eee5\$lut for cells of type $lut.
+Using template $paramod$70e260b11d61c2beb07d1dff789df1caf45cc3d9\$lut for cells of type $lut.
+Using template $paramod$cc08dba3aac8677e797984bdf18a09dd37547dd3\$lut for cells of type $lut.
+Using template $paramod$8c24dc0cdd336b7fb88bbf7eed45cec5cbae862b\$lut for cells of type $lut.
+Using template $paramod$2e7a95e82db1d690ae9ba5d10f68b175fa2cb467\$lut for cells of type $lut.
+Using template $paramod$733dfd4d209dc1a6e016c6f00703d3ad45999a76\$lut for cells of type $lut.
+Using template $paramod$d151c38cd9b2f723ca2e7bae80e30ea6d32d7878\$lut for cells of type $lut.
+Using template $paramod$edc3c77d6d0cfa370b4c94131cecc413b4b0ef1c\$lut for cells of type $lut.
+Using template $paramod$a59507d273cd827eb6c46c37820d50a1b717efdf\$lut for cells of type $lut.
+Using template $paramod$40882341c54dcd36f630f00dd7e46a35652abd36\$lut for cells of type $lut.
+Using template $paramod$ad823946862e656cf7f96d606b18b8f972dc6d6c\$lut for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'11000101 for cells of type $lut.
+Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'11110001 for cells of type $lut.
+Using template $paramod$cbfd30b70b4f0ac8dd1d3ed758215fbf49783a3b\$lut for cells of type $lut.
+Using template $paramod$fb5ee0bdef1c4e74aaf1fd8efae98b46a2f5e564\$lut for cells of type $lut.
+Using template $paramod$c24ed72ebb67e9ead6029e42e909ef7fc0abbb11\$lut for cells of type $lut.
+Using template $paramod$4789582d00084c3344b7a6dacf516efd46244876\$lut for cells of type $lut.
+Using template $paramod$cde3aa23c1efa60a470cf0f0281347d6ba585afa\$lut for cells of type $lut.
+Using template $paramod$422375ed3dc0d4f0e5c0c5f1906dad62654ab15d\$lut for cells of type $lut.
 Using template $paramod$e2e4d79bec18c28fa313e8bd8f4df6f8a38115b2\$lut for cells of type $lut.
 Using template $paramod$e7cf8575a194eb3a0b763de77523fb7297d31466\$lut for cells of type $lut.
-Using template $paramod$b431bfd938e35871dd0b7668e1503c7e8b9d491c\$lut for cells of type $lut.
-Using template $paramod$ef26adabe6060e01077b576cfe34e95e55a26aef\$lut for cells of type $lut.
-Using template $paramod$422375ed3dc0d4f0e5c0c5f1906dad62654ab15d\$lut for cells of type $lut.
-Using template $paramod$d151c38cd9b2f723ca2e7bae80e30ea6d32d7878\$lut for cells of type $lut.
-Using template $paramod$3bd90dfefd2a93c12855dbf6fa4153076794a6ca\$lut for cells of type $lut.
-Using template $paramod$cbfd30b70b4f0ac8dd1d3ed758215fbf49783a3b\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'11111110 for cells of type $lut.
-Using template $paramod$8002feb72fff90c4a4afc593a63ffae81c8e5c37\$lut for cells of type $lut.
-Using template $paramod$71cb81cd7ec213b39129c5f3867d1aa22dffde1b\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'10111111 for cells of type $lut.
-Using template $paramod$575b200168b9e109c2ed99df4359056f2c6696ac\$lut for cells of type $lut.
-Using template $paramod$d54e7238a4a65b6993845c84c1abdbcd353fe338\$lut for cells of type $lut.
-Using template $paramod\$lut\WIDTH=32'00000000000000000000000000000011\LUT=8'10001111 for cells of type $lut.
-Using template $paramod$5b82e1bbcbeac7b2f233de5920996c493e0d5fab\$lut for cells of type $lut.
+Using template $paramod$05e1aa03f4032f091e9babe2ae153c9bb3e7b396\$lut for cells of type $lut.
+Using template $paramod$279a8d961e6b2ded8450bee8ed637cb9efa31f02\$lut for cells of type $lut.
 No more expansions possible.
-<suppressed ~4264 debug messages>
-Removed 0 unused cells and 3240 unused wires.
+<suppressed ~4257 debug messages>
+Removed 0 unused cells and 3223 unused wires.
 
 13.45. Executing AUTONAME pass.
-Renamed 37927 objects in module demo (63 iterations).
-<suppressed ~2974 debug messages>
+Renamed 42770 objects in module demo (73 iterations).
+<suppressed ~2963 debug messages>
 
 13.46. Executing HIERARCHY pass (managing design hierarchy).
 
@@ -7108,14 +7108,14 @@ Removed 0 unused modules.
 
 === demo ===
 
-   Number of wires:               1202
-   Number of wire bits:           4297
-   Number of public wires:        1202
-   Number of public wire bits:    4297
+   Number of wires:               1198
+   Number of wire bits:           4291
+   Number of public wires:        1198
+   Number of public wire bits:    4291
    Number of memories:               0
    Number of memory bits:            0
    Number of processes:              0
-   Number of cells:               2106
+   Number of cells:               2099
      SB_CARRY                      100
      SB_DFFE                         4
      SB_DFFER                      458
@@ -7123,7 +7123,7 @@ Removed 0 unused modules.
      SB_DFFR                        74
      SB_DFFS                         4
      SB_IO                           2
-     SB_LUT4                      1453
+     SB_LUT4                      1446
      SB_PLL40_CORE                   1
      SB_RAM40_4K                     4
 
@@ -7133,6 +7133,6 @@ Found and reported 0 problems.
 
 14. Executing JSON backend.
 
-End of script. Logfile hash: 7abac28c51, CPU: user 7.13s system 0.09s, MEM: 127.25 MB peak
+End of script. Logfile hash: 326b557bb4, CPU: user 8.20s system 0.10s, MEM: 128.32 MB peak
 Yosys 0.10+46 (git sha1 52ba31b1c, clang 10.0.0-4ubuntu1 -fPIC -Os)
-Time spent: 23% 46x opt_expr (1 sec), 13% 1x abc (1 sec), ...
+Time spent: 24% 46x opt_expr (2 sec), 12% 26x opt_clean (1 sec), ...

@@ -29,9 +29,11 @@ module soc
    wire             in_valid;
    wire             out_ready;
 
-   SB_PLL40_CORE #(.DIVR(4'b0000),
+   // if FEEDBACK_PATH = SIMPLE:
+   // clk_freq = (ref_freq * (DIVF + 1)) / (2**DIVQ * (DIVR + 1));
+   SB_PLL40_CORE #(.DIVR(4'd0),
                    .DIVF(DIVF),
-                   .DIVQ(3'b100),
+                   .DIVQ(3'd4),
                    .FILTER_RANGE(3'b001),
                    .FEEDBACK_PATH("SIMPLE"),
                    .DELAY_ADJUSTMENT_MODE_FEEDBACK("FIXED"),

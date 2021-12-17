@@ -5,6 +5,9 @@ USB\_CDC is a Verilog implementation of the Full Speed (12Mbit/s) USB communicat
 Windows 10 provides a built-in driver (Usbser.sys) for USB CDC devices.
 A USB\_CDC device is automatically recognized by Windows 10 as a virtual COM port, and a serial port terminal application such as [CoolTerm](https://freeware.the-meiers.org/) can be used to communicate with it.
 
+macOS and Linux provide built-in drivers for USB CDC ACM devices too.
+On macOS, the virtual COM gets a name like `/dev/cu.usbmodem14601`, whereas, on Linux, it gets a name like `/dev/ttyACM0`. Linux requires that the user account belongs to the dialout group to grant permissions for virtual COM access.
+
 The USB\_CDC idea was born from the awesome [Luke Valenty's TinyFPGA](https://github.com/tinyfpga/TinyFPGA-BX) board. TinyFPGA uses a ["bit-banged" USB port](https://github.com/tinyfpga/TinyFPGA-Bootloader) implemented in the FPGA fabric for communication with the host PC.
 David Williams, with his [TinyFPGA-BX USB serial module](https://github.com/davidthings/tinyfpga_bx_usbserial), changed Luke's code to allow USB communication for FPGA designs.
 David's code uses the same clock for both USB internal stuff and data interface with FPGA application designs.
@@ -32,14 +35,12 @@ Furthermore, USB\_CDC was designed from scratch to keep FPGA resource utilizatio
 * `in_valid_i`: valid control signal
 * `in_ready_o`: ready control signal
 
-### USB bus physical receivers
-* `rx_dp_i`: receiver bit stream
-* `rx_dn_1`: receiver bit stream
-
-### USB bus physical transmitters
-* `tx_dp_o`: transmitter bit stream
-* `tx_dn_o`: transmitter bit stream
-* `tx_en_o`: transmitter enable
+### USB I/O buffers
+* `rx_dp_i`: D+ input bit stream
+* `rx_dn_i`: D- input bit stream
+* `tx_dp_o`: D+ output bit stream
+* `tx_dn_o`: D- output bit stream
+* `tx_en_o`: D+/D- output enable
 
 ## FIFO interface
 USB\_CDC provides a FIFO interface to transfer data to/from FPGA application. Both `in_*` and `out_*` channels use the same transmission protocol.
@@ -68,8 +69,26 @@ BIT\_SAMPLES defines the number of samples taken on USB dp/dn lines for each bit
 ![](readme_files/bit_samples.png)
 
 ### USE\_APP\_CLK and APP\_CLK\_RATIO
-`app_clk` is the FPGA application clock. It can be the same as USB internal stuff (USE\_APP\_CLK = 0) or can be a different asynchronous one (USE\_APP\_CLK = 1). If `app_clk` is asynchronous with `clk`, then for proper synchronization, it must have a frequency less or equal to CLK<sub>freq</sub>/4 (APP\_CLK\_RATIO &ge; 4).
-If APP\_CLK\_RATIO is greater than or equal to 8, then USB data is exchanged with FPGA design at each `app_clk` cycle. Otherwise, if 4 &le; APP\_CLK\_RATIO &lt; 8, then USB data is exchanged every 2 `app_clk` cycles.
+
+USE\_APP\_CLK parameter configures if the FPGA application uses the same USB_CDC internal stuff clock (USE\_APP\_CLK = 0) or a different asynchronous one (USE\_APP\_CLK = 1). If  USE\_APP\_CLK = 0 then `app_clk` input is not used and can be connected to a constant value such as `1'b0`.
+
+When USE\_APP\_CLK = 1, APP\_CLK\_RATIO parameter defines the ratio between `clk` and `app_clk` frequencies:
+
+* APP\_CLK\_RATIO = freq(`clk`) / freq(`app_clk`)
+
+
+To improve data throughput for lower `app_clk` frequencies, APP\_CLK\_RATIO parameter selects one of three different approaches to synchronize data that cross the two clock domains:
+
+* APP\_CLK\_RATIO &ge; 8. FPGA application can exchange data at every `app_clk` cycle.
+
+* 8 > APP\_CLK\_RATIO &ge; 4. FPGA application can exchange data at every 2 `app_clk` cycles.
+
+* APP\_CLK\_RATIO < 4. FPGA application can exchange data at an average of 2\*2.5 `app_clk` cycles + 2\*2.5 `clk` cycles.
+
+
+Overall, the USB Full-speed protocol caps data throughput to 1.5MB/s.
+So, with freq(`clk`) &ge; 48MHz, data throughput is 1.5MB/s if freq(`app_clk`) > 1.5MHz, otherwise it is freq(`app_clk`) bytes.
+
 
 ## Examples
 A few examples with complete implementation on FPGA are present in the `examples` directory. In addition, simulation testbenches are provided for each one.

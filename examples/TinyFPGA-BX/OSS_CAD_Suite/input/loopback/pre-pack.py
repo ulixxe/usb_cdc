@@ -1,4 +1,4 @@
 ctx.addClock("clk", 16)
 ctx.addClock("clk_1mhz", 1)
-ctx.addClock("clk_pll", 48)
-ctx.addClock("clk_div4", 12)
+ctx.addClock("clk_pll", 192)
+ctx.addClock("clk_div4", 48)

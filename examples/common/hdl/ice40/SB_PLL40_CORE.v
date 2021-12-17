@@ -30,6 +30,8 @@ module SB_PLL40_CORE (
 	 parameter                      TEST_MODE = 1'b0;
 	 parameter                      EXTERNAL_DIVIDE_FACTOR = 1;
 
+   localparam                     CLK_RATIO = (DIVF+1)/(2**DIVQ*(DIVR+1));
+
    time                           ref_per;
    time                           clk_per;
    time                           last_ref_rising;
@@ -48,7 +50,7 @@ module SB_PLL40_CORE (
       last_ref_rising = $time;
       clk = 0;
       lock_reg = 1;
-      timeout = 10;
+      timeout = 4*CLK_RATIO;
       #100 lock_reg = 0; // negedge to trigger reset
       ref_per = 0;
       clk_per = 100000000;
@@ -65,13 +67,14 @@ module SB_PLL40_CORE (
          clk_per = 2**DIVQ * (DIVR + 1) * ref_per / (DIVF + 1);
          clk <= ~clk;
       end
-      timeout = 10;
+      timeout = 4*CLK_RATIO;
    end
 
    always @(clk)
      if (timeout > 0) begin
         clk <= #(clk_per/2) ~clk;
-        timeout = timeout - 1;
+        if (clk)
+          timeout = timeout - 1;
      end else
        lock_reg = 0;
 endmodule

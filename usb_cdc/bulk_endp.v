@@ -93,7 +93,6 @@ module bulk_endp
    reg                             out_nak_q, out_nak_d;
    reg                             out_full_q;
 
-   assign app_out_data_o = out_fifo_q[8*out_first_q +:8];
    assign out_nak_o = out_nak_q;
 
    always @(posedge clk_i or negedge rstn_i) begin
@@ -229,6 +228,7 @@ module bulk_endp
    generate
       if (USE_APP_CLK == 0) begin : u_sync_data
          assign app_out_valid_o = ((out_empty == 1'b0 && {1'b0, delay_out_cnt_q} == BIT_SAMPLES-1) ? 1'b1 : 1'b0);
+         assign app_out_data_o = out_fifo_q[8*out_first_q +:8];
 
          always @(posedge clk_i or negedge rstn_i) begin
             if (~rstn_i) begin
@@ -277,15 +277,11 @@ module bulk_endp
                end
             end
          end
-      end else begin : u_async_data
-         reg                                  out_valid_q;
-         reg                                  out_consumed_q;
-         reg [2:0]                            app_clk_sq;
-         reg [1:0]                            data_rstn_sq;
+      end else if (APP_CLK_RATIO >= 4) begin : u_gtex4_async_data
+         reg [1:0] data_rstn_sq;
 
-         wire                                 data_rstn;
+         wire      data_rstn;
 
-         assign app_out_valid_o = out_valid_q;
          assign data_rstn = data_rstn_sq[0];
 
          always @(posedge app_clk_i or negedge rstn_i) begin
@@ -295,6 +291,13 @@ module bulk_endp
                data_rstn_sq <= {1'b1, data_rstn_sq[1]};
             end
          end
+
+         reg [2:0] app_clk_sq;
+         reg       out_valid_q;
+         reg       out_consumed_q;
+
+         assign app_out_valid_o = out_valid_q;
+         assign app_out_data_o = out_fifo_q[8*out_first_q +:8];
 
          always @(posedge clk_i or negedge rstn_i) begin
             if (~rstn_i) begin
@@ -382,6 +385,124 @@ module bulk_endp
                in_consumed_q <= app_in_valid_i & in_ready_q;
                if (app_in_valid_i == 1'b1 && in_ready_q == 1'b1)
                  in_data_q <= app_in_data_i;
+            end
+         end
+      end else begin : u_ltx4_async_data
+         reg [1:0] data_rstn_sq;
+
+         wire      data_rstn;
+
+         assign data_rstn = data_rstn_sq[0];
+
+         always @(posedge app_clk_i or negedge rstn_i) begin
+            if (~rstn_i) begin
+               data_rstn_sq <= 2'd0;
+            end else begin
+               data_rstn_sq <= {1'b1, data_rstn_sq[1]};
+            end
+         end
+
+         reg [1:0] out_iready_sq;
+         reg       out_iready_mask_q;
+         reg       out_ovalid_mask_q;
+         reg [7:0] out_data_q;
+
+         always @(posedge clk_i or negedge rstn_i) begin
+            if (~rstn_i) begin
+               out_first_q <= 'd0;
+               delay_out_cnt_q <= 'd0;
+               out_full_q <= 1'b0;
+               out_iready_sq <= 2'b00;
+               out_iready_mask_q <= 1'b0;
+               out_data_q <= 8'd0;
+            end else begin
+               out_iready_sq <= {~out_ovalid_mask_q, out_iready_sq[1]};
+               if ({1'b0, delay_out_cnt_q} != BIT_SAMPLES-1) begin
+                  delay_out_cnt_q <= delay_out_cnt_q + 1;
+               end else begin
+                  out_full_q <= (out_last_qq == ((out_first_q == 'd0) ? OUT_LENGTH-1: out_first_q-1) ? 1'b1 : 1'b0);
+                  if (~out_iready_sq[0])
+                    out_iready_mask_q <= 1'b0;
+                  else if (~out_empty & ~out_iready_mask_q) begin
+                     out_data_q <= out_fifo_q[8*out_first_q +:8];
+                     out_iready_mask_q <= 1'b1;
+                     delay_out_cnt_q <= 'd0;
+                     if (out_first_q == OUT_LENGTH-1)
+                       out_first_q <= 'd0;
+                     else
+                       out_first_q <= out_first_q + 1;
+                  end
+               end
+            end
+         end
+
+         reg [1:0] out_ovalid_sq;
+
+         assign app_out_valid_o = out_ovalid_sq[0] & ~out_ovalid_mask_q;
+         assign app_out_data_o = out_data_q;
+
+         always @(posedge app_clk_i or negedge data_rstn) begin
+            if (~data_rstn) begin
+               out_ovalid_sq <= 2'b00;
+               out_ovalid_mask_q <= 1'b0;
+            end else begin
+               out_ovalid_sq <= {out_iready_mask_q, out_ovalid_sq[1]};
+               if (~out_ovalid_sq[0])
+                 out_ovalid_mask_q <= 1'b0;
+               else if (app_out_ready_i & ~out_ovalid_mask_q)
+                 out_ovalid_mask_q <= 1'b1;
+            end
+         end
+
+         reg [1:0] in_ovalid_sq;
+         reg       in_ovalid_mask_q;
+         reg       in_iready_mask_q;
+         reg [7:0] in_data_q;
+
+         always @(posedge clk_i or negedge rstn_i) begin
+            if (~rstn_i) begin
+               in_fifo_q <= {IN_LENGTH{8'd0}};
+               in_last_q <= 'd0;
+               delay_in_cnt_q <= 'd0;
+               in_ovalid_sq <= 2'd0;
+               in_ovalid_mask_q <= 1'b0;
+            end else begin
+               in_ovalid_sq <= {in_iready_mask_q, in_ovalid_sq[1]};
+               if ({1'b0, delay_in_cnt_q} != BIT_SAMPLES-1) begin
+                  delay_in_cnt_q <= delay_in_cnt_q + 1;
+               end else begin
+                  if (~in_ovalid_sq[0])
+                    in_ovalid_mask_q <= 1'b0;
+                  else if (~in_full & ~in_ovalid_mask_q) begin
+                     in_ovalid_mask_q <= 1'b1;
+                     in_fifo_q[8*in_last_q +:8] <= in_data_q;
+                     delay_in_cnt_q <= 'd0;
+                     if (in_last_q == IN_LENGTH-1)
+                       in_last_q <= 'd0;
+                     else
+                       in_last_q <= in_last_q + 1;
+                  end
+               end
+            end
+         end
+
+         reg [1:0] in_iready_sq;
+
+         assign app_in_ready_o = in_iready_sq[0] & ~in_iready_mask_q;
+
+         always @(posedge app_clk_i or negedge data_rstn) begin
+            if (~data_rstn) begin
+               in_iready_sq <= 2'b00;
+               in_iready_mask_q <= 1'b0;
+               in_data_q <= 8'd0;
+            end else begin
+               in_iready_sq <= {~in_ovalid_mask_q, in_iready_sq[1]};
+               if (~in_iready_sq[0])
+                 in_iready_mask_q <= 1'b0;
+               else if (app_in_valid_i & ~in_iready_mask_q) begin
+                  in_data_q <= app_in_data_i;
+                  in_iready_mask_q <= 1'b1;
+               end
             end
          end
       end

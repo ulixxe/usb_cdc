@@ -28,10 +28,13 @@ BULK\_ENDP collects OUT data into FIFO, and at the end of an OUT bulk transfer w
 USB data can be exchanged with external USB\_CDC logic through the same clock `clk_i` or with an asynchronous one `app_clk_i`.
 This choice is made through a Verilog parameter and implemented through a generate construct.
 
-Synchronization between the two clock domains is made on valid/ready control signals with double synchronization flip-flops to avoid metastability. These flip-flops are clocked by `clk_i`, and for this reason, must be freq(`clk_i`) >= 4*freq(`app_clk_i`).
+Synchronization between the two clock domains is made on valid/ready control signals with double synchronization flip-flops to avoid metastability. These flip-flops are clocked by `app_clk_i` for signals that belong to the `clk_i` domain and vice versa by `clk_i` for signals that belong to the `app_clk_i` domain. So, to synchronize back and forth the control signals, this requires on average about 2\*2.5 `app_clk_i` cycles + 2\*2.5 `clk_i` cycles.
+If freq(`clk_i`) &ge; 4*freq(`app_clk_i`), then it is possible to guarantee a safe synchronization with double synchronization flip-flops clocked by `clk_i` only. This improves data throughput.
 
-If freq(`clk_i`) >= 8\*freq(`app_clk_i`) then data is exchanged at each `app_clk_i` cycle.
-Otherwise if 8\*freq(`app_clk_i`) > freq(`clk_i`) >= 4\*freq(`app_clk_i`) then data is exchanged every 2 `app_clk_i` cycles.
+If freq(`clk_i`) &ge; 8\*freq(`app_clk_i`) then data is exchanged at each `app_clk_i` cycle.
+Otherwise if 8\*freq(`app_clk_i`) > freq(`clk_i`) &ge; 4\*freq(`app_clk_i`) then data is exchanged every 2 `app_clk_i` cycles.
+
+![](../readme_files/sync.png)
 
 USB data is transferred at a maximum byte rate of 1.5MHz, so data transfer is limited by USB if freq(`app_clk_i`) >= 1.5MHz. Otherwise, data is exchanged at a byte rate of freq(`app_clk_i`).
 

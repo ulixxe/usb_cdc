@@ -134,7 +134,8 @@ architecture fpga of demo is
       PACKAGE_PIN       : inout std_ulogic);
   end component;
 begin
-  -- if FEEDBACK_PATH=SIMPLE, Fpllout=Fref*(DIVF+1)/(2**DIVQ*(DIVR+1))
+  -- if FEEDBACK_PATH = SIMPLE:
+  -- clk_freq = (ref_freq * (DIVF + 1)) / (2**DIVQ * (DIVR + 1));
   u_pll : component SB_PLL40_CORE
     generic map (
       DIVR                           => "0000",

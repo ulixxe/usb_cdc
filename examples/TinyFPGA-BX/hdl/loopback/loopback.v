@@ -30,9 +30,11 @@ module loopback
    wire             in_valid;
    wire             out_ready;
 
-   SB_PLL40_CORE #(.DIVR(4'b0000),
+   // if FEEDBACK_PATH = SIMPLE:
+   // clk_freq = (ref_freq * (DIVF + 1)) / (2**DIVQ * (DIVR + 1));
+   SB_PLL40_CORE #(.DIVR(4'd0),
                    .DIVF(DIVF),
-                   .DIVQ(3'b100),
+                   .DIVQ(3'd2),
                    .FILTER_RANGE(3'b001),
                    .FEEDBACK_PATH("SIMPLE"),
                    .DELAY_ADJUSTMENT_MODE_FEEDBACK("FIXED"),
@@ -107,9 +109,9 @@ module loopback
              .OUT_BULK_MAXPACKETSIZE('d8),
              .BIT_SAMPLES(BIT_SAMPLES),
              .USE_APP_CLK(1),
-             .APP_CLK_RATIO(4))
-   u_usb_cdc (.app_clk_i(clk_div4),
-              .clk_i(clk_pll),
+             .APP_CLK_RATIO(BIT_SAMPLES*12/192))  // BIT_SAMPLES * 12MHz / 192MHz
+   u_usb_cdc (.app_clk_i(clk_pll),
+              .clk_i(clk_div4),
               .rstn_i(rstn),
               .out_ready_i(in_ready),
               .in_data_i(out_data),

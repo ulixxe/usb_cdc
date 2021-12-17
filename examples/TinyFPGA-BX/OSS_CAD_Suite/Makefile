@@ -8,7 +8,7 @@ PKG = cm81
 IN_DIR = input/$(PROJ)
 OUT_DIR = output/$(PROJ)
 INC_DIRS = -I../../common/hdl -I../hdl/$(PROJ)
-ICE40_LIBS = $(shell yosys-config --datdir/ice40/cells_sim.v)
+ICE40_LIB = $(shell yosys-config --datdir/ice40/cells_sim.v)
 
 include $(IN_DIR)/hdl_files.mk
 
@@ -33,10 +33,10 @@ prog: $(OUT_DIR)/$(PROJ).bin
 	tinyprog -p $<
 
 lint: $(HDL_FILES)
-	verilator --lint-only --default-language 1364-2001 -Wall -Wno-UNUSED -Wno-UNDRIVEN -Wno-TIMESCALEMOD -DBLACKBOX -DNO_ICE40_DEFAULT_ASSIGNMENTS --top $(PROJ) $(INC_DIRS) -v $(ICE40_LIBS) $^
+	verilator --lint-only --default-language 1364-2001 -Wall -Wno-UNUSED -Wno-UNDRIVEN -Wno-TIMESCALEMOD -DBLACKBOX -DNO_ICE40_DEFAULT_ASSIGNMENTS --top $(PROJ) $(INC_DIRS) -v $(ICE40_LIB) $^
 
 $(OUT_DIR)/%.vvp: $(HDL_FILES) SB_PLL40_CORE.v tb_$(PROJ).v | $(OUT_DIR)
-	sed '2396,2426d' $(ICE40_LIBS) > $(OUT_DIR)/cells_sim.v && iverilog -g2001 -DNO_ICE40_DEFAULT_ASSIGNMENTS -t vvp -s tb_$(PROJ) $(INC_DIRS) -l $(OUT_DIR)/cells_sim.v -o $@ $^
+	patch $(ICE40_LIB) -o $(OUT_DIR)/cells_sim.v < ../../common/hdl/ice40/cells_sim.v.patch && iverilog -g2001 -DNO_ICE40_DEFAULT_ASSIGNMENTS -t vvp -s tb_$(PROJ) $(INC_DIRS) -l $(OUT_DIR)/cells_sim.v -o $@ $^
 
 $(OUT_DIR)/%.fst: $(OUT_DIR)/%.vvp
 	vvp -N $< -fst && mv tb.dump $@
@@ -44,7 +44,7 @@ $(OUT_DIR)/%.fst: $(OUT_DIR)/%.vvp
 sim: $(OUT_DIR)/$(PROJ).fst
 
 $(OUT_DIR)/%.xml: $(HDL_FILES) tb_$(PROJ).v | $(OUT_DIR)
-	verilator -xml-only --bbox-unsup -Wno-lint -Wno-TIMESCALEMOD -Wno-STMTDLY -Wno-INFINITELOOP -DNO_ICE40_DEFAULT_ASSIGNMENTS --top tb_$(PROJ) $(INC_DIRS) -v $(ICE40_LIBS) $^ --xml-output $@
+	verilator -xml-only --bbox-unsup --bbox-sys -Wno-lint -Wno-TIMESCALEMOD -Wno-STMTDLY -Wno-INFINITELOOP -DNO_ICE40_DEFAULT_ASSIGNMENTS --top tb_$(PROJ) $(INC_DIRS) -v $(ICE40_LIB) $^ --xml-output $@
 
 $(OUT_DIR)/%.stems: $(OUT_DIR)/%.xml
 	xml2stems $< $@
