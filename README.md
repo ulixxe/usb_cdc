@@ -47,7 +47,7 @@ USB\_CDC provides a FIFO interface to transfer data to/from FPGA application. Bo
 
 ![](readme_files/fifo_timings.png)
 
-Data is consumed on rising `app_clk` when both `valid` and `ready` signals are high (red up arrows on the picture). Tsetup and Thold depend on FPGA technology.
+Data is consumed on rising `app_clk` when both `valid` and `ready` signals are high (red up arrows on the picture). Tsetup and Thold depend on FPGA/ASIC technology.
 
 The `valid` signal is high only when new data is available. After data is consumed and there is no new data available, the `valid` signal is asserted low.
 
@@ -58,7 +58,10 @@ The `valid` signal is high only when new data is available. After data is consum
 USB\_CDC has few Verilog parameters that allow customizing some module features.
 
 ### VENDORID and PRODUCTID
-VENDORID and PRODUCTID define USB vendor ID (VID) and product ID (PID). For TinyFPGA, these are 0x1D50 and 0x6130. By default, they are not defined (VENDORID=0x0000 and PRODUCTID=0x0000).
+VENDORID and PRODUCTID define USB vendor ID (VID) and product ID (PID).  
+For TinyFPGA: VID=0x1D50 and PID=0x6130.  
+For Fomu: VID=0x1209 and PID=0x5BF0.  
+By default, they are not defined (VENDORID=0x0000 and PRODUCTID=0x0000).
 
 ### IN\_BULK\_MAXPACKETSIZE and OUT\_BULK\_MAXPACKETSIZE
 IN\_BULK\_MAXPACKETSIZE and OUT\_BULK\_MAXPACKETSIZE define maximum bulk data payload sizes for IN and OUT bulk transactions. The allowable full-speed values are only 8, 16, 32, and 64 bytes. The default value for both is 8.
@@ -91,7 +94,7 @@ So, with freq(`clk`) &ge; 48MHz, data throughput is 1.5MB/s if freq(`app_clk`) >
 
 
 ## Examples
-A few examples with complete implementation on FPGA are present in the `examples` directory. In addition, simulation testbenches are provided for each one.
+A few examples with complete implementation on both Fomu and TinyFPGA-BX are present in the `examples` directory. In addition, simulation testbenches are provided for each one.
  
 ## Logic Resource Utilization
 
@@ -100,12 +103,12 @@ The USB\_CDC code alone (with IN/OUT data in simple loopback configuration and a
 ```
 Logic Resource Utilization:
 ---------------------------
-    Total Logic Cells: 1141/7680
-        Combinational Logic Cells: 744      out of   7680      9.6875%
-        Sequential Logic Cells:    397      out of   7680      5.16927%
-        Logic Tiles:               243      out of   960       25.3125%
+    Total Logic Cells: 1214/7680
+        Combinational Logic Cells: 812      out of   7680      10.5729%
+        Sequential Logic Cells:    402      out of   7680      5.23438%
+        Logic Tiles:               218      out of   960       22.7083%
     Registers: 
-        Logic Registers:           397      out of   7680      5.16927%
+        Logic Registers:           402      out of   7680      5.23438%
         IO Registers:              0        out of   1280      0
     Block RAMs:                    0        out of   32        0%
     Warm Boots:                    0        out of   1         0%
@@ -123,8 +126,8 @@ The clock timing summary is:
                    1::Clock Frequency Summary
  =====================================================================
 Number of clocks: 2
-Clock: clk               | Frequency: 69.50 MHz   | Target: 48.39 MHz  | 
-Clock: clk_app           | Frequency: 223.54 MHz  | Target: 12.50 MHz  | 
+Clock: clk_app           | Frequency: 207.26 MHz  | Target: 12.00 MHz  | 
+Clock: clk_usb           | Frequency: 109.31 MHz  | Target: 48.01 MHz  | 
 ```
 
 ## Directory Structure
@@ -140,6 +143,9 @@ Clock: clk_app           | Frequency: 223.54 MHz  | Target: 12.50 MHz  |
 │   ├── sie.v
 │   └── usb_cdc.v
 └── examples                             --> Example designs
+    ├── Fomu
+    │   :
+    │
     └── TinyFPGA-BX
         ├── hdl
         │   ├── demo

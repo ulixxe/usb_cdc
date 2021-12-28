@@ -1,0 +1,1474 @@
+# ******************************************************************************
+
+# iCEcube Static Timer
+
+# Version:            2020.12.27943
+
+# Build Date:         Dec 10 2020 17:25:43
+
+# File Generated:     Dec 28 2021 19:20:17
+
+# Purpose:            Timing Report with critical paths info
+
+# Copyright (C) 2006-2010 by Lattice Semiconductor Corp. All rights reserved.
+
+# ******************************************************************************
+
+Device, Power Grade: 5K, -T
+Derating factors (Best:Typical:Worst) :-  ( 0.491675 : 0.85965 : 1.32445 )
+Derating factor used to generate this timing report:  Worst
+Based on the following operating conditions 
+Junction Temperature(degree Celsius): 85
+Core Voltage(V): 1.14
+Process Corner:  Worst
+NOTE:
+Please check both worst-case and best-case scenarios for "Setup Times" 
+and "Hold Times" checks
+ #####################################################################
+                    Table of Contents
+ =====================================================================
+	1::Clock Frequency Summary
+	2::Clock Relationship Summary
+	3::Datasheet Report
+		3.1::Setup Times
+		3.2::Clock to Out
+		3.3::Pad to Pad
+		3.4::Hold Times
+		3.5::Minimum Clock to Out
+		3.6::Minimum Pad To Pad
+	4::Path Details for Clock Frequency Summary
+		4.1::Critical Path Report for clk_3mhz
+		4.2::Critical Path Report for clk_app
+		4.3::Critical Path Report for clk_usb
+	5::Path Details for Clock Relationship Summary
+		5.1::Critical Path Report for (clk_usb:R vs. clk_usb:R)
+		5.2::Critical Path Report for (clk_3mhz:R vs. clk_3mhz:R)
+		5.3::Critical Path Report for (clk_app:R vs. clk_app:R)
+	6::Path Details for DataSheet
+		6.1::Setup Times Path Details
+			6.1.1::Path details for port: usb_dn:in
+			6.1.2::Path details for port: usb_dp:in
+		6.2::Clock to Out Path Details
+			6.2.1::Path details for port: rgb1
+			6.2.2::Path details for port: usb_dn:out
+			6.2.3::Path details for port: usb_dp:out
+			6.2.4::Path details for port: usb_dp_pu
+		6.3::PI to PO Path Details
+		6.4::Hold Times Path Details
+			6.4.1::Path details for port: usb_dn:in
+			6.4.2::Path details for port: usb_dp:in
+		6.5::Minimum Clock to Out Path Details
+			6.5.1::Path details for port: rgb1
+			6.5.2::Path details for port: usb_dn:out
+			6.5.3::Path details for port: usb_dp:out
+			6.5.4::Path details for port: usb_dp_pu
+		6.6::Minimum Pad To Pad Path Details
+ =====================================================================
+                    End of Table of Contents
+ #####################################################################
+
+ #####################################################################
+                    1::Clock Frequency Summary
+ =====================================================================
+Number of clocks: 4
+Clock: clk_3mhz  | Frequency: 84.08 MHz   | Target: 3.00 MHz   | 
+Clock: clk_app   | Frequency: 122.17 MHz  | Target: 12.00 MHz  | 
+Clock: clk_usb   | Frequency: 60.84 MHz   | Target: 48.01 MHz  | 
+Clock: clki      | N/A                    | Target: 48.01 MHz  | 
+
+ =====================================================================
+                    End of Clock Frequency Summary
+ #####################################################################
+
+
+ #####################################################################
+                    2::Clock Relationship Summary
+ =====================================================================
+
+Launch Clock  Capture Clock  Constraint(R-R)  Slack(R-R)  Constraint(R-F)  Slack(R-F)  Constraint(F-F)  Slack(F-F)  Constraint(F-R)  Slack(F-R)  
+------------  -------------  ---------------  ----------  ---------------  ----------  ---------------  ----------  ---------------  ----------  
+clk_3mhz      clk_3mhz       333280           321386      N/A              N/A         N/A              N/A         N/A              N/A         
+clk_3mhz      clk_app        False path       False path  False path       False path  False path       False path  False path       False path  
+clk_3mhz      clk_usb        False path       False path  False path       False path  False path       False path  False path       False path  
+clk_app       clk_3mhz       False path       False path  False path       False path  False path       False path  False path       False path  
+clk_app       clk_app        83320            75135       N/A              N/A         N/A              N/A         N/A              N/A         
+clk_app       clk_usb        False path       False path  False path       False path  False path       False path  False path       False path  
+clk_usb       clk_3mhz       False path       False path  False path       False path  False path       False path  False path       False path  
+clk_usb       clk_app        False path       False path  False path       False path  False path       False path  False path       False path  
+clk_usb       clk_usb        20830            4394        N/A              N/A         N/A              N/A         N/A              N/A         
+clki          clk_3mhz       False path       False path  False path       False path  False path       False path  False path       False path  
+clki          clk_app        False path       False path  False path       False path  False path       False path  False path       False path  
+clki          clk_usb        False path       False path  False path       False path  False path       False path  False path       False path  
+
+ =====================================================================
+                    End of Clock Relationship Summary
+ #####################################################################
+
+
+ #####################################################################
+                    3::Datasheet Report
+
+All values are in Picoseconds
+ =====================================================================
+
+                        3.1::Setup Times
+                        ----------------
+
+Data Port  Clock Port                 Setup Times  Clock Reference:Phase  
+---------  -------------------------  -----------  ---------------------  
+usb_dn:in  clk_gb/GLOBALBUFFEROUTPUT  5476         clk_usb:R              
+usb_dp:in  clk_gb/GLOBALBUFFEROUTPUT  6616         clk_usb:R              
+
+
+                       3.2::Clock to Out
+                       -----------------
+
+Data Port   Clock Port                 Clock to Out  Clock Reference:Phase  
+----------  -------------------------  ------------  ---------------------  
+rgb1        clk_gb/GLOBALBUFFEROUTPUT  150749        clk_3mhz:R             
+usb_dn:out  clk_gb/GLOBALBUFFEROUTPUT  18502         clk_usb:R              
+usb_dp:out  clk_gb/GLOBALBUFFEROUTPUT  18502         clk_usb:R              
+usb_dp_pu   clk_gb/GLOBALBUFFEROUTPUT  10578         clk_3mhz:R             
+
+
+                         3.3::Pad to Pad
+                         ---------------
+
+Port Name (Input)  Port Name (Output)  Pad to Pad  
+-----------------  ------------------  ----------  
+
+
+                         3.4::Hold Times
+                         ---------------
+
+Data Port  Clock Port                 Hold Times  Clock Reference:Phase  
+---------  -------------------------  ----------  ---------------------  
+usb_dn:in  clk_gb/GLOBALBUFFEROUTPUT  -4619       clk_usb:R              
+usb_dp:in  clk_gb/GLOBALBUFFEROUTPUT  -5334       clk_usb:R              
+
+
+               3.5::Minimum Clock to Out
+               -------------------------
+
+Data Port   Clock Port                 Minimum Clock to Out  Clock Reference:Phase  
+----------  -------------------------  --------------------  ---------------------  
+rgb1        clk_gb/GLOBALBUFFEROUTPUT  110036                clk_3mhz:R             
+usb_dn:out  clk_gb/GLOBALBUFFEROUTPUT  13741                 clk_usb:R              
+usb_dp:out  clk_gb/GLOBALBUFFEROUTPUT  13529                 clk_usb:R              
+usb_dp_pu   clk_gb/GLOBALBUFFEROUTPUT  10285                 clk_3mhz:R             
+
+
+                 3.6::Minimum Pad To Pad
+                 -----------------------
+
+Port Name (Input)  Port Name (Output)  Minimum Pad To Pad  
+-----------------  ------------------  ------------------  
+
+===================================================================== 
+                    End of Datasheet Report
+##################################################################### 
+##################################################################### 
+                    4::Path Details for Clock Frequency Summary
+===================================================================== 
+4.1::Critical Path Report for clk_3mhz
+**************************************
+Clock: clk_3mhz
+Frequency: 84.08 MHz | Target: 3.00 MHz
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : up_cnt_0_LC_13_11_0/lcout
+Path End         : up_cnt_21_LC_13_13_5/in3
+Capture Clock    : up_cnt_21_LC_13_13_5/clk
+Setup Constraint : 333280p
+Path slack       : 321387p
+
+Capture Clock Arrival Time (clk_3mhz:R#2)   333280
++ Master Clock Source Latency                    0
++ Capture Clock Path Delay                    1139
+- Setup Time                                  -728
+-----------------------------------------   ------ 
+End-of-path required time (ps)              333691
+
+Launch Clock Arrival Time (clk_3mhz:R#1)       0
++ Master Clock Source Latency                  0
++ Launch Clock Path Delay                   1139
++ Clock To Q                                1391
++ Data Path Delay                           9774
+----------------------------------------   ----- 
+End-of-path arrival time (ps)              12304
+ 
+Launch Clock Path
+pin name                   model name                 delay  cumulative delay  edge  Fanout
+-------------------------  -------------------------  -----  ----------------  ----  ------
+clk_gb/GLOBALBUFFEROUTPUT  ICE_GB                         0                 0  RISE     397
+I__9948/I                  gio2CtrlBuf                    0                 0  RISE       1
+I__9948/O                  gio2CtrlBuf                    0                 0  RISE       1
+I__9949/I                  GlobalMux                      0                 0  RISE       1
+I__9949/O                  GlobalMux                    252               252  RISE       1
+I__10063/I                 ClkMux                         0               252  RISE       1
+I__10063/O                 ClkMux                       887              1139  RISE       1
+up_cnt_0_LC_13_11_0/clk    LogicCell40_SEQ_MODE_1000      0              1139  RISE       1
+
+Data path
+pin name                          model name                 delay  cumulative delay  slack  edge  Fanout
+--------------------------------  -------------------------  -----  ----------------  -----  ----  ------
+up_cnt_0_LC_13_11_0/lcout         LogicCell40_SEQ_MODE_1000   1391              2530  321386  RISE       1
+I__9063/I                         LocalMux                       0              2530  321386  RISE       1
+I__9063/O                         LocalMux                    1099              3629  321386  RISE       1
+I__9064/I                         InMux                          0              3629  321386  RISE       1
+I__9064/O                         InMux                        662              4291  321386  RISE       1
+up_cnt_0_LC_13_11_0/in1           LogicCell40_SEQ_MODE_1000      0              4291  321386  RISE       1
+up_cnt_0_LC_13_11_0/carryout      LogicCell40_SEQ_MODE_1000    675              4967  321386  RISE       2
+up_cnt_1_LC_13_11_1/carryin       LogicCell40_SEQ_MODE_1000      0              4967  321386  RISE       1
+up_cnt_1_LC_13_11_1/carryout      LogicCell40_SEQ_MODE_1000    278              5245  321386  RISE       2
+up_cnt_2_LC_13_11_2/carryin       LogicCell40_SEQ_MODE_1000      0              5245  321386  RISE       1
+up_cnt_2_LC_13_11_2/carryout      LogicCell40_SEQ_MODE_1000    278              5523  321386  RISE       2
+up_cnt_3_LC_13_11_3/carryin       LogicCell40_SEQ_MODE_1000      0              5523  321386  RISE       1
+up_cnt_3_LC_13_11_3/carryout      LogicCell40_SEQ_MODE_1000    278              5801  321386  RISE       2
+up_cnt_4_LC_13_11_4/carryin       LogicCell40_SEQ_MODE_1000      0              5801  321386  RISE       1
+up_cnt_4_LC_13_11_4/carryout      LogicCell40_SEQ_MODE_1000    278              6079  321386  RISE       2
+up_cnt_5_LC_13_11_5/carryin       LogicCell40_SEQ_MODE_1000      0              6079  321386  RISE       1
+up_cnt_5_LC_13_11_5/carryout      LogicCell40_SEQ_MODE_1000    278              6357  321386  RISE       2
+up_cnt_6_LC_13_11_6/carryin       LogicCell40_SEQ_MODE_1000      0              6357  321386  RISE       1
+up_cnt_6_LC_13_11_6/carryout      LogicCell40_SEQ_MODE_1000    278              6636  321386  RISE       2
+up_cnt_7_LC_13_11_7/carryin       LogicCell40_SEQ_MODE_1000      0              6636  321386  RISE       1
+up_cnt_7_LC_13_11_7/carryout      LogicCell40_SEQ_MODE_1000    278              6914  321386  RISE       1
+IN_MUX_bfv_13_12_0_/carryinitin   ICE_CARRY_IN_MUX               0              6914  321386  RISE       1
+IN_MUX_bfv_13_12_0_/carryinitout  ICE_CARRY_IN_MUX             556              7470  321386  RISE       2
+up_cnt_8_LC_13_12_0/carryin       LogicCell40_SEQ_MODE_1000      0              7470  321386  RISE       1
+up_cnt_8_LC_13_12_0/carryout      LogicCell40_SEQ_MODE_1000    278              7748  321386  RISE       2
+up_cnt_9_LC_13_12_1/carryin       LogicCell40_SEQ_MODE_1000      0              7748  321386  RISE       1
+up_cnt_9_LC_13_12_1/carryout      LogicCell40_SEQ_MODE_1000    278              8026  321386  RISE       2
+up_cnt_10_LC_13_12_2/carryin      LogicCell40_SEQ_MODE_1000      0              8026  321386  RISE       1
+up_cnt_10_LC_13_12_2/carryout     LogicCell40_SEQ_MODE_1000    278              8304  321386  RISE       2
+up_cnt_11_LC_13_12_3/carryin      LogicCell40_SEQ_MODE_1000      0              8304  321386  RISE       1
+up_cnt_11_LC_13_12_3/carryout     LogicCell40_SEQ_MODE_1000    278              8582  321386  RISE       2
+up_cnt_12_LC_13_12_4/carryin      LogicCell40_SEQ_MODE_1000      0              8582  321386  RISE       1
+up_cnt_12_LC_13_12_4/carryout     LogicCell40_SEQ_MODE_1000    278              8861  321386  RISE       2
+up_cnt_13_LC_13_12_5/carryin      LogicCell40_SEQ_MODE_1000      0              8861  321386  RISE       1
+up_cnt_13_LC_13_12_5/carryout     LogicCell40_SEQ_MODE_1000    278              9139  321386  RISE       2
+up_cnt_14_LC_13_12_6/carryin      LogicCell40_SEQ_MODE_1000      0              9139  321386  RISE       1
+up_cnt_14_LC_13_12_6/carryout     LogicCell40_SEQ_MODE_1000    278              9417  321386  RISE       2
+up_cnt_15_LC_13_12_7/carryin      LogicCell40_SEQ_MODE_1000      0              9417  321386  RISE       1
+up_cnt_15_LC_13_12_7/carryout     LogicCell40_SEQ_MODE_1000    278              9695  321386  RISE       1
+IN_MUX_bfv_13_13_0_/carryinitin   ICE_CARRY_IN_MUX               0              9695  321386  RISE       1
+IN_MUX_bfv_13_13_0_/carryinitout  ICE_CARRY_IN_MUX             556             10251  321386  RISE       2
+up_cnt_16_LC_13_13_0/carryin      LogicCell40_SEQ_MODE_1000      0             10251  321386  RISE       1
+up_cnt_16_LC_13_13_0/carryout     LogicCell40_SEQ_MODE_1000    278             10529  321386  RISE       2
+up_cnt_17_LC_13_13_1/carryin      LogicCell40_SEQ_MODE_1000      0             10529  321386  RISE       1
+up_cnt_17_LC_13_13_1/carryout     LogicCell40_SEQ_MODE_1000    278             10808  321386  RISE       2
+up_cnt_18_LC_13_13_2/carryin      LogicCell40_SEQ_MODE_1000      0             10808  321386  RISE       1
+up_cnt_18_LC_13_13_2/carryout     LogicCell40_SEQ_MODE_1000    278             11086  321386  RISE       2
+up_cnt_19_LC_13_13_3/carryin      LogicCell40_SEQ_MODE_1000      0             11086  321386  RISE       1
+up_cnt_19_LC_13_13_3/carryout     LogicCell40_SEQ_MODE_1000    278             11364  321386  RISE       2
+up_cnt_20_LC_13_13_4/carryin      LogicCell40_SEQ_MODE_1000      0             11364  321386  RISE       1
+up_cnt_20_LC_13_13_4/carryout     LogicCell40_SEQ_MODE_1000    278             11642  321386  RISE       1
+I__9549/I                         InMux                          0             11642  321386  RISE       1
+I__9549/O                         InMux                        662             12304  321386  RISE       1
+up_cnt_21_LC_13_13_5/in3          LogicCell40_SEQ_MODE_1000      0             12304  321386  RISE       1
+
+Capture Clock Path
+pin name                   model name                 delay  cumulative delay  edge  Fanout
+-------------------------  -------------------------  -----  ----------------  ----  ------
+clk_gb/GLOBALBUFFEROUTPUT  ICE_GB                         0                 0  RISE     397
+I__9948/I                  gio2CtrlBuf                    0                 0  RISE       1
+I__9948/O                  gio2CtrlBuf                    0                 0  RISE       1
+I__9949/I                  GlobalMux                      0                 0  RISE       1
+I__9949/O                  GlobalMux                    252               252  RISE       1
+I__10076/I                 ClkMux                         0               252  RISE       1
+I__10076/O                 ClkMux                       887              1139  RISE       1
+up_cnt_21_LC_13_13_5/clk   LogicCell40_SEQ_MODE_1000      0              1139  RISE       1
+
+
+===================================================================== 
+4.2::Critical Path Report for clk_app
+*************************************
+Clock: clk_app
+Frequency: 122.17 MHz | Target: 12.00 MHz
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : u_usb_cdc.u_bulk_endp.u_gtex4_async_data_data_rstn_sq_er_0_LC_8_5_0/lcout
+Path End         : u_usb_cdc.u_bulk_endp.u_gtex4_async_data_in_data_q_7_LC_7_10_4/sr
+Capture Clock    : u_usb_cdc.u_bulk_endp.u_gtex4_async_data_in_data_q_7_LC_7_10_4/clk
+Setup Constraint : 83320p
+Path slack       : 75135p
+
+Capture Clock Arrival Time (clk_app:R#2)   83320
++ Master Clock Source Latency                  0
++ Capture Clock Path Delay                  1139
+- Setup Time                                -424
+----------------------------------------   ----- 
+End-of-path required time (ps)             84035
+
+Launch Clock Arrival Time (clk_app:R#1)      0
++ Master Clock Source Latency                0
++ Launch Clock Path Delay                 1139
++ Clock To Q                              1391
++ Data Path Delay                         6370
+---------------------------------------   ---- 
+End-of-path arrival time (ps)             8900
+ 
+Launch Clock Path
+pin name                                                                 model name                 delay  cumulative delay  edge  Fanout
+-----------------------------------------------------------------------  -------------------------  -----  ----------------  ----  ------
+clk_gb/GLOBALBUFFEROUTPUT                                                ICE_GB                         0                 0  RISE     397
+I__9948/I                                                                gio2CtrlBuf                    0                 0  RISE       1
+I__9948/O                                                                gio2CtrlBuf                    0                 0  RISE       1
+I__9949/I                                                                GlobalMux                      0                 0  RISE       1
+I__9949/O                                                                GlobalMux                    252               252  RISE       1
+I__9979/I                                                                ClkMux                         0               252  RISE       1
+I__9979/O                                                                ClkMux                       887              1139  RISE       1
+u_usb_cdc.u_bulk_endp.u_gtex4_async_data_data_rstn_sq_er_0_LC_8_5_0/clk  LogicCell40_SEQ_MODE_1010      0              1139  RISE       1
+
+Data path
+pin name                                                                           model name                 delay  cumulative delay  slack  edge  Fanout
+---------------------------------------------------------------------------------  -------------------------  -----  ----------------  -----  ----  ------
+u_usb_cdc.u_bulk_endp.u_gtex4_async_data_data_rstn_sq_er_0_LC_8_5_0/lcout          LogicCell40_SEQ_MODE_1010   1391              2530  75135  RISE       1
+I__3838/I                                                                          LocalMux                       0              2530  75135  RISE       1
+I__3838/O                                                                          LocalMux                    1099              3629  75135  RISE       1
+I__3839/I                                                                          InMux                          0              3629  75135  RISE       1
+I__3839/O                                                                          InMux                        662              4291  75135  RISE       1
+u_usb_cdc.u_bulk_endp.u_gtex4_async_data_data_rstn_sq_er_RNIGFKF_0_LC_7_6_1/in1    LogicCell40_SEQ_MODE_0000      0              4291  75135  RISE       1
+u_usb_cdc.u_bulk_endp.u_gtex4_async_data_data_rstn_sq_er_RNIGFKF_0_LC_7_6_1/lcout  LogicCell40_SEQ_MODE_0000   1232              5523  75135  FALL       9
+I__4010/I                                                                          Odrv12                         0              5523  75135  FALL       1
+I__4010/O                                                                          Odrv12                      1232              6755  75135  FALL       1
+I__4014/I                                                                          Sp12to4                        0              6755  75135  FALL       1
+I__4014/O                                                                          Sp12to4                      848              7602  75135  FALL       1
+I__4019/I                                                                          LocalMux                       0              7602  75135  FALL       1
+I__4019/O                                                                          LocalMux                     768              8371  75135  FALL       1
+I__4024/I                                                                          SRMux                          0              8371  75135  FALL       1
+I__4024/O                                                                          SRMux                        530              8900  75135  FALL       1
+u_usb_cdc.u_bulk_endp.u_gtex4_async_data_in_data_q_7_LC_7_10_4/sr                  LogicCell40_SEQ_MODE_1010      0              8900  75135  FALL       1
+
+Capture Clock Path
+pin name                                                            model name                 delay  cumulative delay  edge  Fanout
+------------------------------------------------------------------  -------------------------  -----  ----------------  ----  ------
+clk_gb/GLOBALBUFFEROUTPUT                                           ICE_GB                         0                 0  RISE     397
+I__9948/I                                                           gio2CtrlBuf                    0                 0  RISE       1
+I__9948/O                                                           gio2CtrlBuf                    0                 0  RISE       1
+I__9949/I                                                           GlobalMux                      0                 0  RISE       1
+I__9949/O                                                           GlobalMux                    252               252  RISE       1
+I__10010/I                                                          ClkMux                         0               252  RISE       1
+I__10010/O                                                          ClkMux                       887              1139  RISE       1
+u_usb_cdc.u_bulk_endp.u_gtex4_async_data_in_data_q_7_LC_7_10_4/clk  LogicCell40_SEQ_MODE_1010      0              1139  RISE       1
+
+
+===================================================================== 
+4.3::Critical Path Report for clk_usb
+*************************************
+Clock: clk_usb
+Frequency: 60.84 MHz | Target: 48.01 MHz
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : u_usb_cdc.u_sie.u_phy_tx.clk_cnt_q_0_LC_8_8_4/lcout
+Path End         : u_usb_cdc.u_sie.crc16_q_10_LC_12_2_4/ce
+Capture Clock    : u_usb_cdc.u_sie.crc16_q_10_LC_12_2_4/clk
+Setup Constraint : 20830p
+Path slack       : 4393p
+
+Capture Clock Arrival Time (clk_usb:R#2)   20830
++ Capture Clock Source Latency                 0
++ Capture Clock Path Delay                  1139
+- Setup Time                                   0
+----------------------------------------   ----- 
+End-of-path required time (ps)             21969
+
+Launch Clock Arrival Time (clk_usb:R#1)       0
++ Launch Clock Source Latency                 0
++ Launch Clock Path Delay                  1139
++ Clock To Q                               1391
++ Data Path Delay                         15046
+---------------------------------------   ----- 
+End-of-path arrival time (ps)             17576
+ 
+Launch Clock Path
+pin name                                           model name                 delay  cumulative delay  edge  Fanout
+-------------------------------------------------  -------------------------  -----  ----------------  ----  ------
+clk_gb/GLOBALBUFFEROUTPUT                          ICE_GB                         0                 0  RISE     397
+I__9948/I                                          gio2CtrlBuf                    0                 0  RISE       1
+I__9948/O                                          gio2CtrlBuf                    0                 0  RISE       1
+I__9949/I                                          GlobalMux                      0                 0  RISE       1
+I__9949/O                                          GlobalMux                    252               252  RISE       1
+I__10003/I                                         ClkMux                         0               252  RISE       1
+I__10003/O                                         ClkMux                       887              1139  RISE       1
+u_usb_cdc.u_sie.u_phy_tx.clk_cnt_q_0_LC_8_8_4/clk  LogicCell40_SEQ_MODE_1010      0              1139  RISE       1
+
+Data path
+pin name                                                                   model name                 delay  cumulative delay  slack  edge  Fanout
+-------------------------------------------------------------------------  -------------------------  -----  ----------------  -----  ----  ------
+u_usb_cdc.u_sie.u_phy_tx.clk_cnt_q_0_LC_8_8_4/lcout                        LogicCell40_SEQ_MODE_1010   1391              2530   4394  RISE       3
+I__3972/I                                                                  LocalMux                       0              2530   4394  RISE       1
+I__3972/O                                                                  LocalMux                    1099              3629   4394  RISE       1
+I__3973/I                                                                  InMux                          0              3629   4394  RISE       1
+I__3973/O                                                                  InMux                        662              4291   4394  RISE       1
+u_usb_cdc.u_sie.u_phy_tx.clk_cnt_q_RNIPJRB_1_LC_8_8_6/in1                  LogicCell40_SEQ_MODE_0000      0              4291   4394  RISE       1
+u_usb_cdc.u_sie.u_phy_tx.clk_cnt_q_RNIPJRB_1_LC_8_8_6/lcout                LogicCell40_SEQ_MODE_0000   1179              5470   4394  RISE      11
+I__9681/I                                                                  LocalMux                       0              5470   4394  RISE       1
+I__9681/O                                                                  LocalMux                    1099              6569   4394  RISE       1
+I__9684/I                                                                  InMux                          0              6569   4394  RISE       1
+I__9684/O                                                                  InMux                        662              7232   4394  RISE       1
+u_usb_cdc.u_sie.u_phy_tx.stuffing_cnt_q_RNI4V8K1_2_LC_9_7_0/in3            LogicCell40_SEQ_MODE_0000      0              7232   4394  RISE       1
+u_usb_cdc.u_sie.u_phy_tx.stuffing_cnt_q_RNI4V8K1_2_LC_9_7_0/ltout          LogicCell40_SEQ_MODE_0000    609              7841   4394  FALL       1
+I__4582/I                                                                  CascadeMux                     0              7841   4394  FALL       1
+I__4582/O                                                                  CascadeMux                     0              7841   4394  FALL       1
+u_usb_cdc.u_sie.u_phy_tx.tx_valid_q_RNIGBML2_LC_9_7_1/in2                  LogicCell40_SEQ_MODE_0000      0              7841   4394  FALL       1
+u_usb_cdc.u_sie.u_phy_tx.tx_valid_q_RNIGBML2_LC_9_7_1/lcout                LogicCell40_SEQ_MODE_0000   1179              9020   4394  RISE       2
+I__8907/I                                                                  LocalMux                       0              9020   4394  RISE       1
+I__8907/O                                                                  LocalMux                    1099             10119   4394  RISE       1
+I__8909/I                                                                  InMux                          0             10119   4394  RISE       1
+I__8909/O                                                                  InMux                        662             10781   4394  RISE       1
+u_usb_cdc.u_sie.u_phy_rx.rx_state_q_RNI6VSI4_3_LC_9_7_6/in3                LogicCell40_SEQ_MODE_0000      0             10781   4394  RISE       1
+u_usb_cdc.u_sie.u_phy_rx.rx_state_q_RNI6VSI4_3_LC_9_7_6/lcout              LogicCell40_SEQ_MODE_0000    861             11642   4394  RISE       1
+I__4643/I                                                                  Odrv4                          0             11642   4394  RISE       1
+I__4643/O                                                                  Odrv4                        596             12238   4394  RISE       1
+I__4644/I                                                                  Span4Mux_v                     0             12238   4394  RISE       1
+I__4644/O                                                                  Span4Mux_v                   596             12834   4394  RISE       1
+I__4645/I                                                                  Span4Mux_s2_v                  0             12834   4394  RISE       1
+I__4645/O                                                                  Span4Mux_s2_v                437             13271   4394  RISE       1
+I__4646/I                                                                  LocalMux                       0             13271   4394  RISE       1
+I__4646/O                                                                  LocalMux                    1099             14370   4394  RISE       1
+I__4647/I                                                                  IoInMux                        0             14370   4394  RISE       1
+I__4647/O                                                                  IoInMux                      662             15033   4394  RISE       1
+u_usb_cdc.u_sie.u_phy_rx.rx_state_q_RNI6VSI4_1_3/USERSIGNALTOGLOBALBUFFER  ICE_GB                         0             15033   4394  RISE       1
+u_usb_cdc.u_sie.u_phy_rx.rx_state_q_RNI6VSI4_1_3/GLOBALBUFFEROUTPUT        ICE_GB                      1589             16622   4394  RISE      56
+I__8913/I                                                                  gio2CtrlBuf                    0             16622   4394  RISE       1
+I__8913/O                                                                  gio2CtrlBuf                    0             16622   4394  RISE       1
+I__8914/I                                                                  GlobalMux                      0             16622   4394  RISE       1
+I__8914/O                                                                  GlobalMux                    252             16874   4394  RISE       1
+I__8915/I                                                                  CEMux                          0             16874   4394  RISE       1
+I__8915/O                                                                  CEMux                        702             17576   4394  RISE       1
+u_usb_cdc.u_sie.crc16_q_10_LC_12_2_4/ce                                    LogicCell40_SEQ_MODE_1010      0             17576   4394  RISE       1
+
+Capture Clock Path
+pin name                                  model name                 delay  cumulative delay  edge  Fanout
+----------------------------------------  -------------------------  -----  ----------------  ----  ------
+clk_gb/GLOBALBUFFEROUTPUT                 ICE_GB                         0                 0  RISE     397
+I__9948/I                                 gio2CtrlBuf                    0                 0  RISE       1
+I__9948/O                                 gio2CtrlBuf                    0                 0  RISE       1
+I__9949/I                                 GlobalMux                      0                 0  RISE       1
+I__9949/O                                 GlobalMux                    252               252  RISE       1
+I__9981/I                                 ClkMux                         0               252  RISE       1
+I__9981/O                                 ClkMux                       887              1139  RISE       1
+u_usb_cdc.u_sie.crc16_q_10_LC_12_2_4/clk  LogicCell40_SEQ_MODE_1010      0              1139  RISE       1
+
+
+
+===================================================================== 
+                    End of Path Details for Clock Frequency Summary
+##################################################################### 
+
+
+##################################################################### 
+                    5::Path Details for Clock Relationship Summary
+===================================================================== 
+
+5.1::Critical Path Report for (clk_usb:R vs. clk_usb:R)
+*******************************************************
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : u_usb_cdc.u_sie.u_phy_tx.clk_cnt_q_0_LC_8_8_4/lcout
+Path End         : u_usb_cdc.u_sie.crc16_q_10_LC_12_2_4/ce
+Capture Clock    : u_usb_cdc.u_sie.crc16_q_10_LC_12_2_4/clk
+Setup Constraint : 20830p
+Path slack       : 4393p
+
+Capture Clock Arrival Time (clk_usb:R#2)   20830
++ Capture Clock Source Latency                 0
++ Capture Clock Path Delay                  1139
+- Setup Time                                   0
+----------------------------------------   ----- 
+End-of-path required time (ps)             21969
+
+Launch Clock Arrival Time (clk_usb:R#1)       0
++ Launch Clock Source Latency                 0
++ Launch Clock Path Delay                  1139
++ Clock To Q                               1391
++ Data Path Delay                         15046
+---------------------------------------   ----- 
+End-of-path arrival time (ps)             17576
+ 
+Launch Clock Path
+pin name                                           model name                 delay  cumulative delay  edge  Fanout
+-------------------------------------------------  -------------------------  -----  ----------------  ----  ------
+clk_gb/GLOBALBUFFEROUTPUT                          ICE_GB                         0                 0  RISE     397
+I__9948/I                                          gio2CtrlBuf                    0                 0  RISE       1
+I__9948/O                                          gio2CtrlBuf                    0                 0  RISE       1
+I__9949/I                                          GlobalMux                      0                 0  RISE       1
+I__9949/O                                          GlobalMux                    252               252  RISE       1
+I__10003/I                                         ClkMux                         0               252  RISE       1
+I__10003/O                                         ClkMux                       887              1139  RISE       1
+u_usb_cdc.u_sie.u_phy_tx.clk_cnt_q_0_LC_8_8_4/clk  LogicCell40_SEQ_MODE_1010      0              1139  RISE       1
+
+Data path
+pin name                                                                   model name                 delay  cumulative delay  slack  edge  Fanout
+-------------------------------------------------------------------------  -------------------------  -----  ----------------  -----  ----  ------
+u_usb_cdc.u_sie.u_phy_tx.clk_cnt_q_0_LC_8_8_4/lcout                        LogicCell40_SEQ_MODE_1010   1391              2530   4394  RISE       3
+I__3972/I                                                                  LocalMux                       0              2530   4394  RISE       1
+I__3972/O                                                                  LocalMux                    1099              3629   4394  RISE       1
+I__3973/I                                                                  InMux                          0              3629   4394  RISE       1
+I__3973/O                                                                  InMux                        662              4291   4394  RISE       1
+u_usb_cdc.u_sie.u_phy_tx.clk_cnt_q_RNIPJRB_1_LC_8_8_6/in1                  LogicCell40_SEQ_MODE_0000      0              4291   4394  RISE       1
+u_usb_cdc.u_sie.u_phy_tx.clk_cnt_q_RNIPJRB_1_LC_8_8_6/lcout                LogicCell40_SEQ_MODE_0000   1179              5470   4394  RISE      11
+I__9681/I                                                                  LocalMux                       0              5470   4394  RISE       1
+I__9681/O                                                                  LocalMux                    1099              6569   4394  RISE       1
+I__9684/I                                                                  InMux                          0              6569   4394  RISE       1
+I__9684/O                                                                  InMux                        662              7232   4394  RISE       1
+u_usb_cdc.u_sie.u_phy_tx.stuffing_cnt_q_RNI4V8K1_2_LC_9_7_0/in3            LogicCell40_SEQ_MODE_0000      0              7232   4394  RISE       1
+u_usb_cdc.u_sie.u_phy_tx.stuffing_cnt_q_RNI4V8K1_2_LC_9_7_0/ltout          LogicCell40_SEQ_MODE_0000    609              7841   4394  FALL       1
+I__4582/I                                                                  CascadeMux                     0              7841   4394  FALL       1
+I__4582/O                                                                  CascadeMux                     0              7841   4394  FALL       1
+u_usb_cdc.u_sie.u_phy_tx.tx_valid_q_RNIGBML2_LC_9_7_1/in2                  LogicCell40_SEQ_MODE_0000      0              7841   4394  FALL       1
+u_usb_cdc.u_sie.u_phy_tx.tx_valid_q_RNIGBML2_LC_9_7_1/lcout                LogicCell40_SEQ_MODE_0000   1179              9020   4394  RISE       2
+I__8907/I                                                                  LocalMux                       0              9020   4394  RISE       1
+I__8907/O                                                                  LocalMux                    1099             10119   4394  RISE       1
+I__8909/I                                                                  InMux                          0             10119   4394  RISE       1
+I__8909/O                                                                  InMux                        662             10781   4394  RISE       1
+u_usb_cdc.u_sie.u_phy_rx.rx_state_q_RNI6VSI4_3_LC_9_7_6/in3                LogicCell40_SEQ_MODE_0000      0             10781   4394  RISE       1
+u_usb_cdc.u_sie.u_phy_rx.rx_state_q_RNI6VSI4_3_LC_9_7_6/lcout              LogicCell40_SEQ_MODE_0000    861             11642   4394  RISE       1
+I__4643/I                                                                  Odrv4                          0             11642   4394  RISE       1
+I__4643/O                                                                  Odrv4                        596             12238   4394  RISE       1
+I__4644/I                                                                  Span4Mux_v                     0             12238   4394  RISE       1
+I__4644/O                                                                  Span4Mux_v                   596             12834   4394  RISE       1
+I__4645/I                                                                  Span4Mux_s2_v                  0             12834   4394  RISE       1
+I__4645/O                                                                  Span4Mux_s2_v                437             13271   4394  RISE       1
+I__4646/I                                                                  LocalMux                       0             13271   4394  RISE       1
+I__4646/O                                                                  LocalMux                    1099             14370   4394  RISE       1
+I__4647/I                                                                  IoInMux                        0             14370   4394  RISE       1
+I__4647/O                                                                  IoInMux                      662             15033   4394  RISE       1
+u_usb_cdc.u_sie.u_phy_rx.rx_state_q_RNI6VSI4_1_3/USERSIGNALTOGLOBALBUFFER  ICE_GB                         0             15033   4394  RISE       1
+u_usb_cdc.u_sie.u_phy_rx.rx_state_q_RNI6VSI4_1_3/GLOBALBUFFEROUTPUT        ICE_GB                      1589             16622   4394  RISE      56
+I__8913/I                                                                  gio2CtrlBuf                    0             16622   4394  RISE       1
+I__8913/O                                                                  gio2CtrlBuf                    0             16622   4394  RISE       1
+I__8914/I                                                                  GlobalMux                      0             16622   4394  RISE       1
+I__8914/O                                                                  GlobalMux                    252             16874   4394  RISE       1
+I__8915/I                                                                  CEMux                          0             16874   4394  RISE       1
+I__8915/O                                                                  CEMux                        702             17576   4394  RISE       1
+u_usb_cdc.u_sie.crc16_q_10_LC_12_2_4/ce                                    LogicCell40_SEQ_MODE_1010      0             17576   4394  RISE       1
+
+Capture Clock Path
+pin name                                  model name                 delay  cumulative delay  edge  Fanout
+----------------------------------------  -------------------------  -----  ----------------  ----  ------
+clk_gb/GLOBALBUFFEROUTPUT                 ICE_GB                         0                 0  RISE     397
+I__9948/I                                 gio2CtrlBuf                    0                 0  RISE       1
+I__9948/O                                 gio2CtrlBuf                    0                 0  RISE       1
+I__9949/I                                 GlobalMux                      0                 0  RISE       1
+I__9949/O                                 GlobalMux                    252               252  RISE       1
+I__9981/I                                 ClkMux                         0               252  RISE       1
+I__9981/O                                 ClkMux                       887              1139  RISE       1
+u_usb_cdc.u_sie.crc16_q_10_LC_12_2_4/clk  LogicCell40_SEQ_MODE_1010      0              1139  RISE       1
+
+
+5.2::Critical Path Report for (clk_3mhz:R vs. clk_3mhz:R)
+*********************************************************
+
+++++ Path 2 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : up_cnt_0_LC_13_11_0/lcout
+Path End         : up_cnt_21_LC_13_13_5/in3
+Capture Clock    : up_cnt_21_LC_13_13_5/clk
+Setup Constraint : 333280p
+Path slack       : 321387p
+
+Capture Clock Arrival Time (clk_3mhz:R#2)   333280
++ Master Clock Source Latency                    0
++ Capture Clock Path Delay                    1139
+- Setup Time                                  -728
+-----------------------------------------   ------ 
+End-of-path required time (ps)              333691
+
+Launch Clock Arrival Time (clk_3mhz:R#1)       0
++ Master Clock Source Latency                  0
++ Launch Clock Path Delay                   1139
++ Clock To Q                                1391
++ Data Path Delay                           9774
+----------------------------------------   ----- 
+End-of-path arrival time (ps)              12304
+ 
+Launch Clock Path
+pin name                   model name                 delay  cumulative delay  edge  Fanout
+-------------------------  -------------------------  -----  ----------------  ----  ------
+clk_gb/GLOBALBUFFEROUTPUT  ICE_GB                         0                 0  RISE     397
+I__9948/I                  gio2CtrlBuf                    0                 0  RISE       1
+I__9948/O                  gio2CtrlBuf                    0                 0  RISE       1
+I__9949/I                  GlobalMux                      0                 0  RISE       1
+I__9949/O                  GlobalMux                    252               252  RISE       1
+I__10063/I                 ClkMux                         0               252  RISE       1
+I__10063/O                 ClkMux                       887              1139  RISE       1
+up_cnt_0_LC_13_11_0/clk    LogicCell40_SEQ_MODE_1000      0              1139  RISE       1
+
+Data path
+pin name                          model name                 delay  cumulative delay  slack  edge  Fanout
+--------------------------------  -------------------------  -----  ----------------  -----  ----  ------
+up_cnt_0_LC_13_11_0/lcout         LogicCell40_SEQ_MODE_1000   1391              2530  321386  RISE       1
+I__9063/I                         LocalMux                       0              2530  321386  RISE       1
+I__9063/O                         LocalMux                    1099              3629  321386  RISE       1
+I__9064/I                         InMux                          0              3629  321386  RISE       1
+I__9064/O                         InMux                        662              4291  321386  RISE       1
+up_cnt_0_LC_13_11_0/in1           LogicCell40_SEQ_MODE_1000      0              4291  321386  RISE       1
+up_cnt_0_LC_13_11_0/carryout      LogicCell40_SEQ_MODE_1000    675              4967  321386  RISE       2
+up_cnt_1_LC_13_11_1/carryin       LogicCell40_SEQ_MODE_1000      0              4967  321386  RISE       1
+up_cnt_1_LC_13_11_1/carryout      LogicCell40_SEQ_MODE_1000    278              5245  321386  RISE       2
+up_cnt_2_LC_13_11_2/carryin       LogicCell40_SEQ_MODE_1000      0              5245  321386  RISE       1
+up_cnt_2_LC_13_11_2/carryout      LogicCell40_SEQ_MODE_1000    278              5523  321386  RISE       2
+up_cnt_3_LC_13_11_3/carryin       LogicCell40_SEQ_MODE_1000      0              5523  321386  RISE       1
+up_cnt_3_LC_13_11_3/carryout      LogicCell40_SEQ_MODE_1000    278              5801  321386  RISE       2
+up_cnt_4_LC_13_11_4/carryin       LogicCell40_SEQ_MODE_1000      0              5801  321386  RISE       1
+up_cnt_4_LC_13_11_4/carryout      LogicCell40_SEQ_MODE_1000    278              6079  321386  RISE       2
+up_cnt_5_LC_13_11_5/carryin       LogicCell40_SEQ_MODE_1000      0              6079  321386  RISE       1
+up_cnt_5_LC_13_11_5/carryout      LogicCell40_SEQ_MODE_1000    278              6357  321386  RISE       2
+up_cnt_6_LC_13_11_6/carryin       LogicCell40_SEQ_MODE_1000      0              6357  321386  RISE       1
+up_cnt_6_LC_13_11_6/carryout      LogicCell40_SEQ_MODE_1000    278              6636  321386  RISE       2
+up_cnt_7_LC_13_11_7/carryin       LogicCell40_SEQ_MODE_1000      0              6636  321386  RISE       1
+up_cnt_7_LC_13_11_7/carryout      LogicCell40_SEQ_MODE_1000    278              6914  321386  RISE       1
+IN_MUX_bfv_13_12_0_/carryinitin   ICE_CARRY_IN_MUX               0              6914  321386  RISE       1
+IN_MUX_bfv_13_12_0_/carryinitout  ICE_CARRY_IN_MUX             556              7470  321386  RISE       2
+up_cnt_8_LC_13_12_0/carryin       LogicCell40_SEQ_MODE_1000      0              7470  321386  RISE       1
+up_cnt_8_LC_13_12_0/carryout      LogicCell40_SEQ_MODE_1000    278              7748  321386  RISE       2
+up_cnt_9_LC_13_12_1/carryin       LogicCell40_SEQ_MODE_1000      0              7748  321386  RISE       1
+up_cnt_9_LC_13_12_1/carryout      LogicCell40_SEQ_MODE_1000    278              8026  321386  RISE       2
+up_cnt_10_LC_13_12_2/carryin      LogicCell40_SEQ_MODE_1000      0              8026  321386  RISE       1
+up_cnt_10_LC_13_12_2/carryout     LogicCell40_SEQ_MODE_1000    278              8304  321386  RISE       2
+up_cnt_11_LC_13_12_3/carryin      LogicCell40_SEQ_MODE_1000      0              8304  321386  RISE       1
+up_cnt_11_LC_13_12_3/carryout     LogicCell40_SEQ_MODE_1000    278              8582  321386  RISE       2
+up_cnt_12_LC_13_12_4/carryin      LogicCell40_SEQ_MODE_1000      0              8582  321386  RISE       1
+up_cnt_12_LC_13_12_4/carryout     LogicCell40_SEQ_MODE_1000    278              8861  321386  RISE       2
+up_cnt_13_LC_13_12_5/carryin      LogicCell40_SEQ_MODE_1000      0              8861  321386  RISE       1
+up_cnt_13_LC_13_12_5/carryout     LogicCell40_SEQ_MODE_1000    278              9139  321386  RISE       2
+up_cnt_14_LC_13_12_6/carryin      LogicCell40_SEQ_MODE_1000      0              9139  321386  RISE       1
+up_cnt_14_LC_13_12_6/carryout     LogicCell40_SEQ_MODE_1000    278              9417  321386  RISE       2
+up_cnt_15_LC_13_12_7/carryin      LogicCell40_SEQ_MODE_1000      0              9417  321386  RISE       1
+up_cnt_15_LC_13_12_7/carryout     LogicCell40_SEQ_MODE_1000    278              9695  321386  RISE       1
+IN_MUX_bfv_13_13_0_/carryinitin   ICE_CARRY_IN_MUX               0              9695  321386  RISE       1
+IN_MUX_bfv_13_13_0_/carryinitout  ICE_CARRY_IN_MUX             556             10251  321386  RISE       2
+up_cnt_16_LC_13_13_0/carryin      LogicCell40_SEQ_MODE_1000      0             10251  321386  RISE       1
+up_cnt_16_LC_13_13_0/carryout     LogicCell40_SEQ_MODE_1000    278             10529  321386  RISE       2
+up_cnt_17_LC_13_13_1/carryin      LogicCell40_SEQ_MODE_1000      0             10529  321386  RISE       1
+up_cnt_17_LC_13_13_1/carryout     LogicCell40_SEQ_MODE_1000    278             10808  321386  RISE       2
+up_cnt_18_LC_13_13_2/carryin      LogicCell40_SEQ_MODE_1000      0             10808  321386  RISE       1
+up_cnt_18_LC_13_13_2/carryout     LogicCell40_SEQ_MODE_1000    278             11086  321386  RISE       2
+up_cnt_19_LC_13_13_3/carryin      LogicCell40_SEQ_MODE_1000      0             11086  321386  RISE       1
+up_cnt_19_LC_13_13_3/carryout     LogicCell40_SEQ_MODE_1000    278             11364  321386  RISE       2
+up_cnt_20_LC_13_13_4/carryin      LogicCell40_SEQ_MODE_1000      0             11364  321386  RISE       1
+up_cnt_20_LC_13_13_4/carryout     LogicCell40_SEQ_MODE_1000    278             11642  321386  RISE       1
+I__9549/I                         InMux                          0             11642  321386  RISE       1
+I__9549/O                         InMux                        662             12304  321386  RISE       1
+up_cnt_21_LC_13_13_5/in3          LogicCell40_SEQ_MODE_1000      0             12304  321386  RISE       1
+
+Capture Clock Path
+pin name                   model name                 delay  cumulative delay  edge  Fanout
+-------------------------  -------------------------  -----  ----------------  ----  ------
+clk_gb/GLOBALBUFFEROUTPUT  ICE_GB                         0                 0  RISE     397
+I__9948/I                  gio2CtrlBuf                    0                 0  RISE       1
+I__9948/O                  gio2CtrlBuf                    0                 0  RISE       1
+I__9949/I                  GlobalMux                      0                 0  RISE       1
+I__9949/O                  GlobalMux                    252               252  RISE       1
+I__10076/I                 ClkMux                         0               252  RISE       1
+I__10076/O                 ClkMux                       887              1139  RISE       1
+up_cnt_21_LC_13_13_5/clk   LogicCell40_SEQ_MODE_1000      0              1139  RISE       1
+
+
+5.3::Critical Path Report for (clk_app:R vs. clk_app:R)
+*******************************************************
+
+++++ Path 3 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Path Begin       : u_usb_cdc.u_bulk_endp.u_gtex4_async_data_data_rstn_sq_er_0_LC_8_5_0/lcout
+Path End         : u_usb_cdc.u_bulk_endp.u_gtex4_async_data_in_data_q_7_LC_7_10_4/sr
+Capture Clock    : u_usb_cdc.u_bulk_endp.u_gtex4_async_data_in_data_q_7_LC_7_10_4/clk
+Setup Constraint : 83320p
+Path slack       : 75135p
+
+Capture Clock Arrival Time (clk_app:R#2)   83320
++ Master Clock Source Latency                  0
++ Capture Clock Path Delay                  1139
+- Setup Time                                -424
+----------------------------------------   ----- 
+End-of-path required time (ps)             84035
+
+Launch Clock Arrival Time (clk_app:R#1)      0
++ Master Clock Source Latency                0
++ Launch Clock Path Delay                 1139
++ Clock To Q                              1391
++ Data Path Delay                         6370
+---------------------------------------   ---- 
+End-of-path arrival time (ps)             8900
+ 
+Launch Clock Path
+pin name                                                                 model name                 delay  cumulative delay  edge  Fanout
+-----------------------------------------------------------------------  -------------------------  -----  ----------------  ----  ------
+clk_gb/GLOBALBUFFEROUTPUT                                                ICE_GB                         0                 0  RISE     397
+I__9948/I                                                                gio2CtrlBuf                    0                 0  RISE       1
+I__9948/O                                                                gio2CtrlBuf                    0                 0  RISE       1
+I__9949/I                                                                GlobalMux                      0                 0  RISE       1
+I__9949/O                                                                GlobalMux                    252               252  RISE       1
+I__9979/I                                                                ClkMux                         0               252  RISE       1
+I__9979/O                                                                ClkMux                       887              1139  RISE       1
+u_usb_cdc.u_bulk_endp.u_gtex4_async_data_data_rstn_sq_er_0_LC_8_5_0/clk  LogicCell40_SEQ_MODE_1010      0              1139  RISE       1
+
+Data path
+pin name                                                                           model name                 delay  cumulative delay  slack  edge  Fanout
+---------------------------------------------------------------------------------  -------------------------  -----  ----------------  -----  ----  ------
+u_usb_cdc.u_bulk_endp.u_gtex4_async_data_data_rstn_sq_er_0_LC_8_5_0/lcout          LogicCell40_SEQ_MODE_1010   1391              2530  75135  RISE       1
+I__3838/I                                                                          LocalMux                       0              2530  75135  RISE       1
+I__3838/O                                                                          LocalMux                    1099              3629  75135  RISE       1
+I__3839/I                                                                          InMux                          0              3629  75135  RISE       1
+I__3839/O                                                                          InMux                        662              4291  75135  RISE       1
+u_usb_cdc.u_bulk_endp.u_gtex4_async_data_data_rstn_sq_er_RNIGFKF_0_LC_7_6_1/in1    LogicCell40_SEQ_MODE_0000      0              4291  75135  RISE       1
+u_usb_cdc.u_bulk_endp.u_gtex4_async_data_data_rstn_sq_er_RNIGFKF_0_LC_7_6_1/lcout  LogicCell40_SEQ_MODE_0000   1232              5523  75135  FALL       9
+I__4010/I                                                                          Odrv12                         0              5523  75135  FALL       1
+I__4010/O                                                                          Odrv12                      1232              6755  75135  FALL       1
+I__4014/I                                                                          Sp12to4                        0              6755  75135  FALL       1
+I__4014/O                                                                          Sp12to4                      848              7602  75135  FALL       1
+I__4019/I                                                                          LocalMux                       0              7602  75135  FALL       1
+I__4019/O                                                                          LocalMux                     768              8371  75135  FALL       1
+I__4024/I                                                                          SRMux                          0              8371  75135  FALL       1
+I__4024/O                                                                          SRMux                        530              8900  75135  FALL       1
+u_usb_cdc.u_bulk_endp.u_gtex4_async_data_in_data_q_7_LC_7_10_4/sr                  LogicCell40_SEQ_MODE_1010      0              8900  75135  FALL       1
+
+Capture Clock Path
+pin name                                                            model name                 delay  cumulative delay  edge  Fanout
+------------------------------------------------------------------  -------------------------  -----  ----------------  ----  ------
+clk_gb/GLOBALBUFFEROUTPUT                                           ICE_GB                         0                 0  RISE     397
+I__9948/I                                                           gio2CtrlBuf                    0                 0  RISE       1
+I__9948/O                                                           gio2CtrlBuf                    0                 0  RISE       1
+I__9949/I                                                           GlobalMux                      0                 0  RISE       1
+I__9949/O                                                           GlobalMux                    252               252  RISE       1
+I__10010/I                                                          ClkMux                         0               252  RISE       1
+I__10010/O                                                          ClkMux                       887              1139  RISE       1
+u_usb_cdc.u_bulk_endp.u_gtex4_async_data_in_data_q_7_LC_7_10_4/clk  LogicCell40_SEQ_MODE_1010      0              1139  RISE       1
+
+
+
+===================================================================== 
+                    End of Path Details for Clock Relationship Summary
+##################################################################### 
+
+
+##################################################################### 
+                    6::Path Details for DataSheet
+===================================================================== 
+
+
+6.1::Setup Times Path Details           
+--------------------------------------------------
+
+6.1.1::Path details for port: usb_dn:in 
+--------------------------------------------------
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Data Port         : usb_dn:in
+Clock Port        : clk_gb/GLOBALBUFFEROUTPUT
+Clock Reference   : clk_usb:R
+Setup Time        : 5476
+
+
+Data Path Delay                5887
++ Setup Time                    728
+- Capture Clock Path Delay    -1139
+---------------------------- ------
+Setup to Clock                 5476
+
+Data Path
+pin name                                       model name                 delay  cummulative delay  edge  Fanout  
+---------------------------------------------  -------------------------  -----  -----------------  ----  ------  
+usb_dn:in                                      loopback                   0      0                  RISE  1       
+u_usb_dn_iopad/PACKAGEPIN:in                   IO_PAD                     0      0                  RISE  1       
+u_usb_dn_iopad/DOUT                            IO_PAD                     510    510                RISE  1       
+u_usb_dn_preio/PADIN                           PRE_IO_PIN_TYPE_101001     0      510                RISE  1       
+u_usb_dn_preio/DIN0                            PRE_IO_PIN_TYPE_101001     490    1000               RISE  1       
+I__9472/I                                      Odrv12                     0      1000               RISE  1       
+I__9472/O                                      Odrv12                     1073   2073               RISE  1       
+I__9473/I                                      Span12Mux_v                0      2073               RISE  1       
+I__9473/O                                      Span12Mux_v                980    3053               RISE  1       
+I__9474/I                                      Span12Mux_h                0      3053               RISE  1       
+I__9474/O                                      Span12Mux_h                1073   4126               RISE  1       
+I__9475/I                                      LocalMux                   0      4126               RISE  1       
+I__9475/O                                      LocalMux                   1099   5225               RISE  1       
+I__9476/I                                      InMux                      0      5225               RISE  1       
+I__9476/O                                      InMux                      662    5887               RISE  1       
+u_usb_cdc.u_sie.u_phy_rx.dn_q_2_LC_14_7_7/in3  LogicCell40_SEQ_MODE_1000  0      5887               RISE  1       
+
+Capture Clock Path
+pin name                                       model name                 delay  cummulative delay  edge  Fanout  
+---------------------------------------------  -------------------------  -----  -----------------  ----  ------  
+clk_gb/GLOBALBUFFEROUTPUT                      ICE_GB                     0      0                  RISE  397     
+I__9948/I                                      gio2CtrlBuf                0      0                  RISE  1       
+I__9948/O                                      gio2CtrlBuf                0      0                  RISE  1       
+I__9949/I                                      GlobalMux                  0      0                  RISE  1       
+I__9949/O                                      GlobalMux                  252    252                RISE  1       
+I__10041/I                                     ClkMux                     0      252                RISE  1       
+I__10041/O                                     ClkMux                     887    1139               RISE  1       
+u_usb_cdc.u_sie.u_phy_rx.dn_q_2_LC_14_7_7/clk  LogicCell40_SEQ_MODE_1000  0      1139               RISE  1       
+
+6.1.2::Path details for port: usb_dp:in 
+--------------------------------------------------
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Data Port         : usb_dp:in
+Clock Port        : clk_gb/GLOBALBUFFEROUTPUT
+Clock Reference   : clk_usb:R
+Setup Time        : 6616
+
+
+Data Path Delay                6523
++ Setup Time                   1232
+- Capture Clock Path Delay    -1139
+---------------------------- ------
+Setup to Clock                 6616
+
+Data Path
+pin name                                       model name                 delay  cummulative delay  edge  Fanout  
+---------------------------------------------  -------------------------  -----  -----------------  ----  ------  
+usb_dp:in                                      loopback                   0      0                  RISE  1       
+u_usb_dp_iopad/PACKAGEPIN:in                   IO_PAD                     0      0                  RISE  1       
+u_usb_dp_iopad/DOUT                            IO_PAD                     510    510                RISE  1       
+u_usb_dp_preio/PADIN                           PRE_IO_PIN_TYPE_101001     0      510                RISE  1       
+u_usb_dp_preio/DIN0                            PRE_IO_PIN_TYPE_101001     490    1000               RISE  1       
+I__9482/I                                      Odrv12                     0      1000               RISE  1       
+I__9482/O                                      Odrv12                     1073   2073               RISE  1       
+I__9483/I                                      Span12Mux_v                0      2073               RISE  1       
+I__9483/O                                      Span12Mux_v                980    3053               RISE  1       
+I__9484/I                                      Sp12to4                    0      3053               RISE  1       
+I__9484/O                                      Sp12to4                    596    3649               RISE  1       
+I__9485/I                                      Span4Mux_h                 0      3649               RISE  1       
+I__9485/O                                      Span4Mux_h                 517    4165               RISE  1       
+I__9486/I                                      Span4Mux_v                 0      4165               RISE  1       
+I__9486/O                                      Span4Mux_v                 596    4761               RISE  1       
+I__9487/I                                      LocalMux                   0      4761               RISE  1       
+I__9487/O                                      LocalMux                   1099   5861               RISE  1       
+I__9488/I                                      InMux                      0      5861               RISE  1       
+I__9488/O                                      InMux                      662    6523               RISE  1       
+u_usb_cdc.u_sie.u_phy_rx.dp_q_2_LC_14_7_5/in0  LogicCell40_SEQ_MODE_1000  0      6523               RISE  1       
+
+Capture Clock Path
+pin name                                       model name                 delay  cummulative delay  edge  Fanout  
+---------------------------------------------  -------------------------  -----  -----------------  ----  ------  
+clk_gb/GLOBALBUFFEROUTPUT                      ICE_GB                     0      0                  RISE  397     
+I__9948/I                                      gio2CtrlBuf                0      0                  RISE  1       
+I__9948/O                                      gio2CtrlBuf                0      0                  RISE  1       
+I__9949/I                                      GlobalMux                  0      0                  RISE  1       
+I__9949/O                                      GlobalMux                  252    252                RISE  1       
+I__10041/I                                     ClkMux                     0      252                RISE  1       
+I__10041/O                                     ClkMux                     887    1139               RISE  1       
+u_usb_cdc.u_sie.u_phy_rx.dp_q_2_LC_14_7_5/clk  LogicCell40_SEQ_MODE_1000  0      1139               RISE  1       
+
+6.2::Clock to Out Path Details          
+--------------------------------------------------
+
+6.2.1::Path details for port: rgb1      
+--------------------------------------------------
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Data Port          : rgb1
+Clock Port         : clk_gb/GLOBALBUFFEROUTPUT
+Clock Reference    : clk_3mhz:R
+Clock to Out Delay : 150749
+
+
+Launch Clock Path Delay        1139
++ Clock To Q Delay             1391
++ Data Path Delay            148219
+---------------------------- ------
+Clock To Out Delay           150749
+
+Launch Clock Path
+pin name                   model name                 delay  cummulative delay  edge  Fanout  
+-------------------------  -------------------------  -----  -----------------  ----  ------  
+clk_gb/GLOBALBUFFEROUTPUT  ICE_GB                     0      0                  RISE  397     
+I__9948/I                  gio2CtrlBuf                0      0                  RISE  1       
+I__9948/O                  gio2CtrlBuf                0      0                  RISE  1       
+I__9949/I                  GlobalMux                  0      0                  RISE  1       
+I__9949/O                  GlobalMux                  252    252                RISE  1       
+I__10076/I                 ClkMux                     0      252                RISE  1       
+I__10076/O                 ClkMux                     887    1139               RISE  1       
+up_cnt_21_LC_13_13_5/clk   LogicCell40_SEQ_MODE_1000  0      1139               RISE  1       
+
+Data Path
+pin name                                       model name                 delay   cummulative delay  edge  Fanout  
+---------------------------------------------  -------------------------  ------  -----------------  ----  ------  
+up_cnt_21_LC_13_13_5/lcout                     LogicCell40_SEQ_MODE_1000  1391    2530               RISE  3       
+I__10180/I                                     LocalMux                   0       2530               RISE  1       
+I__10180/O                                     LocalMux                   1099    3629               RISE  1       
+I__10183/I                                     InMux                      0       3629               RISE  1       
+I__10183/O                                     InMux                      662     4291               RISE  1       
+u_usb_cdc.u_bulk_endp.N_18_i_LC_14_13_1/in1    LogicCell40_SEQ_MODE_0000  0       4291               RISE  1       
+u_usb_cdc.u_bulk_endp.N_18_i_LC_14_13_1/lcout  LogicCell40_SEQ_MODE_0000  1232    5523               FALL  1       
+I__10164/I                                     Odrv12                     0       5523               FALL  1       
+I__10164/O                                     Odrv12                     1232    6755               FALL  1       
+I__10165/I                                     Span12Mux_v                0       6755               FALL  1       
+I__10165/O                                     Span12Mux_v                1073    7828               FALL  1       
+I__10166/I                                     Sp12to4                    0       7828               FALL  1       
+I__10166/O                                     Sp12to4                    848     8675               FALL  1       
+I__10167/I                                     Span4Mux_h                 0       8675               FALL  1       
+I__10167/O                                     Span4Mux_h                 543     9218               FALL  1       
+I__10168/I                                     Span4Mux_h                 0       9218               FALL  1       
+I__10168/O                                     Span4Mux_h                 543     9761               FALL  1       
+I__10169/I                                     Span4Mux_v                 0       9761               FALL  1       
+I__10169/O                                     Span4Mux_v                 649     10410              FALL  1       
+I__10170/I                                     LocalMux                   0       10410              FALL  1       
+I__10170/O                                     LocalMux                   768     11178              FALL  1       
+I__10171/I                                     InMux                      0       11178              FALL  1       
+I__10171/O                                     InMux                      503     11682              FALL  1       
+RGBA_DRIVER/RGB1PWM                            SB_RGBA_DRV                0       11682              FALL  1       
+RGBA_DRIVER/RGB1                               SB_RGBA_DRV                139068  150749             FALL  0       
+rgb1                                           loopback                   0       150749             FALL  1       
+
+6.2.2::Path details for port: usb_dn:out
+--------------------------------------------------
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Data Port          : usb_dn:out
+Clock Port         : clk_gb/GLOBALBUFFEROUTPUT
+Clock Reference    : clk_usb:R
+Clock to Out Delay : 18502
+
+
+Launch Clock Path Delay        1139
++ Clock To Q Delay             1391
++ Data Path Delay             15972
+---------------------------- ------
+Clock To Out Delay            18502
+
+Launch Clock Path
+pin name                                             model name                 delay  cummulative delay  edge  Fanout  
+---------------------------------------------------  -------------------------  -----  -----------------  ----  ------  
+clk_gb/GLOBALBUFFEROUTPUT                            ICE_GB                     0      0                  RISE  397     
+I__9948/I                                            gio2CtrlBuf                0      0                  RISE  1       
+I__9948/O                                            gio2CtrlBuf                0      0                  RISE  1       
+I__9949/I                                            GlobalMux                  0      0                  RISE  1       
+I__9949/O                                            GlobalMux                  252    252                RISE  1       
+I__10033/I                                           ClkMux                     0      252                RISE  1       
+I__10033/O                                           ClkMux                     887    1139               RISE  1       
+u_usb_cdc.u_sie.u_phy_tx.tx_state_q_0_LC_12_8_6/clk  LogicCell40_SEQ_MODE_1010  0      1139               RISE  1       
+
+Data Path
+pin name                                                          model name                 delay  cummulative delay  edge  Fanout  
+----------------------------------------------------------------  -------------------------  -----  -----------------  ----  ------  
+u_usb_cdc.u_sie.u_phy_tx.tx_state_q_0_LC_12_8_6/lcout             LogicCell40_SEQ_MODE_1010  1391   2530               RISE  10      
+I__9860/I                                                         Odrv4                      0      2530               RISE  1       
+I__9860/O                                                         Odrv4                      596    3126               RISE  1       
+I__9866/I                                                         Span4Mux_h                 0      3126               RISE  1       
+I__9866/O                                                         Span4Mux_h                 517    3642               RISE  1       
+I__9873/I                                                         LocalMux                   0      3642               RISE  1       
+I__9873/O                                                         LocalMux                   1099   4742               RISE  1       
+I__9879/I                                                         InMux                      0      4742               RISE  1       
+I__9879/O                                                         InMux                      662    5404               RISE  1       
+u_usb_cdc.u_sie.u_phy_tx.tx_state_q_RNIL8IP_0_0_LC_14_7_6/in3     LogicCell40_SEQ_MODE_0000  0      5404               RISE  1       
+u_usb_cdc.u_sie.u_phy_tx.tx_state_q_RNIL8IP_0_0_LC_14_7_6/lcout   LogicCell40_SEQ_MODE_0000  861    6265               RISE  5       
+I__9902/I                                                         Odrv4                      0      6265               RISE  1       
+I__9902/O                                                         Odrv4                      596    6861               RISE  1       
+I__9905/I                                                         Span4Mux_h                 0      6861               RISE  1       
+I__9905/O                                                         Span4Mux_h                 517    7377               RISE  1       
+I__9909/I                                                         Span4Mux_v                 0      7377               RISE  1       
+I__9909/O                                                         Span4Mux_v                 596    7973               RISE  1       
+I__9912/I                                                         Span4Mux_v                 0      7973               RISE  1       
+I__9912/O                                                         Span4Mux_v                 596    8569               RISE  1       
+I__9915/I                                                         LocalMux                   0      8569               RISE  1       
+I__9915/O                                                         LocalMux                   1099   9669               RISE  1       
+I__9916/I                                                         InMux                      0      9669               RISE  1       
+I__9916/O                                                         InMux                      662    10331              RISE  1       
+u_usb_cdc.u_sie.u_phy_tx.tx_state_q_RNIL8IP_1_0_LC_15_15_0/in3    LogicCell40_SEQ_MODE_0000  0      10331              RISE  1       
+u_usb_cdc.u_sie.u_phy_tx.tx_state_q_RNIL8IP_1_0_LC_15_15_0/lcout  LogicCell40_SEQ_MODE_0000  861    11192              RISE  2       
+I__9892/I                                                         Odrv4                      0      11192              RISE  1       
+I__9892/O                                                         Odrv4                      596    11788              RISE  1       
+I__9893/I                                                         Span4Mux_v                 0      11788              RISE  1       
+I__9893/O                                                         Span4Mux_v                 596    12384              RISE  1       
+I__9894/I                                                         Span4Mux_v                 0      12384              RISE  1       
+I__9894/O                                                         Span4Mux_v                 596    12980              RISE  1       
+I__9895/I                                                         Span4Mux_v                 0      12980              RISE  1       
+I__9895/O                                                         Span4Mux_v                 596    13576              RISE  1       
+I__9896/I                                                         Span4Mux_s3_v              0      13576              RISE  1       
+I__9896/O                                                         Span4Mux_s3_v              543    14119              RISE  1       
+I__9897/I                                                         LocalMux                   0      14119              RISE  1       
+I__9897/O                                                         LocalMux                   1099   15218              RISE  1       
+I__9899/I                                                         IoInMux                    0      15218              RISE  1       
+I__9899/O                                                         IoInMux                    662    15880              RISE  1       
+u_usb_dn_preio/OUTPUTENABLE                                       PRE_IO_PIN_TYPE_101001     0      15880              RISE  1       
+u_usb_dn_preio/PADOEN                                             PRE_IO_PIN_TYPE_101001     534    16414              FALL  1       
+u_usb_dn_iopad/OE                                                 IO_PAD                     0      16414              FALL  1       
+u_usb_dn_iopad/PACKAGEPIN:out                                     IO_PAD                     2088   18502              FALL  1       
+usb_dn:out                                                        loopback                   0      18502              FALL  1       
+
+6.2.3::Path details for port: usb_dp:out
+--------------------------------------------------
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Data Port          : usb_dp:out
+Clock Port         : clk_gb/GLOBALBUFFEROUTPUT
+Clock Reference    : clk_usb:R
+Clock to Out Delay : 18502
+
+
+Launch Clock Path Delay        1139
++ Clock To Q Delay             1391
++ Data Path Delay             15972
+---------------------------- ------
+Clock To Out Delay            18502
+
+Launch Clock Path
+pin name                                             model name                 delay  cummulative delay  edge  Fanout  
+---------------------------------------------------  -------------------------  -----  -----------------  ----  ------  
+clk_gb/GLOBALBUFFEROUTPUT                            ICE_GB                     0      0                  RISE  397     
+I__9948/I                                            gio2CtrlBuf                0      0                  RISE  1       
+I__9948/O                                            gio2CtrlBuf                0      0                  RISE  1       
+I__9949/I                                            GlobalMux                  0      0                  RISE  1       
+I__9949/O                                            GlobalMux                  252    252                RISE  1       
+I__10033/I                                           ClkMux                     0      252                RISE  1       
+I__10033/O                                           ClkMux                     887    1139               RISE  1       
+u_usb_cdc.u_sie.u_phy_tx.tx_state_q_0_LC_12_8_6/clk  LogicCell40_SEQ_MODE_1010  0      1139               RISE  1       
+
+Data Path
+pin name                                                          model name                 delay  cummulative delay  edge  Fanout  
+----------------------------------------------------------------  -------------------------  -----  -----------------  ----  ------  
+u_usb_cdc.u_sie.u_phy_tx.tx_state_q_0_LC_12_8_6/lcout             LogicCell40_SEQ_MODE_1010  1391   2530               RISE  10      
+I__9860/I                                                         Odrv4                      0      2530               RISE  1       
+I__9860/O                                                         Odrv4                      596    3126               RISE  1       
+I__9866/I                                                         Span4Mux_h                 0      3126               RISE  1       
+I__9866/O                                                         Span4Mux_h                 517    3642               RISE  1       
+I__9873/I                                                         LocalMux                   0      3642               RISE  1       
+I__9873/O                                                         LocalMux                   1099   4742               RISE  1       
+I__9879/I                                                         InMux                      0      4742               RISE  1       
+I__9879/O                                                         InMux                      662    5404               RISE  1       
+u_usb_cdc.u_sie.u_phy_tx.tx_state_q_RNIL8IP_0_0_LC_14_7_6/in3     LogicCell40_SEQ_MODE_0000  0      5404               RISE  1       
+u_usb_cdc.u_sie.u_phy_tx.tx_state_q_RNIL8IP_0_0_LC_14_7_6/lcout   LogicCell40_SEQ_MODE_0000  861    6265               RISE  5       
+I__9902/I                                                         Odrv4                      0      6265               RISE  1       
+I__9902/O                                                         Odrv4                      596    6861               RISE  1       
+I__9905/I                                                         Span4Mux_h                 0      6861               RISE  1       
+I__9905/O                                                         Span4Mux_h                 517    7377               RISE  1       
+I__9909/I                                                         Span4Mux_v                 0      7377               RISE  1       
+I__9909/O                                                         Span4Mux_v                 596    7973               RISE  1       
+I__9912/I                                                         Span4Mux_v                 0      7973               RISE  1       
+I__9912/O                                                         Span4Mux_v                 596    8569               RISE  1       
+I__9915/I                                                         LocalMux                   0      8569               RISE  1       
+I__9915/O                                                         LocalMux                   1099   9669               RISE  1       
+I__9916/I                                                         InMux                      0      9669               RISE  1       
+I__9916/O                                                         InMux                      662    10331              RISE  1       
+u_usb_cdc.u_sie.u_phy_tx.tx_state_q_RNIL8IP_1_0_LC_15_15_0/in3    LogicCell40_SEQ_MODE_0000  0      10331              RISE  1       
+u_usb_cdc.u_sie.u_phy_tx.tx_state_q_RNIL8IP_1_0_LC_15_15_0/lcout  LogicCell40_SEQ_MODE_0000  861    11192              RISE  2       
+I__9892/I                                                         Odrv4                      0      11192              RISE  1       
+I__9892/O                                                         Odrv4                      596    11788              RISE  1       
+I__9893/I                                                         Span4Mux_v                 0      11788              RISE  1       
+I__9893/O                                                         Span4Mux_v                 596    12384              RISE  1       
+I__9894/I                                                         Span4Mux_v                 0      12384              RISE  1       
+I__9894/O                                                         Span4Mux_v                 596    12980              RISE  1       
+I__9895/I                                                         Span4Mux_v                 0      12980              RISE  1       
+I__9895/O                                                         Span4Mux_v                 596    13576              RISE  1       
+I__9896/I                                                         Span4Mux_s3_v              0      13576              RISE  1       
+I__9896/O                                                         Span4Mux_s3_v              543    14119              RISE  1       
+I__9898/I                                                         LocalMux                   0      14119              RISE  1       
+I__9898/O                                                         LocalMux                   1099   15218              RISE  1       
+I__9900/I                                                         IoInMux                    0      15218              RISE  1       
+I__9900/O                                                         IoInMux                    662    15880              RISE  1       
+u_usb_dp_preio/OUTPUTENABLE                                       PRE_IO_PIN_TYPE_101001     0      15880              RISE  1       
+u_usb_dp_preio/PADOEN                                             PRE_IO_PIN_TYPE_101001     534    16414              FALL  1       
+u_usb_dp_iopad/OE                                                 IO_PAD                     0      16414              FALL  1       
+u_usb_dp_iopad/PACKAGEPIN:out                                     IO_PAD                     2088   18502              FALL  1       
+usb_dp:out                                                        loopback                   0      18502              FALL  1       
+
+6.2.4::Path details for port: usb_dp_pu 
+--------------------------------------------------
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Data Port          : usb_dp_pu
+Clock Port         : clk_gb/GLOBALBUFFEROUTPUT
+Clock Reference    : clk_3mhz:R
+Clock to Out Delay : 10578
+
+
+Launch Clock Path Delay        1139
++ Clock To Q Delay             1391
++ Data Path Delay              8048
+---------------------------- ------
+Clock To Out Delay            10578
+
+Launch Clock Path
+pin name                    model name                 delay  cummulative delay  edge  Fanout  
+--------------------------  -------------------------  -----  -----------------  ----  ------  
+clk_gb/GLOBALBUFFEROUTPUT   ICE_GB                     0      0                  RISE  397     
+I__9948/I                   gio2CtrlBuf                0      0                  RISE  1       
+I__9948/O                   gio2CtrlBuf                0      0                  RISE  1       
+I__9949/I                   GlobalMux                  0      0                  RISE  1       
+I__9949/O                   GlobalMux                  252    252                RISE  1       
+I__10077/I                  ClkMux                     0      252                RISE  1       
+I__10077/O                  ClkMux                     887    1139               RISE  1       
+usb_dp_pu_q_LC_14_12_3/clk  LogicCell40_SEQ_MODE_1000  0      1139               RISE  1       
+
+Data Path
+pin name                             model name                 delay  cummulative delay  edge  Fanout  
+-----------------------------------  -------------------------  -----  -----------------  ----  ------  
+usb_dp_pu_q_LC_14_12_3/lcout         LogicCell40_SEQ_MODE_1000  1391   2530               FALL  2       
+I__10185/I                           Odrv12                     0      2530               FALL  1       
+I__10185/O                           Odrv12                     1232   3761               FALL  1       
+I__10187/I                           Sp12to4                    0      3761               FALL  1       
+I__10187/O                           Sp12to4                    848    4609               FALL  1       
+I__10188/I                           Span4Mux_v                 0      4609               FALL  1       
+I__10188/O                           Span4Mux_v                 649    5258               FALL  1       
+I__10189/I                           Span4Mux_s2_v              0      5258               FALL  1       
+I__10189/O                           Span4Mux_s2_v              450    5708               FALL  1       
+I__10190/I                           IoSpan4Mux                 0      5708               FALL  1       
+I__10190/O                           IoSpan4Mux                 742    6450               FALL  1       
+I__10191/I                           LocalMux                   0      6450               FALL  1       
+I__10191/O                           LocalMux                   768    7218               FALL  1       
+I__10192/I                           IoInMux                    0      7218               FALL  1       
+I__10192/O                           IoInMux                    503    7722               FALL  1       
+usb_dp_pu_obuf_preio/DOUT0           PRE_IO_PIN_TYPE_011001     0      7722               FALL  1       
+usb_dp_pu_obuf_preio/PADOUT          PRE_IO_PIN_TYPE_011001     768    8490               FALL  1       
+usb_dp_pu_obuf_iopad/DIN             IO_PAD                     0      8490               FALL  1       
+usb_dp_pu_obuf_iopad/PACKAGEPIN:out  IO_PAD                     2088   10578              FALL  1       
+usb_dp_pu                            loopback                   0      10578              FALL  1       
+
+6.4::Hold Times Path Details            
+--------------------------------------------------
+
+6.4.1::Path details for port: usb_dn:in 
+--------------------------------------------------
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Data Port         : usb_dn:in
+Clock Port        : clk_gb/GLOBALBUFFEROUTPUT
+Clock Reference   : clk_usb:R
+Hold Time         : -4619
+
+
+Capture Clock Path Delay       1139
++ Hold  Time                      0
+- Data Path Delay             -5758
+---------------------------- ------
+Hold Time                     -4619
+
+Data Path
+pin name                                       model name                 delay  cummulative delay  edge  Fanout  
+---------------------------------------------  -------------------------  -----  -----------------  ----  ------  
+usb_dn:in                                      loopback                   0      0                  FALL  1       
+u_usb_dn_iopad/PACKAGEPIN:in                   IO_PAD                     0      0                  FALL  1       
+u_usb_dn_iopad/DOUT                            IO_PAD                     460    460                FALL  1       
+u_usb_dn_preio/PADIN                           PRE_IO_PIN_TYPE_101001     0      460                FALL  1       
+u_usb_dn_preio/DIN0                            PRE_IO_PIN_TYPE_101001     490    950                FALL  1       
+I__9472/I                                      Odrv12                     0      950                FALL  1       
+I__9472/O                                      Odrv12                     1232   2182               FALL  1       
+I__9473/I                                      Span12Mux_v                0      2182               FALL  1       
+I__9473/O                                      Span12Mux_v                1073   3255               FALL  1       
+I__9474/I                                      Span12Mux_h                0      3255               FALL  1       
+I__9474/O                                      Span12Mux_h                1232   4486               FALL  1       
+I__9475/I                                      LocalMux                   0      4486               FALL  1       
+I__9475/O                                      LocalMux                   768    5255               FALL  1       
+I__9476/I                                      InMux                      0      5255               FALL  1       
+I__9476/O                                      InMux                      503    5758               FALL  1       
+u_usb_cdc.u_sie.u_phy_rx.dn_q_2_LC_14_7_7/in3  LogicCell40_SEQ_MODE_1000  0      5758               FALL  1       
+
+Capture Clock Path
+pin name                                       model name                 delay  cummulative delay  edge  Fanout  
+---------------------------------------------  -------------------------  -----  -----------------  ----  ------  
+clk_gb/GLOBALBUFFEROUTPUT                      ICE_GB                     0      0                  RISE  397     
+I__9948/I                                      gio2CtrlBuf                0      0                  RISE  1       
+I__9948/O                                      gio2CtrlBuf                0      0                  RISE  1       
+I__9949/I                                      GlobalMux                  0      0                  RISE  1       
+I__9949/O                                      GlobalMux                  252    252                RISE  1       
+I__10041/I                                     ClkMux                     0      252                RISE  1       
+I__10041/O                                     ClkMux                     887    1139               RISE  1       
+u_usb_cdc.u_sie.u_phy_rx.dn_q_2_LC_14_7_7/clk  LogicCell40_SEQ_MODE_1000  0      1139               RISE  1       
+
+6.4.2::Path details for port: usb_dp:in 
+--------------------------------------------------
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Data Port         : usb_dp:in
+Clock Port        : clk_gb/GLOBALBUFFEROUTPUT
+Clock Reference   : clk_usb:R
+Hold Time         : -5334
+
+
+Capture Clock Path Delay       1139
++ Hold  Time                      0
+- Data Path Delay             -6473
+---------------------------- ------
+Hold Time                     -5334
+
+Data Path
+pin name                                       model name                 delay  cummulative delay  edge  Fanout  
+---------------------------------------------  -------------------------  -----  -----------------  ----  ------  
+usb_dp:in                                      loopback                   0      0                  FALL  1       
+u_usb_dp_iopad/PACKAGEPIN:in                   IO_PAD                     0      0                  FALL  1       
+u_usb_dp_iopad/DOUT                            IO_PAD                     460    460                FALL  1       
+u_usb_dp_preio/PADIN                           PRE_IO_PIN_TYPE_101001     0      460                FALL  1       
+u_usb_dp_preio/DIN0                            PRE_IO_PIN_TYPE_101001     490    950                RISE  1       
+I__9482/I                                      Odrv12                     0      950                RISE  1       
+I__9482/O                                      Odrv12                     1073   2023               RISE  1       
+I__9483/I                                      Span12Mux_v                0      2023               RISE  1       
+I__9483/O                                      Span12Mux_v                980    3003               RISE  1       
+I__9484/I                                      Sp12to4                    0      3003               RISE  1       
+I__9484/O                                      Sp12to4                    596    3599               RISE  1       
+I__9485/I                                      Span4Mux_h                 0      3599               RISE  1       
+I__9485/O                                      Span4Mux_h                 517    4115               RISE  1       
+I__9486/I                                      Span4Mux_v                 0      4115               RISE  1       
+I__9486/O                                      Span4Mux_v                 596    4711               RISE  1       
+I__9487/I                                      LocalMux                   0      4711               RISE  1       
+I__9487/O                                      LocalMux                   1099   5811               RISE  1       
+I__9488/I                                      InMux                      0      5811               RISE  1       
+I__9488/O                                      InMux                      662    6473               RISE  1       
+u_usb_cdc.u_sie.u_phy_rx.dp_q_2_LC_14_7_5/in0  LogicCell40_SEQ_MODE_1000  0      6473               RISE  1       
+
+Capture Clock Path
+pin name                                       model name                 delay  cummulative delay  edge  Fanout  
+---------------------------------------------  -------------------------  -----  -----------------  ----  ------  
+clk_gb/GLOBALBUFFEROUTPUT                      ICE_GB                     0      0                  RISE  397     
+I__9948/I                                      gio2CtrlBuf                0      0                  RISE  1       
+I__9948/O                                      gio2CtrlBuf                0      0                  RISE  1       
+I__9949/I                                      GlobalMux                  0      0                  RISE  1       
+I__9949/O                                      GlobalMux                  252    252                RISE  1       
+I__10041/I                                     ClkMux                     0      252                RISE  1       
+I__10041/O                                     ClkMux                     887    1139               RISE  1       
+u_usb_cdc.u_sie.u_phy_rx.dp_q_2_LC_14_7_5/clk  LogicCell40_SEQ_MODE_1000  0      1139               RISE  1       
+
+6.5::Min Clock to Out Path Details      
+--------------------------------------------------
+
+6.5.1::Path details for port: rgb1      
+--------------------------------------------------
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Data Port          : rgb1
+Clock Port         : clk_gb/GLOBALBUFFEROUTPUT
+Clock Reference    : clk_3mhz:R
+Clock to Out Delay : 110036
+
+
+Launch Clock Path Delay        1139
++ Clock To Q Delay             1391
++ Data Path Delay            107506
+---------------------------- ------
+Clock To Out Delay           110036
+
+Launch Clock Path
+pin name                   model name                 delay  cummulative delay  edge  Fanout  
+-------------------------  -------------------------  -----  -----------------  ----  ------  
+clk_gb/GLOBALBUFFEROUTPUT  ICE_GB                     0      0                  RISE  397     
+I__9948/I                  gio2CtrlBuf                0      0                  RISE  1       
+I__9948/O                  gio2CtrlBuf                0      0                  RISE  1       
+I__9949/I                  GlobalMux                  0      0                  RISE  1       
+I__9949/O                  GlobalMux                  252    252                RISE  1       
+I__10076/I                 ClkMux                     0      252                RISE  1       
+I__10076/O                 ClkMux                     887    1139               RISE  1       
+up_cnt_20_LC_13_13_4/clk   LogicCell40_SEQ_MODE_1000  0      1139               RISE  1       
+
+Data Path
+pin name                                       model name                 delay  cummulative delay  edge  Fanout  
+---------------------------------------------  -------------------------  -----  -----------------  ----  ------  
+up_cnt_20_LC_13_13_4/lcout                     LogicCell40_SEQ_MODE_1000  1391   2530               FALL  3       
+I__10174/I                                     LocalMux                   0      2530               FALL  1       
+I__10174/O                                     LocalMux                   768    3298               FALL  1       
+I__10177/I                                     InMux                      0      3298               FALL  1       
+I__10177/O                                     InMux                      503    3801               FALL  1       
+u_usb_cdc.u_bulk_endp.N_18_i_LC_14_13_1/in3    LogicCell40_SEQ_MODE_0000  0      3801               FALL  1       
+u_usb_cdc.u_bulk_endp.N_18_i_LC_14_13_1/lcout  LogicCell40_SEQ_MODE_0000  861    4662               RISE  1       
+I__10164/I                                     Odrv12                     0      4662               RISE  1       
+I__10164/O                                     Odrv12                     1073   5735               RISE  1       
+I__10165/I                                     Span12Mux_v                0      5735               RISE  1       
+I__10165/O                                     Span12Mux_v                980    6715               RISE  1       
+I__10166/I                                     Sp12to4                    0      6715               RISE  1       
+I__10166/O                                     Sp12to4                    596    7311               RISE  1       
+I__10167/I                                     Span4Mux_h                 0      7311               RISE  1       
+I__10167/O                                     Span4Mux_h                 517    7828               RISE  1       
+I__10168/I                                     Span4Mux_h                 0      7828               RISE  1       
+I__10168/O                                     Span4Mux_h                 517    8344               RISE  1       
+I__10169/I                                     Span4Mux_v                 0      8344               RISE  1       
+I__10169/O                                     Span4Mux_v                 596    8940               RISE  1       
+I__10170/I                                     LocalMux                   0      8940               RISE  1       
+I__10170/O                                     LocalMux                   1099   10039              RISE  1       
+I__10171/I                                     InMux                      0      10039              RISE  1       
+I__10171/O                                     InMux                      662    10702              RISE  1       
+RGBA_DRIVER/RGB1PWM                            SB_RGBA_DRV                0      10702              RISE  1       
+RGBA_DRIVER/RGB1                               SB_RGBA_DRV                99334  110036             RISE  0       
+rgb1                                           loopback                   0      110036             RISE  1       
+
+6.5.2::Path details for port: usb_dn:out
+--------------------------------------------------
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Data Port          : usb_dn:out
+Clock Port         : clk_gb/GLOBALBUFFEROUTPUT
+Clock Reference    : clk_usb:R
+Clock to Out Delay : 13741
+
+
+Launch Clock Path Delay        1139
++ Clock To Q Delay             1391
++ Data Path Delay             11211
+---------------------------- ------
+Clock To Out Delay            13741
+
+Launch Clock Path
+pin name                                       model name                 delay  cummulative delay  edge  Fanout  
+---------------------------------------------  -------------------------  -----  -----------------  ----  ------  
+clk_gb/GLOBALBUFFEROUTPUT                      ICE_GB                     0      0                  RISE  397     
+I__9948/I                                      gio2CtrlBuf                0      0                  RISE  1       
+I__9948/O                                      gio2CtrlBuf                0      0                  RISE  1       
+I__9949/I                                      GlobalMux                  0      0                  RISE  1       
+I__9949/O                                      GlobalMux                  252    252                RISE  1       
+I__10050/I                                     ClkMux                     0      252                RISE  1       
+I__10050/O                                     ClkMux                     887    1139               RISE  1       
+u_usb_cdc.u_sie.u_phy_tx.nrzi_q_LC_14_8_4/clk  LogicCell40_SEQ_MODE_1011  0      1139               RISE  1       
+
+Data Path
+pin name                                                   model name                 delay  cummulative delay  edge  Fanout  
+---------------------------------------------------------  -------------------------  -----  -----------------  ----  ------  
+u_usb_cdc.u_sie.u_phy_tx.nrzi_q_LC_14_8_4/lcout            LogicCell40_SEQ_MODE_1011  1391   2530               FALL  3       
+I__9841/I                                                  LocalMux                   0      2530               FALL  1       
+I__9841/O                                                  LocalMux                   768    3298               FALL  1       
+I__9843/I                                                  InMux                      0      3298               FALL  1       
+I__9843/O                                                  InMux                      503    3801               FALL  1       
+u_usb_cdc.u_sie.u_phy_tx.nrzi_q_RNI6LMR_0_LC_14_8_1/in1    LogicCell40_SEQ_MODE_0000  0      3801               FALL  1       
+u_usb_cdc.u_sie.u_phy_tx.nrzi_q_RNI6LMR_0_LC_14_8_1/lcout  LogicCell40_SEQ_MODE_0000  1179   4980               RISE  1       
+I__9453/I                                                  Odrv12                     0      4980               RISE  1       
+I__9453/O                                                  Odrv12                     1073   6053               RISE  1       
+I__9454/I                                                  Span12Mux_v                0      6053               RISE  1       
+I__9454/O                                                  Span12Mux_v                980    7033               RISE  1       
+I__9455/I                                                  Sp12to4                    0      7033               RISE  1       
+I__9455/O                                                  Sp12to4                    596    7629               RISE  1       
+I__9456/I                                                  Span4Mux_s2_v              0      7629               RISE  1       
+I__9456/O                                                  Span4Mux_s2_v              437    8066               RISE  1       
+I__9457/I                                                  IoSpan4Mux                 0      8066               RISE  1       
+I__9457/O                                                  IoSpan4Mux                 622    8688               RISE  1       
+I__9458/I                                                  IoSpan4Mux                 0      8688               RISE  1       
+I__9458/O                                                  IoSpan4Mux                 622    9311               RISE  1       
+I__9459/I                                                  LocalMux                   0      9311               RISE  1       
+I__9459/O                                                  LocalMux                   1099   10410              RISE  1       
+I__9460/I                                                  IoInMux                    0      10410              RISE  1       
+I__9460/O                                                  IoInMux                    662    11072              RISE  1       
+u_usb_dn_preio/DOUT0                                       PRE_IO_PIN_TYPE_101001     0      11072              RISE  1       
+u_usb_dn_preio/PADOUT                                      PRE_IO_PIN_TYPE_101001     755    11827              RISE  1       
+u_usb_dn_iopad/DIN                                         IO_PAD                     0      11827              RISE  1       
+u_usb_dn_iopad/PACKAGEPIN:out                              IO_PAD                     1914   13741              RISE  1       
+usb_dn:out                                                 loopback                   0      13741              RISE  1       
+
+6.5.3::Path details for port: usb_dp:out
+--------------------------------------------------
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Data Port          : usb_dp:out
+Clock Port         : clk_gb/GLOBALBUFFEROUTPUT
+Clock Reference    : clk_usb:R
+Clock to Out Delay : 13529
+
+
+Launch Clock Path Delay        1139
++ Clock To Q Delay             1391
++ Data Path Delay             10999
+---------------------------- ------
+Clock To Out Delay            13529
+
+Launch Clock Path
+pin name                                             model name                 delay  cummulative delay  edge  Fanout  
+---------------------------------------------------  -------------------------  -----  -----------------  ----  ------  
+clk_gb/GLOBALBUFFEROUTPUT                            ICE_GB                     0      0                  RISE  397     
+I__9948/I                                            gio2CtrlBuf                0      0                  RISE  1       
+I__9948/O                                            gio2CtrlBuf                0      0                  RISE  1       
+I__9949/I                                            GlobalMux                  0      0                  RISE  1       
+I__9949/O                                            GlobalMux                  252    252                RISE  1       
+I__10040/I                                           ClkMux                     0      252                RISE  1       
+I__10040/O                                           ClkMux                     887    1139               RISE  1       
+u_usb_cdc.u_sie.u_phy_tx.tx_state_q_1_LC_13_8_7/clk  LogicCell40_SEQ_MODE_1010  0      1139               RISE  1       
+
+Data Path
+pin name                                                 model name                 delay  cummulative delay  edge  Fanout  
+-------------------------------------------------------  -------------------------  -----  -----------------  ----  ------  
+u_usb_cdc.u_sie.u_phy_tx.tx_state_q_1_LC_13_8_7/lcout    LogicCell40_SEQ_MODE_1010  1391   2530               FALL  10      
+I__9827/I                                                LocalMux                   0      2530               FALL  1       
+I__9827/O                                                LocalMux                   768    3298               FALL  1       
+I__9837/I                                                InMux                      0      3298               FALL  1       
+I__9837/O                                                InMux                      503    3801               FALL  1       
+u_usb_cdc.u_sie.u_phy_tx.nrzi_q_RNI6LMR_LC_14_8_0/in1    LogicCell40_SEQ_MODE_0000  0      3801               FALL  1       
+u_usb_cdc.u_sie.u_phy_tx.nrzi_q_RNI6LMR_LC_14_8_0/lcout  LogicCell40_SEQ_MODE_0000  1179   4980               RISE  1       
+I__9461/I                                                Odrv12                     0      4980               RISE  1       
+I__9461/O                                                Odrv12                     1073   6053               RISE  1       
+I__9462/I                                                Span12Mux_v                0      6053               RISE  1       
+I__9462/O                                                Span12Mux_v                980    7033               RISE  1       
+I__9463/I                                                Span12Mux_s11_h            0      7033               RISE  1       
+I__9463/O                                                Span12Mux_s11_h            1033   8066               RISE  1       
+I__9464/I                                                Sp12to4                    0      8066               RISE  1       
+I__9464/O                                                Sp12to4                    596    8662               RISE  1       
+I__9465/I                                                Span4Mux_s2_v              0      8662               RISE  1       
+I__9465/O                                                Span4Mux_s2_v              437    9099               RISE  1       
+I__9466/I                                                LocalMux                   0      9099               RISE  1       
+I__9466/O                                                LocalMux                   1099   10198              RISE  1       
+I__9467/I                                                IoInMux                    0      10198              RISE  1       
+I__9467/O                                                IoInMux                    662    10861              RISE  1       
+u_usb_dp_preio/DOUT0                                     PRE_IO_PIN_TYPE_101001     0      10861              RISE  1       
+u_usb_dp_preio/PADOUT                                    PRE_IO_PIN_TYPE_101001     755    11615              RISE  1       
+u_usb_dp_iopad/DIN                                       IO_PAD                     0      11615              RISE  1       
+u_usb_dp_iopad/PACKAGEPIN:out                            IO_PAD                     1914   13529              RISE  1       
+usb_dp:out                                               loopback                   0      13529              RISE  1       
+
+6.5.4::Path details for port: usb_dp_pu 
+--------------------------------------------------
+
+++++ Path 1 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Data Port          : usb_dp_pu
+Clock Port         : clk_gb/GLOBALBUFFEROUTPUT
+Clock Reference    : clk_3mhz:R
+Clock to Out Delay : 10285
+
+
+Launch Clock Path Delay        1139
++ Clock To Q Delay             1391
++ Data Path Delay              7755
+---------------------------- ------
+Clock To Out Delay            10285
+
+Launch Clock Path
+pin name                    model name                 delay  cummulative delay  edge  Fanout  
+--------------------------  -------------------------  -----  -----------------  ----  ------  
+clk_gb/GLOBALBUFFEROUTPUT   ICE_GB                     0      0                  RISE  397     
+I__9948/I                   gio2CtrlBuf                0      0                  RISE  1       
+I__9948/O                   gio2CtrlBuf                0      0                  RISE  1       
+I__9949/I                   GlobalMux                  0      0                  RISE  1       
+I__9949/O                   GlobalMux                  252    252                RISE  1       
+I__10077/I                  ClkMux                     0      252                RISE  1       
+I__10077/O                  ClkMux                     887    1139               RISE  1       
+usb_dp_pu_q_LC_14_12_3/clk  LogicCell40_SEQ_MODE_1000  0      1139               RISE  1       
+
+Data Path
+pin name                             model name                 delay  cummulative delay  edge  Fanout  
+-----------------------------------  -------------------------  -----  -----------------  ----  ------  
+usb_dp_pu_q_LC_14_12_3/lcout         LogicCell40_SEQ_MODE_1000  1391   2530               RISE  2       
+I__10185/I                           Odrv12                     0      2530               RISE  1       
+I__10185/O                           Odrv12                     1073   3603               RISE  1       
+I__10187/I                           Sp12to4                    0      3603               RISE  1       
+I__10187/O                           Sp12to4                    596    4199               RISE  1       
+I__10188/I                           Span4Mux_v                 0      4199               RISE  1       
+I__10188/O                           Span4Mux_v                 596    4795               RISE  1       
+I__10189/I                           Span4Mux_s2_v              0      4795               RISE  1       
+I__10189/O                           Span4Mux_s2_v              437    5232               RISE  1       
+I__10190/I                           IoSpan4Mux                 0      5232               RISE  1       
+I__10190/O                           IoSpan4Mux                 622    5854               RISE  1       
+I__10191/I                           LocalMux                   0      5854               RISE  1       
+I__10191/O                           LocalMux                   1099   6953               RISE  1       
+I__10192/I                           IoInMux                    0      6953               RISE  1       
+I__10192/O                           IoInMux                    662    7616               RISE  1       
+usb_dp_pu_obuf_preio/DOUT0           PRE_IO_PIN_TYPE_011001     0      7616               RISE  1       
+usb_dp_pu_obuf_preio/PADOUT          PRE_IO_PIN_TYPE_011001     755    8371               RISE  1       
+usb_dp_pu_obuf_iopad/DIN             IO_PAD                     0      8371               RISE  1       
+usb_dp_pu_obuf_iopad/PACKAGEPIN:out  IO_PAD                     1914   10285              RISE  1       
+usb_dp_pu                            loopback                   0      10285              RISE  1       
+
+
+ =====================================================================
+                    End of Path Details for Datasheet
+ #####################################################################
+

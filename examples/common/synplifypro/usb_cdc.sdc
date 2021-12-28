@@ -18,8 +18,10 @@ set gated_pins [get_pins "
     ${path}.tx_data_i*
     "]
 #c_print -file mylog.txt $gated_pins
-set_multicycle_path -setup [expr 7 * $BIT_SAMPLES] -through $gated_pins
-set_multicycle_path -hold [expr 7 * $BIT_SAMPLES - 1] -through $gated_pins
+set gated_cells [remove_from_collection -intersect [all_registers] [get_cells -of_objects [all_fanout -from $gated_pins -flat -trace_arcs all]]]
+#c_print -file mylog.txt $gated_cells
+set_multicycle_path -setup [expr 7 * $BIT_SAMPLES] -to $gated_cells
+set_multicycle_path -hold [expr 7 * $BIT_SAMPLES - 1] -to $gated_cells
 
 set path "${root_path}.u_sie.u_phy_rx"
 set gated_cells [remove_from_collection -intersect [all_registers] [get_cells "
@@ -41,8 +43,10 @@ set gated_pins [get_pins "
     ${path}.in_ready_o
     "]
 #c_print -file mylog.txt $gated_pins
-set_multicycle_path -setup [expr 8 * $BIT_SAMPLES] -through $gated_pins
-set_multicycle_path -hold [expr 8 * $BIT_SAMPLES - 1] -through $gated_pins
+set gated_cells [remove_from_collection -intersect [all_registers] [get_cells -of_objects [all_fanout -from $gated_pins -flat -trace_arcs all]]]
+#c_print -file mylog.txt $gated_cells
+set_multicycle_path -setup [expr 8 * $BIT_SAMPLES] -to $gated_cells
+set_multicycle_path -hold [expr 8 * $BIT_SAMPLES - 1] -to $gated_cells
 
 set gated_cells [remove_from_collection -intersect [all_registers] [get_cells -of_objects [all_fanout -from [get_nets "${path}.clk_gate"] -flat -trace_arcs all]]]
 #c_print -file mylog.txt $gated_cells
@@ -64,5 +68,12 @@ set gated_pins [get_pins "
     ${root_path}.u_sie.in_valid_i
     "]
 #c_print -file mylog.txt $gated_pins
-set_multicycle_path -setup [expr 8 * $BIT_SAMPLES] -through $gated_pins
-set_multicycle_path -hold [expr 8 * $BIT_SAMPLES - 1] -through $gated_pins
+set gated_cells [remove_from_collection -intersect [all_registers] [get_cells -of_objects [all_fanout -from $gated_pins -flat -trace_arcs all]]]
+#c_print -file mylog.txt $gated_cells
+set_multicycle_path -setup [expr 8 * $BIT_SAMPLES] -to $gated_cells
+set_multicycle_path -hold [expr 8 * $BIT_SAMPLES - 1] -to $gated_cells
+
+set gated_cells [remove_from_collection -intersect [all_registers] [get_cells "${root_path}.u_bulk_endp.u_*.in_fifo_q*"]]
+#c_print -file mylog.txt $gated_cells
+set_multicycle_path -setup [expr $BIT_SAMPLES] -to $gated_cells
+set_multicycle_path -hold [expr $BIT_SAMPLES - 1] -to $gated_cells

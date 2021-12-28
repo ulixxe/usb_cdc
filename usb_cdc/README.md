@@ -44,7 +44,8 @@ Clock gating is extensively used to allow high clock frequencies and reduce powe
 12MHz * BIT\_SAMPLES frequency is used mainly in PHY\_RX for USB lines sampling and in a few other logic to manage the timing of some data transfer.
 
 USB device serializes data at 12MHz frequency. Data is transferred internally at byte chunks with a lower frequency of  1.5MHz.
-Synplify Pro is aware of these timings with the definition of multi-cycle path constraints. Yosys/nextpnr doesn't allow to specify timing constraints, so if timings are not met, there is a good chance that USB\_CDC works correctly.
+Synplify Pro is aware of these timings with the definition of multi-cycle path constraints. Yosys/nextpnr doesn't allow to specify timing constraints, so if timings are not met, there is a good chance that USB\_CDC works correctly.  
+Fomu up5k logic is slower than TinyFPGA-BX lp8k logic, so to complete Fomu examples implementation, a unique 12MHz clock is used with Yosys/nextpnr because they report a false timing failure @48MHz. Whereas SynplifyPro shows the actual timing closure with the use of timings constraints.
 
 In an ASIC device, clock gating is implemented directly on the clock tree. This significantly reduces power consumption by shutting down clock switching when data transfer is not requested.
 

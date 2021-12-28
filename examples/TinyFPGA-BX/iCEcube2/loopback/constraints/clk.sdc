@@ -1,5 +1,5 @@
 ####---- CreateClock list ----
-set BIT_SAMPLES 4.0
+set BIT_SAMPLES 4
 set BIT_PERIOD [expr 1000 / 12.0]
 set CLK_PERIOD [expr $BIT_PERIOD / $BIT_SAMPLES]
 set BYTE_PERIOD [expr $BIT_PERIOD * 8]

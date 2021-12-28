@@ -1,0 +1,506 @@
+Info: constrained 'rgb0' to bel 'X4/Y31/io0'
+Info: constrained 'rgb1' to bel 'X5/Y31/io0'
+Info: constrained 'rgb2' to bel 'X6/Y31/io0'
+Warning: unmatched constraint 'pmod_1' (on line 4)
+Warning: unmatched constraint 'pmod_2' (on line 5)
+Warning: unmatched constraint 'pmod_3' (on line 6)
+Warning: unmatched constraint 'pmod_4' (on line 7)
+Warning: unmatched constraint 'pmoda_1' (on line 8)
+Warning: unmatched constraint 'pmoda_2' (on line 9)
+Warning: unmatched constraint 'pmoda_3' (on line 10)
+Warning: unmatched constraint 'pmoda_4' (on line 11)
+Info: constrained 'clki' to bel 'X12/Y0/io1'
+Warning: unmatched constraint 'user_1' (on line 13)
+Warning: unmatched constraint 'user_2' (on line 14)
+Warning: unmatched constraint 'user_3' (on line 15)
+Warning: unmatched constraint 'user_4' (on line 16)
+Warning: unmatched constraint 'touch_1' (on line 17)
+Warning: unmatched constraint 'touch_2' (on line 18)
+Warning: unmatched constraint 'touch_3' (on line 19)
+Warning: unmatched constraint 'touch_4' (on line 20)
+Warning: unmatched constraint 'spi_mosi' (on line 21)
+Warning: unmatched constraint 'spi_miso' (on line 22)
+Warning: unmatched constraint 'spi_clk' (on line 23)
+Warning: unmatched constraint 'spi_io2' (on line 24)
+Warning: unmatched constraint 'spi_io3' (on line 25)
+Warning: unmatched constraint 'spi_cs' (on line 26)
+Info: constrained 'usb_dn' to bel 'X19/Y31/io0'
+Info: constrained 'usb_dp' to bel 'X19/Y31/io1'
+Info: constrained 'usb_dp_pu' to bel 'X12/Y31/io0'
+
+Info: Packing constants..
+Info: Packing IOs..
+Info: rgb2 use by SB_RGBA_DRV/SB_RGB_DRV RGBA_DRIVER, not creating SB_IO
+Info: rgb1 use by SB_RGBA_DRV/SB_RGB_DRV RGBA_DRIVER, not creating SB_IO
+Info: rgb0 use by SB_RGBA_DRV/SB_RGB_DRV RGBA_DRIVER, not creating SB_IO
+Info: usb_dp feeds SB_IO u_usb_dp, removing $nextpnr_iobuf usb_dp.
+Info: usb_dn feeds SB_IO u_usb_dn, removing $nextpnr_iobuf usb_dn.
+Info: Packing LUT-FFs..
+Info:      645 LCs used as LUT4 only
+Info:      339 LCs used as LUT4 and DFF
+Info: Packing non-LUT FFs..
+Info:       63 LCs used as DFF only
+Info: Packing carries..
+Info:       15 LCs used as CARRY only
+Info: Packing RAMs..
+Info: Placing PLLs..
+Info: Packing special functions..
+Info:   constrained SB_RGBA_DRV 'RGBA_DRIVER' to X0/Y30/rgba_drv_0
+Info: Packing PLLs..
+Info: Promoting globals..
+Info: promoting u_usb_cdc.u_sie.rstn_i_SB_LUT4_I3_O [reset] (fanout 325)
+Info: promoting u_usb_cdc.u_sie.rstn_i_SB_LUT4_I3_1_O [reset] (fanout 37)
+Info: promoting u_prescaler.rstn_i_SB_LUT4_I3_O [reset] (fanout 29)
+Info: promoting u_usb_cdc.u_bulk_endp.genblk1.u_gtex4_async_data.in_ready_q_SB_DFFER_Q_E_SB_LUT4_I2_O [cen] (fanout 76)
+Info: promoting u_usb_cdc.u_bulk_endp.out_full_q_SB_LUT4_I0_O [cen] (fanout 72)
+Info: promoting clk_3mhz (fanout 23)
+Info: promoting led [cen] (fanout 22)
+Info: Constraining chains...
+Info:       21 LCs used to legalise carry chains.
+Info: Checksum: 0xef22d6ad
+
+Info: Annotating ports with timing budgets for target frequency 12.00 MHz
+Info: Checksum: 0x3c13c6e6
+
+Info: Device utilisation:
+Info: 	         ICESTORM_LC:  1085/ 5280    20%
+Info: 	        ICESTORM_RAM:     0/   30     0%
+Info: 	               SB_IO:     4/   96     4%
+Info: 	               SB_GB:     8/    8   100%
+Info: 	        ICESTORM_PLL:     0/    1     0%
+Info: 	         SB_WARMBOOT:     0/    1     0%
+Info: 	        ICESTORM_DSP:     0/    8     0%
+Info: 	      ICESTORM_HFOSC:     0/    1     0%
+Info: 	      ICESTORM_LFOSC:     0/    1     0%
+Info: 	              SB_I2C:     0/    2     0%
+Info: 	              SB_SPI:     0/    2     0%
+Info: 	              IO_I3C:     0/    2     0%
+Info: 	         SB_LEDDA_IP:     0/    1     0%
+Info: 	         SB_RGBA_DRV:     1/    1   100%
+Info: 	      ICESTORM_SPRAM:     0/    4     0%
+
+Info: Placed 5 cells based on constraints.
+Info: Creating initial analytic placement for 1011 cells, random placement wirelen = 26586.
+Info:     at initial placer iter 0, wirelen = 73
+Info:     at initial placer iter 1, wirelen = 67
+Info:     at initial placer iter 2, wirelen = 65
+Info:     at initial placer iter 3, wirelen = 65
+Info: Running main analytical placer.
+Info:     at iteration #1, type ALL: wirelen solved = 65, spread = 5304, legal = 5586; time = 0.02s
+Info:     at iteration #2, type ALL: wirelen solved = 251, spread = 4117, legal = 4342; time = 0.02s
+Info:     at iteration #3, type ALL: wirelen solved = 486, spread = 3830, legal = 4174; time = 0.03s
+Info:     at iteration #4, type ALL: wirelen solved = 665, spread = 3573, legal = 3920; time = 0.03s
+Info:     at iteration #5, type ALL: wirelen solved = 811, spread = 3527, legal = 3896; time = 0.03s
+Info:     at iteration #6, type ALL: wirelen solved = 914, spread = 3220, legal = 3628; time = 0.03s
+Info:     at iteration #7, type ALL: wirelen solved = 1110, spread = 3289, legal = 3610; time = 0.03s
+Info:     at iteration #8, type ALL: wirelen solved = 1123, spread = 3125, legal = 3482; time = 0.03s
+Info:     at iteration #9, type ALL: wirelen solved = 1236, spread = 3036, legal = 3539; time = 0.03s
+Info:     at iteration #10, type ALL: wirelen solved = 1310, spread = 3122, legal = 3597; time = 0.03s
+Info:     at iteration #11, type ALL: wirelen solved = 1332, spread = 3043, legal = 3369; time = 0.03s
+Info:     at iteration #12, type ALL: wirelen solved = 1417, spread = 3027, legal = 3481; time = 0.02s
+Info:     at iteration #13, type ALL: wirelen solved = 1473, spread = 2969, legal = 3419; time = 0.03s
+Info:     at iteration #14, type ALL: wirelen solved = 1574, spread = 3029, legal = 3444; time = 0.02s
+Info:     at iteration #15, type ALL: wirelen solved = 1599, spread = 3034, legal = 3418; time = 0.02s
+Info:     at iteration #16, type ALL: wirelen solved = 1661, spread = 3002, legal = 3420; time = 0.02s
+Info: HeAP Placer Time: 0.57s
+Info:   of which solving equations: 0.29s
+Info:   of which spreading cells: 0.04s
+Info:   of which strict legalisation: 0.13s
+
+Info: Running simulated annealing placer for refinement.
+Info:   at iteration #1: temp = 0.000000, timing cost = 454, wirelen = 3369
+Info:   at iteration #5: temp = 0.000000, timing cost = 482, wirelen = 2867
+Info:   at iteration #10: temp = 0.000000, timing cost = 524, wirelen = 2703
+Info:   at iteration #15: temp = 0.000000, timing cost = 512, wirelen = 2611
+Info:   at iteration #20: temp = 0.000000, timing cost = 538, wirelen = 2520
+Info:   at iteration #22: temp = 0.000000, timing cost = 507, wirelen = 2509 
+Info: SA placement time 0.91s
+
+Info: Max frequency for clock 'clk_3mhz_$glb_clk': 77.46 MHz (PASS at 12.00 MHz)
+Info: Max frequency for clock               'clk': 29.72 MHz (PASS at 12.00 MHz)
+Info: Max frequency for clock         'clk_12mhz': 169.89 MHz (PASS at 12.00 MHz)
+
+Info: Max delay <async>                   -> posedge clk              : 4.59 ns
+Info: Max delay posedge clk               -> <async>                  : 10.37 ns
+Info: Max delay posedge clk               -> posedge clk_12mhz        : 17.74 ns
+Info: Max delay posedge clk               -> posedge clk_3mhz_$glb_clk: 13.49 ns
+Info: Max delay posedge clk_12mhz         -> posedge clk              : 17.54 ns
+Info: Max delay posedge clk_3mhz_$glb_clk -> <async>                  : 6.12 ns
+
+Info: Slack histogram:
+Info:  legend: * represents 6 endpoint(s)
+Info:          + represents [1,6) endpoint(s)
+Info: [ 49681,  51165) |*********************+
+Info: [ 51165,  52649) |*****+
+Info: [ 52649,  54133) |*+
+Info: [ 54133,  55617) |*+
+Info: [ 55617,  57101) |******+
+Info: [ 57101,  58585) |**+
+Info: [ 58585,  60069) |**+
+Info: [ 60069,  61553) |***+
+Info: [ 61553,  63037) |**+
+Info: [ 63037,  64521) |****+
+Info: [ 64521,  66005) |*****************+
+Info: [ 66005,  67489) |*************************************************+
+Info: [ 67489,  68973) |************+
+Info: [ 68973,  70457) |*********+
+Info: [ 70457,  71941) |*********+
+Info: [ 71941,  73425) |*******+
+Info: [ 73425,  74909) |******************************+
+Info: [ 74909,  76393) |*****************************+
+Info: [ 76393,  77877) |*************************************+
+Info: [ 77877,  79361) |************************************************************ 
+Info: Checksum: 0xf08e380e
+
+Info: Routing..
+Info: Setting up routing queue.
+Info: Routing 3831 arcs.
+Info:            |   (re-)routed arcs  |   delta    | remaining|       time spent     |
+Info:    IterCnt |  w/ripup   wo/ripup |  w/r  wo/r |      arcs| batch(sec) total(sec)|
+Info:       1000 |       47        889 |   47   889 |      2882|       0.08       0.08|
+Info:       2000 |      131       1805 |   84   916 |      1983|       0.10       0.18|
+Info:       3000 |      255       2681 |  124   876 |      1142|       0.11       0.29|
+Info:       4000 |      502       3434 |  247   753 |       493|       0.13       0.41|
+Info:       4640 |      609       3968 |  107   534 |         0|       0.11       0.52|
+Info: Routing complete.
+Info: Router1 time 0.52s
+Info: Checksum: 0xb64b993f
+
+Info: Critical path report for clock 'clk_3mhz_$glb_clk' (posedge -> posedge):
+Info: curr total
+Info:  1.4  1.4  Source up_cnt_SB_LUT4_I3_LC.O
+Info:  1.8  3.2    Net up_cnt[0] budget 74.223999 ns (2,27) -> (1,27)
+Info:                Sink $nextpnr_ICESTORM_LC_8.I1
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:77.22-77.32
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/arith_map.v:51.21-51.22
+Info:  0.7  3.8  Source $nextpnr_ICESTORM_LC_8.COUT
+Info:  0.0  3.8    Net $nextpnr_ICESTORM_LC_8$O budget 0.000000 ns (1,27) -> (1,27)
+Info:                Sink up_cnt_SB_LUT4_I2_10_LC.CIN
+Info:  0.3  4.1  Source up_cnt_SB_LUT4_I2_10_LC.COUT
+Info:  0.0  4.1    Net up_cnt_SB_CARRY_CI_CO[2] budget 0.000000 ns (1,27) -> (1,27)
+Info:                Sink up_cnt_SB_LUT4_I2_7_LC.CIN
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:77.22-77.32
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/arith_map.v:51.21-51.22
+Info:  0.3  4.4  Source up_cnt_SB_LUT4_I2_7_LC.COUT
+Info:  0.0  4.4    Net up_cnt_SB_CARRY_CI_CO[3] budget 0.000000 ns (1,27) -> (1,27)
+Info:                Sink up_cnt_SB_LUT4_I2_6_LC.CIN
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:77.22-77.32
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/arith_map.v:51.21-51.22
+Info:  0.3  4.7  Source up_cnt_SB_LUT4_I2_6_LC.COUT
+Info:  0.0  4.7    Net up_cnt_SB_CARRY_CI_CO[4] budget 0.000000 ns (1,27) -> (1,27)
+Info:                Sink up_cnt_SB_LUT4_I2_5_LC.CIN
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:77.22-77.32
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/arith_map.v:51.21-51.22
+Info:  0.3  4.9  Source up_cnt_SB_LUT4_I2_5_LC.COUT
+Info:  0.0  4.9    Net up_cnt_SB_CARRY_CI_CO[5] budget 0.000000 ns (1,27) -> (1,27)
+Info:                Sink up_cnt_SB_LUT4_I2_4_LC.CIN
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:77.22-77.32
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/arith_map.v:51.21-51.22
+Info:  0.3  5.2  Source up_cnt_SB_LUT4_I2_4_LC.COUT
+Info:  0.0  5.2    Net up_cnt_SB_CARRY_CI_CO[6] budget 0.000000 ns (1,27) -> (1,27)
+Info:                Sink up_cnt_SB_LUT4_I2_3_LC.CIN
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:77.22-77.32
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/arith_map.v:51.21-51.22
+Info:  0.3  5.5  Source up_cnt_SB_LUT4_I2_3_LC.COUT
+Info:  0.0  5.5    Net up_cnt_SB_CARRY_CI_CO[7] budget 0.000000 ns (1,27) -> (1,27)
+Info:                Sink up_cnt_SB_LUT4_I2_2_LC.CIN
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:77.22-77.32
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/arith_map.v:51.21-51.22
+Info:  0.3  5.8  Source up_cnt_SB_LUT4_I2_2_LC.COUT
+Info:  0.6  6.3    Net up_cnt_SB_CARRY_CI_CO[8] budget 0.560000 ns (1,27) -> (1,28)
+Info:                Sink up_cnt_SB_LUT4_I2_1_LC.CIN
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:77.22-77.32
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/arith_map.v:51.21-51.22
+Info:  0.3  6.6  Source up_cnt_SB_LUT4_I2_1_LC.COUT
+Info:  0.0  6.6    Net up_cnt_SB_CARRY_CI_CO[9] budget 0.000000 ns (1,28) -> (1,28)
+Info:                Sink up_cnt_SB_LUT4_I2_LC.CIN
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:77.22-77.32
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/arith_map.v:51.21-51.22
+Info:  0.3  6.9  Source up_cnt_SB_LUT4_I2_LC.COUT
+Info:  0.0  6.9    Net up_cnt_SB_CARRY_CI_CO[10] budget 0.000000 ns (1,28) -> (1,28)
+Info:                Sink up_cnt_SB_LUT4_I2_20_LC.CIN
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:77.22-77.32
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/arith_map.v:51.21-51.22
+Info:  0.3  7.2  Source up_cnt_SB_LUT4_I2_20_LC.COUT
+Info:  0.0  7.2    Net up_cnt_SB_CARRY_CI_CO[11] budget 0.000000 ns (1,28) -> (1,28)
+Info:                Sink up_cnt_SB_LUT4_I2_19_LC.CIN
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:77.22-77.32
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/arith_map.v:51.21-51.22
+Info:  0.3  7.4  Source up_cnt_SB_LUT4_I2_19_LC.COUT
+Info:  0.0  7.4    Net up_cnt_SB_CARRY_CI_CO[12] budget 0.000000 ns (1,28) -> (1,28)
+Info:                Sink up_cnt_SB_LUT4_I2_18_LC.CIN
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:77.22-77.32
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/arith_map.v:51.21-51.22
+Info:  0.3  7.7  Source up_cnt_SB_LUT4_I2_18_LC.COUT
+Info:  0.0  7.7    Net up_cnt_SB_CARRY_CI_CO[13] budget 0.000000 ns (1,28) -> (1,28)
+Info:                Sink up_cnt_SB_LUT4_I2_17_LC.CIN
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:77.22-77.32
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/arith_map.v:51.21-51.22
+Info:  0.3  8.0  Source up_cnt_SB_LUT4_I2_17_LC.COUT
+Info:  0.0  8.0    Net up_cnt_SB_CARRY_CI_CO[14] budget 0.000000 ns (1,28) -> (1,28)
+Info:                Sink up_cnt_SB_LUT4_I2_16_LC.CIN
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:77.22-77.32
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/arith_map.v:51.21-51.22
+Info:  0.3  8.3  Source up_cnt_SB_LUT4_I2_16_LC.COUT
+Info:  0.0  8.3    Net up_cnt_SB_CARRY_CI_CO[15] budget 0.000000 ns (1,28) -> (1,28)
+Info:                Sink up_cnt_SB_LUT4_I2_15_LC.CIN
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:77.22-77.32
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/arith_map.v:51.21-51.22
+Info:  0.3  8.6  Source up_cnt_SB_LUT4_I2_15_LC.COUT
+Info:  0.6  9.1    Net up_cnt_SB_CARRY_CI_CO[16] budget 0.560000 ns (1,28) -> (1,29)
+Info:                Sink up_cnt_SB_LUT4_I2_14_LC.CIN
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:77.22-77.32
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/arith_map.v:51.21-51.22
+Info:  0.3  9.4  Source up_cnt_SB_LUT4_I2_14_LC.COUT
+Info:  0.0  9.4    Net up_cnt_SB_CARRY_CI_CO[17] budget 0.000000 ns (1,29) -> (1,29)
+Info:                Sink up_cnt_SB_LUT4_I2_13_LC.CIN
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:77.22-77.32
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/arith_map.v:51.21-51.22
+Info:  0.3  9.7  Source up_cnt_SB_LUT4_I2_13_LC.COUT
+Info:  0.0  9.7    Net up_cnt_SB_CARRY_CI_CO[18] budget 0.000000 ns (1,29) -> (1,29)
+Info:                Sink up_cnt_SB_LUT4_I2_12_LC.CIN
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:77.22-77.32
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/arith_map.v:51.21-51.22
+Info:  0.3  9.9  Source up_cnt_SB_LUT4_I2_12_LC.COUT
+Info:  0.0  9.9    Net up_cnt_SB_CARRY_CI_CO[19] budget 0.000000 ns (1,29) -> (1,29)
+Info:                Sink up_cnt_SB_LUT4_I2_11_LC.CIN
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:77.22-77.32
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/arith_map.v:51.21-51.22
+Info:  0.3 10.2  Source up_cnt_SB_LUT4_I2_11_LC.COUT
+Info:  0.0 10.2    Net up_cnt_SB_CARRY_CI_CO[20] budget 0.000000 ns (1,29) -> (1,29)
+Info:                Sink up_cnt_SB_LUT4_I2_9_LC.CIN
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:77.22-77.32
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/arith_map.v:51.21-51.22
+Info:  0.3 10.5  Source up_cnt_SB_LUT4_I2_9_LC.COUT
+Info:  0.7 11.2    Net up_cnt_SB_CARRY_CI_CO[21] budget 0.660000 ns (1,29) -> (1,29)
+Info:                Sink up_cnt_SB_LUT4_I2_8_LC.I3
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:77.22-77.32
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/arith_map.v:51.21-51.22
+Info:  0.8 12.0  Setup up_cnt_SB_LUT4_I2_8_LC.I3
+Info: 8.4 ns logic, 3.5 ns routing
+
+Info: Critical path report for clock 'clk' (posedge -> posedge):
+Info: curr total
+Info:  1.4  1.4  Source u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_DFFER_Q_E_SB_LUT4_O_I2_SB_LUT4_I3_I2_SB_LUT4_O_I0_SB_LUT4_I1_O_SB_LUT4_O_I2_SB_LUT4_O_I3_SB_LUT4_I1_LC.O
+Info:  1.8  3.2    Net u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_DFFER_Q_E_SB_LUT4_O_I2_SB_LUT4_O_I2[0] budget 7.053000 ns (5,18) -> (4,17)
+Info:                Sink u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_DFFER_Q_E_SB_LUT4_O_I2_SB_LUT4_O_I2_SB_LUT4_I2_O_SB_LUT4_O_LC.I0
+Info:                Defined in:
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_map.v:6.21-6.22
+Info:  1.3  4.4  Source u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_DFFER_Q_E_SB_LUT4_O_I2_SB_LUT4_O_I2_SB_LUT4_I2_O_SB_LUT4_O_LC.O
+Info:  3.6  8.0    Net u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_DFFER_Q_E_SB_LUT4_O_I2_SB_LUT4_O_I2_SB_LUT4_I2_O[2] budget 7.053000 ns (4,17) -> (7,12)
+Info:                Sink u_usb_cdc.u_sie.data_d_SB_LUT4_O_2_I0_SB_LUT4_O_1_I1_SB_LUT4_I2_I0_SB_LUT4_I2_O_SB_LUT4_O_LC.I3
+Info:                Defined in:
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_map.v:6.21-6.22
+Info:  0.9  8.9  Source u_usb_cdc.u_sie.data_d_SB_LUT4_O_2_I0_SB_LUT4_O_1_I1_SB_LUT4_I2_I0_SB_LUT4_I2_O_SB_LUT4_O_LC.O
+Info:  1.8 10.7    Net u_usb_cdc.u_ctrl_endp.byte_cnt_q_SB_DFFER_Q_E_SB_LUT4_O_I2_SB_LUT4_O_I1[1] budget 7.053000 ns (7,12) -> (8,13)
+Info:                Sink u_usb_cdc.u_bulk_endp.in_valid_q_SB_LUT4_I0_O_SB_LUT4_O_1_LC.I2
+Info:                Defined in:
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_map.v:6.21-6.22
+Info:  1.2 11.9  Source u_usb_cdc.u_bulk_endp.in_valid_q_SB_LUT4_I0_O_SB_LUT4_O_1_LC.O
+Info:  1.8 13.6    Net u_usb_cdc.u_bulk_endp.in_valid_q_SB_LUT4_I0_O[1] budget 7.053000 ns (8,13) -> (9,14)
+Info:                Sink u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_DFFER_Q_E_SB_LUT4_O_I3_SB_LUT4_O_I3_SB_LUT4_I3_O_SB_LUT4_O_LC.I0
+Info:                Defined in:
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_map.v:6.21-6.22
+Info:  1.3 14.9  Source u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_DFFER_Q_E_SB_LUT4_O_I3_SB_LUT4_O_I3_SB_LUT4_I3_O_SB_LUT4_O_LC.O
+Info:  1.8 16.7    Net u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_DFFER_Q_E_SB_LUT4_O_I3_SB_LUT4_O_I3_SB_LUT4_I3_O[0] budget 7.052000 ns (9,14) -> (9,15)
+Info:                Sink u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_DFFER_Q_E_SB_LUT4_O_I3_SB_LUT4_O_I3_SB_LUT4_I3_O_SB_LUT4_I0_LC.I0
+Info:                Defined in:
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_map.v:6.21-6.22
+Info:  1.3 18.0  Source u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_DFFER_Q_E_SB_LUT4_O_I3_SB_LUT4_O_I3_SB_LUT4_I3_O_SB_LUT4_I0_LC.O
+Info:  1.8 19.7    Net u_usb_cdc.u_sie.clk_gate_SB_LUT4_O_I2_SB_LUT4_I2_O[0] budget 7.052000 ns (9,15) -> (9,16)
+Info:                Sink u_usb_cdc.u_bulk_endp.in_req_i_SB_LUT4_I3_I2_SB_LUT4_O_LC.I2
+Info:                Defined in:
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_map.v:6.21-6.22
+Info:  1.2 20.9  Source u_usb_cdc.u_bulk_endp.in_req_i_SB_LUT4_I3_I2_SB_LUT4_O_LC.O
+Info:  1.8 22.7    Net u_usb_cdc.u_bulk_endp.in_req_i_SB_LUT4_I3_I2[0] budget 7.052000 ns (9,16) -> (9,15)
+Info:                Sink u_usb_cdc.u_bulk_endp.in_req_i_SB_LUT4_I3_I2_SB_LUT4_I2_LC.I2
+Info:                Defined in:
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_map.v:6.21-6.22
+Info:  1.2 23.9  Source u_usb_cdc.u_bulk_endp.in_req_i_SB_LUT4_I3_I2_SB_LUT4_I2_LC.O
+Info:  1.8 25.7    Net u_usb_cdc.ctrl_stall_SB_LUT4_I3_I2[2] budget 7.052000 ns (9,15) -> (8,14)
+Info:                Sink u_usb_cdc.u_ctrl_endp.rec_q_SB_DFFER_Q_E_SB_LUT4_O_I0_SB_LUT4_O_LC.I0
+Info:                Defined in:
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_map.v:6.21-6.22
+Info:  1.3 26.9  Source u_usb_cdc.u_ctrl_endp.rec_q_SB_DFFER_Q_E_SB_LUT4_O_I0_SB_LUT4_O_LC.O
+Info:  3.0 29.9    Net u_usb_cdc.u_ctrl_endp.rec_q_SB_DFFER_Q_E_SB_LUT4_O_I0[3] budget 7.093000 ns (8,14) -> (5,17)
+Info:                Sink u_usb_cdc.u_ctrl_endp.req_q_SB_DFFER_Q_E_SB_LUT4_O_LC.I3
+Info:                Defined in:
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_map.v:6.21-6.22
+Info:  0.9 30.8  Source u_usb_cdc.u_ctrl_endp.req_q_SB_DFFER_Q_E_SB_LUT4_O_LC.O
+Info:  3.0 33.8    Net u_usb_cdc.u_ctrl_endp.req_q_SB_DFFER_Q_E budget 7.093000 ns (5,17) -> (5,18)
+Info:                Sink u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_DFFER_Q_E_SB_LUT4_O_I2_SB_LUT4_I3_I2_SB_LUT4_O_I0_SB_LUT4_I1_O_SB_LUT4_O_I2_SB_LUT4_O_I3_SB_LUT4_I1_O_SB_LUT4_O_LC.CEN
+Info:  0.1 33.9  Setup u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_DFFER_Q_E_SB_LUT4_O_I2_SB_LUT4_I3_I2_SB_LUT4_O_I0_SB_LUT4_I1_O_SB_LUT4_O_I2_SB_LUT4_O_I3_SB_LUT4_I1_O_SB_LUT4_O_LC.CEN
+Info: 12.0 ns logic, 21.9 ns routing
+
+Info: Critical path report for clock 'clk_12mhz' (posedge -> posedge):
+Info: curr total
+Info:  1.4  1.4  Source u_usb_cdc.u_bulk_endp.genblk1.u_gtex4_async_data.data_rstn_SB_DFFR_Q_DFFLC.O
+Info:  1.8  3.2    Net u_usb_cdc.u_bulk_endp.genblk1.u_gtex4_async_data.data_rstn budget 40.485001 ns (1,12) -> (2,12)
+Info:                Sink u_usb_cdc.u_bulk_endp.genblk1.u_gtex4_async_data.data_rstn_SB_LUT4_I3_LC.I3
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:114.4-127.31
+Info:                  ../../../usb_cdc/bulk_endp.v:281.20-281.32
+Info:                  ../../../usb_cdc/usb_cdc.v:152.4-169.47
+Info:  0.9  4.0  Source u_usb_cdc.u_bulk_endp.genblk1.u_gtex4_async_data.data_rstn_SB_LUT4_I3_LC.O
+Info:  1.7  5.8    Net u_usb_cdc.u_bulk_endp.genblk1.u_gtex4_async_data.data_rstn_SB_LUT4_I3_O budget 40.484001 ns (2,12) -> (3,13)
+Info:                Sink u_usb_cdc.u_bulk_endp.genblk1.u_gtex4_async_data.in_consumed_q_SB_DFFR_Q_DFFLC.SR
+Info:  0.1  5.9  Setup u_usb_cdc.u_bulk_endp.genblk1.u_gtex4_async_data.in_consumed_q_SB_DFFR_Q_DFFLC.SR
+Info: 2.4 ns logic, 3.5 ns routing
+
+Info: Critical path report for cross-domain path '<async>' -> 'posedge clk':
+Info: curr total
+Info:  0.0  0.0  Source u_usb_dn.D_IN_0
+Info:  3.7  3.7    Net rx_dn budget 82.178001 ns (19,31) -> (17,25)
+Info:                Sink u_usb_cdc.u_sie.u_phy_rx.rx_dn_i_SB_LUT4_O_LC.I2
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:114.4-127.31
+Info:                  ../../../usb_cdc/sie.v:100.19-100.26
+Info:                  ../../../usb_cdc/usb_cdc.v:97.4-121.49
+Info:  1.2  4.8  Setup u_usb_cdc.u_sie.u_phy_rx.rx_dn_i_SB_LUT4_O_LC.I2
+Info: 1.2 ns logic, 3.7 ns routing
+
+Info: Critical path report for cross-domain path 'posedge clk' -> '<async>':
+Info: curr total
+Info:  1.4  1.4  Source u_usb_cdc.u_sie.datain_toggle_d_SB_LUT4_O_I0_SB_LUT4_I1_O_SB_LUT4_I0_O_SB_LUT4_I0_O_SB_LUT4_O_6_LC.O
+Info:  3.0  4.3    Net u_usb_cdc.u_sie.u_phy_tx.data_q[0] budget 40.355999 ns (11,17) -> (14,20)
+Info:                Sink tx_dp_SB_LUT4_O_LC.I1
+Info:                Defined in:
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_map.v:6.21-6.22
+Info:  1.2  5.6  Source tx_dp_SB_LUT4_O_LC.O
+Info:  4.9 10.5    Net tx_dp budget 40.355999 ns (14,20) -> (19,31)
+Info:                Sink u_usb_dp.D_OUT_0
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:114.4-127.31
+Info:                  ../../../usb_cdc/sie.v:543.4-550.34
+Info:                  ../../../usb_cdc/phy_tx.v:18.17-18.24
+Info:                  ../../../usb_cdc/usb_cdc.v:97.4-121.49
+Info: 2.6 ns logic, 7.8 ns routing
+
+Info: Critical path report for cross-domain path 'posedge clk' -> 'posedge clk_12mhz':
+Info: curr total
+Info:  1.4  1.4  Source u_usb_cdc.u_bulk_endp.out_first_q_SB_DFFER_Q_3_D_SB_LUT4_O_LC.O
+Info:  2.4  3.8    Net u_usb_cdc.u_bulk_endp.app_in_data_i_SB_LUT4_O_1_I2_SB_LUT4_O_I0_SB_LUT4_O_I3[2] budget 19.357000 ns (3,11) -> (4,13)
+Info:                Sink u_usb_cdc.u_bulk_endp.app_in_data_i_SB_LUT4_O_3_I2_SB_LUT4_O_I0_SB_LUT4_O_I3_SB_LUT4_O_LC.I2
+Info:                Defined in:
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_map.v:6.21-6.22
+Info:  1.2  5.0  Source u_usb_cdc.u_bulk_endp.app_in_data_i_SB_LUT4_O_3_I2_SB_LUT4_O_I0_SB_LUT4_O_I3_SB_LUT4_O_LC.O
+Info:  1.8  6.8    Net u_usb_cdc.u_bulk_endp.app_in_data_i_SB_LUT4_O_3_I2_SB_LUT4_O_I0_SB_LUT4_O_I3[3] budget 19.356001 ns (4,13) -> (5,13)
+Info:                Sink u_usb_cdc.u_bulk_endp.app_in_data_i_SB_LUT4_O_3_I2_SB_LUT4_O_I0_SB_LUT4_O_LC.I3
+Info:                Defined in:
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_map.v:6.21-6.22
+Info:  0.9  7.6  Source u_usb_cdc.u_bulk_endp.app_in_data_i_SB_LUT4_O_3_I2_SB_LUT4_O_I0_SB_LUT4_O_LC.O
+Info:  1.8  9.4    Net u_usb_cdc.u_bulk_endp.app_in_data_i_SB_LUT4_O_3_I2_SB_LUT4_O_I0[2] budget 19.356001 ns (5,13) -> (4,12)
+Info:                Sink u_usb_cdc.u_bulk_endp.app_in_data_i_SB_LUT4_O_3_I2_SB_LUT4_O_LC.I2
+Info:                Defined in:
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_map.v:6.21-6.22
+Info:  1.2 10.6  Source u_usb_cdc.u_bulk_endp.app_in_data_i_SB_LUT4_O_3_I2_SB_LUT4_O_LC.O
+Info:  2.3 12.9    Net u_usb_cdc.u_bulk_endp.app_in_data_i_SB_LUT4_O_3_I2[1] budget 19.356001 ns (4,12) -> (2,12)
+Info:                Sink u_usb_cdc.u_bulk_endp.app_in_data_i_SB_LUT4_O_3_LC.I2
+Info:                Defined in:
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_map.v:6.21-6.22
+Info:  1.2 14.1  Setup u_usb_cdc.u_bulk_endp.app_in_data_i_SB_LUT4_O_3_LC.I2
+Info: 5.8 ns logic, 8.2 ns routing
+
+Info: Critical path report for cross-domain path 'posedge clk' -> 'posedge clk_3mhz_$glb_clk':
+Info: curr total
+Info:  1.4  1.4  Source u_prescaler.rstn_i_SB_DFF_Q_DFFLC.O
+Info:  1.8  3.2    Net rstn budget 26.459999 ns (5,30) -> (5,30)
+Info:                Sink u_prescaler.rstn_i_SB_LUT4_I3_LC.I3
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:114.4-127.31
+Info:                  ../../../usb_cdc/usb_cdc.v:19.18-19.24
+Info:  0.9  4.0  Source u_prescaler.rstn_i_SB_LUT4_I3_LC.O
+Info:  3.5  7.5    Net u_prescaler.rstn_i_SB_LUT4_I3_O budget 26.459999 ns (5,30) -> (12,31)
+Info:                Sink $gbuf_u_prescaler.rstn_i_SB_LUT4_I3_O_$glb_sr.USER_SIGNAL_TO_GLOBAL_BUFFER
+Info:  1.6  9.1  Source $gbuf_u_prescaler.rstn_i_SB_LUT4_I3_O_$glb_sr.GLOBAL_BUFFER_OUTPUT
+Info:  0.6  9.7    Net u_prescaler.rstn_i_SB_LUT4_I3_O_$glb_sr budget 26.459999 ns (12,31) -> (1,29)
+Info:                Sink up_cnt_SB_LUT4_I2_8_LC.SR
+Info:  0.1  9.8  Setup up_cnt_SB_LUT4_I2_8_LC.SR
+Info: 4.0 ns logic, 5.9 ns routing
+
+Info: Critical path report for cross-domain path 'posedge clk_12mhz' -> 'posedge clk':
+Info: curr total
+Info:  1.4  1.4  Source u_usb_cdc.u_bulk_endp.genblk1.u_gtex4_async_data.in_consumed_q_SB_DFFR_Q_DFFLC.O
+Info:  1.8  3.2    Net u_usb_cdc.u_bulk_endp.genblk1.u_gtex4_async_data.in_consumed_q budget 26.459999 ns (3,13) -> (4,14)
+Info:                Sink u_usb_cdc.u_bulk_endp.genblk1.u_gtex4_async_data.in_ready_q_SB_DFFER_Q_E_SB_LUT4_I2_LC.I3
+Info:                Defined in:
+Info:                  /home/santo/rep/oss-cad-suite/lib/../share/yosys/ice40/cells_map.v:6.21-6.22
+Info:  0.9  4.0  Source u_usb_cdc.u_bulk_endp.genblk1.u_gtex4_async_data.in_ready_q_SB_DFFER_Q_E_SB_LUT4_I2_LC.O
+Info:  5.4  9.4    Net u_usb_cdc.u_bulk_endp.genblk1.u_gtex4_async_data.in_ready_q_SB_DFFER_Q_E_SB_LUT4_I2_O budget 9.009000 ns (4,14) -> (13,31)
+Info:                Sink $gbuf_u_usb_cdc.u_bulk_endp.genblk1.u_gtex4_async_data.in_ready_q_SB_DFFER_Q_E_SB_LUT4_I2_O_$glb_ce.USER_SIGNAL_TO_GLOBAL_BUFFER
+Info:  1.6 11.0  Source $gbuf_u_usb_cdc.u_bulk_endp.genblk1.u_gtex4_async_data.in_ready_q_SB_DFFER_Q_E_SB_LUT4_I2_O_$glb_ce.GLOBAL_BUFFER_OUTPUT
+Info:  0.7 11.7    Net u_usb_cdc.u_bulk_endp.genblk1.u_gtex4_async_data.in_ready_q_SB_DFFER_Q_E_SB_LUT4_I2_O_$glb_ce budget 9.009000 ns (13,31) -> (3,15)
+Info:                Sink u_usb_cdc.u_bulk_endp.in_fifo_q_SB_DFFER_Q_D_SB_LUT4_O_LC.CEN
+Info:  0.1 11.8  Setup u_usb_cdc.u_bulk_endp.in_fifo_q_SB_DFFER_Q_D_SB_LUT4_O_LC.CEN
+Info: 4.0 ns logic, 7.9 ns routing
+
+Info: Critical path report for cross-domain path 'posedge clk_3mhz_$glb_clk' -> '<async>':
+Info: curr total
+Info:  1.4  1.4  Source up_cnt_SB_LUT4_I2_9_LC.O
+Info:  1.8  3.2    Net up_cnt[20] budget 26.350000 ns (1,29) -> (1,29)
+Info:                Sink led_SB_LUT4_O_LC.I2
+Info:                Defined in:
+Info:                  ../hdl/loopback/loopback.v:66.15-66.21
+Info:  1.2  4.4  Source led_SB_LUT4_O_LC.O
+Info:  1.8  6.1    Net led budget 40.368999 ns (1,29) -> (0,30)
+Info:                Sink RGBA_DRIVER.RGB1PWM
+Info: 2.6 ns logic, 3.5 ns routing
+
+Info: Max frequency for clock 'clk_3mhz_$glb_clk': 83.46 MHz (PASS at 12.00 MHz)
+Info: Max frequency for clock               'clk': 29.50 MHz (PASS at 12.00 MHz)
+Info: Max frequency for clock         'clk_12mhz': 170.68 MHz (PASS at 12.00 MHz)
+
+Info: Max delay <async>                   -> posedge clk              : 4.85 ns
+Info: Max delay posedge clk               -> <async>                  : 10.47 ns
+Info: Max delay posedge clk               -> posedge clk_12mhz        : 14.06 ns
+Info: Max delay posedge clk               -> posedge clk_3mhz_$glb_clk: 9.83 ns
+Info: Max delay posedge clk_12mhz         -> posedge clk              : 11.84 ns
+Info: Max delay posedge clk_3mhz_$glb_clk -> <async>                  : 6.12 ns
+
+Info: Slack histogram:
+Info:  legend: * represents 6 endpoint(s)
+Info:          + represents [1,6) endpoint(s)
+Info: [ 49434,  50931) |**+
+Info: [ 50931,  52428) |**+
+Info: [ 52428,  53925) |*+
+Info: [ 53925,  55422) |************+
+Info: [ 55422,  56919) |**************+
+Info: [ 56919,  58416) |***+
+Info: [ 58416,  59913) |**+
+Info: [ 59913,  61410) |**+
+Info: [ 61410,  62907) |***+
+Info: [ 62907,  64404) |****+
+Info: [ 64404,  65901) |***+
+Info: [ 65901,  67398) |*+
+Info: [ 67398,  68895) |*****+
+Info: [ 68895,  70392) |**+
+Info: [ 70392,  71889) |****************+
+Info: [ 71889,  73386) |************************************************************ 
+Info: [ 73386,  74883) |**************************************+
+Info: [ 74883,  76380) |****************************+
+Info: [ 76380,  77877) |***********************************+
+Info: [ 77877,  79374) |******************************************************+
+22 warnings, 0 errors
+
+Info: Program finished normally.
