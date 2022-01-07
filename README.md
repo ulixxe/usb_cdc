@@ -41,6 +41,7 @@ Furthermore, USB\_CDC was designed from scratch to keep FPGA resource utilizatio
 * `tx_dp_o`: D+ output bit stream
 * `tx_dn_o`: D- output bit stream
 * `tx_en_o`: D+/D- output enable
+* `dp_up_o`: 1.5k&Omega; D+ pullup enable
 
 ## FIFO interface
 USB\_CDC provides a FIFO interface to transfer data to/from FPGA application. Both `in_*` and `out_*` channels use the same transmission protocol.

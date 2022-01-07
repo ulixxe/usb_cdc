@@ -17,6 +17,7 @@ module soc
    wire             clk_4mhz;
    wire             clk_8mhz;
    wire             lock;
+   wire             dp_pu;
    wire             rx_dp;
    wire             rx_dn;
    wire             tx_dp;
@@ -43,9 +44,9 @@ module soc
                    .SHIFTREG_DIV_MODE(2'b00),
                    .PLLOUT_SELECT("GENCLK"),
                    .ENABLE_ICEGATE(1'b0))
-   u_pll (.REFERENCECLK(clk),
+   u_pll (.REFERENCECLK(clk), // 16MHz
           .PLLOUTCORE(),
-          .PLLOUTGLOBAL(clk_pll),
+          .PLLOUTGLOBAL(clk_pll), // 48MHz
           .EXTFEEDBACK(1'b0),
           .DYNAMICDELAY(8'd0),
           .LOCK(lock),
@@ -78,7 +79,6 @@ module soc
    end
 
    reg [20:0]       up_cnt;
-   reg              usb_pu_q;
    reg [1:0]        sleep_sq;
 
    wire             sleep;
@@ -86,12 +86,9 @@ module soc
    always @(posedge clk_1mhz or negedge rstn) begin
       if (~rstn) begin
          up_cnt <= 'd0;
-         usb_pu_q <= 1'b0;
          sleep_sq <= 2'b00;
       end else begin
          sleep_sq <= {sleep, sleep_sq[1]};
-         if (up_cnt[14] == 1'b1)
-           usb_pu_q <= 1'b1; // TSIGATT < 100ms (USB2.0 Tab.7-14 pag.188)
          if (up_cnt[20] == 1'b0)
            up_cnt <= up_cnt + 1;
          else if (~sleep_sq[0])
@@ -99,8 +96,7 @@ module soc
       end
    end
 
-   assign led = ~up_cnt[20];
-   assign usb_pu = usb_pu_q;
+   assign led = ~dp_pu | ~up_cnt[20];
 
    app u_app (.clk_i(clk_2mhz),
               .rstn_i(rstn),
@@ -130,6 +126,7 @@ module soc
               .out_data_o(out_data),
               .out_valid_o(out_valid),
               .in_ready_o(in_ready),
+              .dp_pu_o(dp_pu),
               .tx_en_o(tx_en),
               .tx_dp_o(tx_dp),
               .tx_dn_o(tx_dn));
@@ -159,5 +156,19 @@ module soc
             .LATCH_INPUT_VALUE(1'b0),
             .INPUT_CLK(1'b0),
             .OUTPUT_CLK(1'b0));
+
+   // drive usb_pu to 3.3V or to high impedance
+   SB_IO #(.PIN_TYPE(6'b101001),
+           .PULLUP(1'b0))
+   u_usb_pu (.PACKAGE_PIN(usb_pu),
+             .OUTPUT_ENABLE(dp_pu),
+             .D_OUT_0(1'b1),
+             .D_IN_0(),
+             .D_OUT_1(1'b0),
+             .D_IN_1(),
+             .CLOCK_ENABLE(1'b0),
+             .LATCH_INPUT_VALUE(1'b0),
+             .INPUT_CLK(1'b0),
+             .OUTPUT_CLK(1'b0));
 
 endmodule

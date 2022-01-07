@@ -34,8 +34,11 @@ module ctrl_endp
     // clk_i clock shall have a frequency of 12MHz*BIT_SAMPLES
     input        rstn_i,
     // While rstn_i is low (active low), the module shall be reset
+    input        usb_reset_i,
+    // While usb_reset_i is high, the module shall be reset
 
     // ---- to/from SIE module ------------------------------------
+    output       usb_en_o,
     output [6:0] addr_o,
     // addr_o shall be the device address.
     // addr_o shall be updated at the end of SET_ADDRESS control transfer.
@@ -83,7 +86,7 @@ module ctrl_endp
     // out_ready_i shall be high only for one clk_i period.
     );
 
-   // device descriptor (in reverse order)
+   // Device Descriptor (in reverse order)
    localparam [8*'h12-1:0] DEV_DESCR = {8'h01, // bNumConfigurations
                                         8'h00, // iSerialNumber (no string)
                                         8'h00, // iProduct (no string)
@@ -101,9 +104,10 @@ module ctrl_endp
                                         8'h02, // bcdUSB[1] (2.00)
                                         8'h00, // bcdUSB[0]
                                         8'h01, // bDescriptorType (DEVICE)
-                                        8'h12}; // bLength
+                                        8'h12 // bLength
+                                        }; // Standard Device Descriptor, USB2.0 9.6.1, page 261-263, Table 9-8
 
-   // configuration descriptor (in reverse order)
+   // Configuration Descriptor (in reverse order)
    localparam [8*'h43-1:0] CONF_DESCR = {8'h00, // bInterval
                                          8'h00, // wMaxPacketSize[1]
                                          IN_BULK_MAXPACKETSIZE[7:0], // wMaxPacketSize[0]
@@ -111,7 +115,7 @@ module ctrl_endp
                                          {4'h8, ENDP_BULK}, // bEndpointAddress (1 IN)
                                          8'h05, // bDescriptorType (ENDPOINT)
                                          8'h07, // bLength
-                                         // endpoint descriptor, USB spec 9.6.6, page 269-271, Table 9-13
+                                         // Standard Endpoint Descriptor, USB2.0 9.6.6, page 269-271, Table 9-13
 
                                          8'h00, // bInterval
                                          8'h00, // wMaxPacketSize[1]
@@ -120,7 +124,7 @@ module ctrl_endp
                                          {4'h0, ENDP_BULK}, // bEndpointAddress (1 OUT)
                                          8'h05, // bDescriptorType (ENDPOINT)
                                          8'h07, // bLength
-                                         // endpoint descriptor, USB spec 9.6.6, page 269-271, Table 9-13
+                                         // Standard Endpoint Descriptor, USB2.0 9.6.6, page 269-271, Table 9-13
 
                                          8'h00, // iInterface (no string)
                                          8'h00, // bInterfaceProtocol
@@ -131,7 +135,7 @@ module ctrl_endp
                                          8'h01, // bInterfaceNumber
                                          8'h04, // bDescriptorType (INTERFACE)
                                          8'h09, // bLength
-                                         // interface descriptor, USB spec 9.6.5, page 267-269, Table 9-12
+                                         // Standard Interface Descriptor, USB2.0 9.6.5, page 267-269, Table 9-12
 
                                          8'hFF, // bInterval (255 ms)
                                          8'h00, // wMaxPacketSize[1]
@@ -140,34 +144,34 @@ module ctrl_endp
                                          {4'h8, ENDP_INT}, // bEndpointAddress (2 IN)
                                          8'h05, // bDescriptorType (ENDPOINT)
                                          8'h07, // bLength
-                                         // endpoint descriptor, USB spec 9.6.6, page 269-271, Table 9-13
-
-                                         8'h01, // bDataInterface
-                                         8'h00, // bmCapabilities (no call mgmnt)
-                                         8'h01, // bDescriptorSubtype (Call Management)
-                                         8'h24, // bDescriptorType (CS_INTERFACE)
-                                         8'h05, // bFunctionLength
-                                         // Call Management Functional Descriptor, CDC Spec 5.2.3.2, Table 27
+                                         // Standard Endpoint Descriptor, USB2.0 9.6.6, page 269-271, Table 9-13
 
                                          8'h01, // bSlaveInterface0
                                          8'h00, // bMasterInterface
-                                         8'h06, // bDescriptorSubtype (union)
+                                         8'h06, // bDescriptorSubtype (Union Functional)
                                          8'h24, // bDescriptorType (CS_INTERFACE)
                                          8'h05, // bFunctionLength
-                                         // Union Functional Descriptor, CDC Spec 5.2.3.8, Table 33
+                                         // Union Functional Descriptor, CDC1.1 5.2.3.8, Table 33
 
                                          8'h00, // bmCapabilities (none)
-                                         8'h02, // bDescriptorSubtype (Abstract Control Management)
+                                         8'h02, // bDescriptorSubtype (Abstract Control Management Functional)
                                          8'h24, // bDescriptorType (CS_INTERFACE)
                                          8'h04, // bFunctionLength
-                                         // Abstract Control Management Functional Descriptor, CDC Spec 5.2.3.3, Table 28
+                                         // Abstract Control Management Functional Descriptor, CDC1.1 5.2.3.3, Table 28
+
+                                         8'h01, // bDataInterface
+                                         8'h00, // bmCapabilities (no call mgmnt)
+                                         8'h01, // bDescriptorSubtype (Call Management Functional)
+                                         8'h24, // bDescriptorType (CS_INTERFACE)
+                                         8'h05, // bFunctionLength
+                                         // Call Management Functional Descriptor, CDC1.1 5.2.3.2, Table 27
 
                                          8'h01, // bcdCDC[1] (1.1)
                                          8'h10, // bcdCDC[0]
-                                         8'h00, // bDescriptorSubtype (header)
+                                         8'h00, // bDescriptorSubtype (Header Functional)
                                          8'h24, // bDescriptorType (CS_INTERFACE)
                                          8'h05, // bFunctionLength
-                                         // Header Functional Descriptor, CDC Spec 5.2.3.1, Table 26
+                                         // Header Functional Descriptor, CDC1.1 5.2.3.1, Table 26
 
                                          8'h00, // iInterface (no string)
                                          8'h01, // bInterfaceProtocol (AT Commands in ITU V.25ter)
@@ -178,7 +182,7 @@ module ctrl_endp
                                          8'h00, // bInterfaceNumber
                                          8'h04, // bDescriptorType (INTERFACE)
                                          8'h09, // bLength
-                                         // interface descriptor, USB spec 9.6.5, page 267-269, Table 9-12
+                                         // Standard Interface Descriptor, USB2.0 9.6.5, page 267-269, Table 9-12
 
                                          8'h32, // bMaxPower (100mA)
                                          8'h80, // bmAttributes (bus powered, no remote wakeup)
@@ -188,7 +192,8 @@ module ctrl_endp
                                          8'h00, // wTotalLength[1]
                                          8'h43, // wTotalLength[0]
                                          8'h02, // bDescriptorType (CONFIGURATION)
-                                         8'h09}; // bLength
+                                         8'h09 // bLength
+                                         }; // Standard Configuration Descriptor, USB2.0 9.6.3, page 264-266, Table 9-10
 
    localparam [2:0]        ST_IDLE = 3'd0,
                            ST_STALL = 3'd1,
@@ -198,25 +203,41 @@ module ctrl_endp
    localparam [1:0]        REC_DEVICE = 2'd0,
                            REC_INTERFACE = 2'd1,
                            REC_ENDPOINT = 2'd2;
-   localparam [3:0]        REQ_GET_STATUS = 4'd0,
+   // Supported Standard Requests
+   localparam [7:0]        STD_REQ_GET_STATUS = 'd0,
+                           STD_REQ_CLEAR_FEATURE = 'd1,
+                           STD_REQ_SET_ADDRESS = 'd5,
+                           STD_REQ_GET_DESCRIPTOR = 'd6,
+                           STD_REQ_GET_CONFIGURATION = 'd8,
+                           STD_REQ_SET_CONFIGURATION = 'd9,
+                           STD_REQ_GET_INTERFACE = 'd10;
+   // Supported Class Requests
+   localparam [7:0]        CLASS_REQ_SET_LINE_CODING = 'h20,
+                           CLASS_REQ_GET_LINE_CODING = 'h21,
+                           CLASS_REQ_SET_CONTROL_LINE_STATE = 'h22,
+                           CLASS_REQ_SEND_BREAK = 'h23;
+   localparam [3:0]        REQ_NONE = 4'd0,
                            REQ_CLEAR_FEATURE = 4'd1,
-                           REQ_SET_ADDRESS = 4'd5,
-                           REQ_GET_DESCRIPTOR = 4'd6,
-                           REQ_GET_CONFIGURATION = 4'd8,
+                           REQ_GET_CONFIGURATION = 4'd2,
+                           REQ_GET_DESCRIPTOR = 4'd3,
+                           REQ_GET_DESCRIPTOR_DEVICE = 4'd4,
+                           REQ_GET_DESCRIPTOR_CONFIGURATION = 4'd5,
+                           REQ_GET_INTERFACE = 4'd6,
+                           REQ_GET_STATUS = 4'd7,
+                           REQ_SET_ADDRESS = 4'd8,
                            REQ_SET_CONFIGURATION = 4'd9,
-                           REQ_GET_INTERFACE = 4'd10,
-                           REQ_GET_DESCRIPTOR_DEVICE = 4'd12,
-                           REQ_GET_DESCRIPTOR_CONFIGURATION = 4'd13,
-                           REQ_CLASS = 4'd14,
-                           REQ_UNSUPPORTED = 4'd15;
-   localparam [1:0]        DEFAULT_STATE = 2'd0,
-                           ADDRESS_STATE = 2'd1,
-                           CONFIGURED_STATE = 2'd2;
+                           REQ_DUMMY = 4'd10,
+                           REQ_UNSUPPORTED = 4'd11;
+   localparam [1:0]        POWERED_STATE = 2'd0,
+                           DEFAULT_STATE = 2'd1,
+                           ADDRESS_STATE = 2'd2,
+                           CONFIGURED_STATE = 2'd3;
 
    reg [2:0]               state_q, state_d;
    reg [6:0]               byte_cnt_q, byte_cnt_d;
    reg [6:0]               max_length_q, max_length_d;
    reg                     in_dir_q, in_dir_d;
+   reg                     class_q, class_d;
    reg [1:0]               rec_q, rec_d;
    reg [3:0]               req_q, req_d;
    reg [1:0]               dev_state_q, dev_state_d;
@@ -228,8 +249,10 @@ module ctrl_endp
    reg                     in_zlp;
    reg                     in_valid;
    reg                     in_toggle_reset, out_toggle_reset;
+   reg                     usb_reset_q;
 
    wire                    clk_gate /* synthesis syn_direct_enable = 1 */;
+   wire                    rstn;
 
    assign addr_o = addr_qq;
    assign stall_o = (state_q == ST_STALL) ? 1'b1 : 1'b0;
@@ -243,14 +266,33 @@ module ctrl_endp
 
    always @(posedge clk_i or negedge rstn_i) begin
       if (~rstn_i) begin
+         dev_state_qq <= POWERED_STATE;
+         usb_reset_q <= 1'b0;
+      end else begin
+         usb_reset_q <= usb_reset_i | usb_reset_q;
+         if (clk_gate) begin
+            if (usb_reset_q) begin
+               dev_state_qq <= DEFAULT_STATE;
+               usb_reset_q <= 1'b0;
+            end else
+              dev_state_qq <= dev_state_dd;
+         end
+      end
+   end
+
+   assign usb_en_o = (dev_state_qq == POWERED_STATE && usb_reset_q == 1'b0) ? 1'b0 : 1'b1;
+   assign rstn = rstn_i & ~usb_reset_i;
+
+   always @(posedge clk_i or negedge rstn) begin
+      if (~rstn) begin
          state_q <= ST_IDLE;
          byte_cnt_q <= 7'd0;
          max_length_q <= 7'd0;
          in_dir_q <= 1'b0;
+         class_q <= 1'b0;
          rec_q <= REC_DEVICE;
-         req_q <= 4'd0;
-         dev_state_q <= 2'd0;
-         dev_state_qq <= 2'd0;
+         req_q <= REQ_NONE;
+         dev_state_q <= DEFAULT_STATE;
          addr_q <= 7'd0;
          addr_qq <= 7'd0;
          in_endp_q <= 1'b0;
@@ -260,10 +302,10 @@ module ctrl_endp
             byte_cnt_q <= byte_cnt_d;
             max_length_q <= max_length_d;
             in_dir_q <= in_dir_d;
+            class_q <= class_d;
             rec_q <= rec_d;
             req_q <= req_d;
             dev_state_q <= dev_state_d;
-            dev_state_qq <= dev_state_dd;
             addr_q <= addr_d;
             addr_qq <= addr_dd;
             in_endp_q <= in_endp_d;
@@ -271,14 +313,15 @@ module ctrl_endp
       end
    end
 
-   always @(/*AS*/addr_q or addr_qq or byte_cnt_q or dev_state_q
-            or dev_state_qq or in_dir_q or in_endp_q or in_req_i
-            or max_length_q or out_data_i or out_err_i or out_valid_i
-            or rec_q or req_q or setup_i or state_q) begin
+   always @(/*AS*/addr_q or addr_qq or byte_cnt_q or class_q
+            or dev_state_q or dev_state_qq or in_dir_q or in_endp_q
+            or in_req_i or max_length_q or out_data_i or out_err_i
+            or out_valid_i or rec_q or req_q or setup_i or state_q) begin
       state_d = state_q;
       byte_cnt_d = 7'd0;
       max_length_d = max_length_q;
       in_dir_d = in_dir_q;
+      class_d = class_q;
       rec_d = rec_q;
       req_d = req_q;
       dev_state_d = dev_state_q;
@@ -299,8 +342,7 @@ module ctrl_endp
          state_d = ST_SETUP;
       end else begin
          case (state_q)
-           ST_IDLE,
-           ST_STALL : begin
+           ST_IDLE, ST_STALL : begin
            end
            ST_SETUP : begin
               if (out_valid_i == 1'b1) begin
@@ -308,83 +350,85 @@ module ctrl_endp
                  case (byte_cnt_q)
                    7'd0 : begin // bmRequestType
                       in_dir_d = out_data_i[7];
+                      class_d = out_data_i[5];
                       rec_d = out_data_i[1:0];
-                      if ((out_data_i[6] == 1'b1) || (|out_data_i[4:2] != 1'b0) || (out_data_i[1:0] == 2'b11)) begin
-                         req_d = REQ_UNSUPPORTED;
-                      end else if (out_data_i[5] == 1'b1) begin
-                         req_d = REQ_CLASS;
-                      end else begin
-                         req_d = 4'd0;
-                      end
+                      if ((out_data_i[6] == 1'b1) || (|out_data_i[4:2] != 1'b0) || (out_data_i[1:0] == 2'b11))
+                        req_d = REQ_UNSUPPORTED;
+                      else
+                        req_d = REQ_NONE;
                    end
                    7'd1 : begin // bRequest
-                      if (req_q == 4'd0) begin
-                         if (|out_data_i[7:4] == 1'b0) begin
-                            req_d = out_data_i[3:0];
-                            case (out_data_i[3:0])
-                              REQ_GET_STATUS : begin
-                                 if (in_dir_q == 1'b0)
-                                   req_d = REQ_UNSUPPORTED;
+                      req_d = REQ_UNSUPPORTED;
+                      if (req_q == REQ_NONE) begin
+                         if (class_q == 1'b0) begin
+                            case (out_data_i)
+                              STD_REQ_CLEAR_FEATURE : begin
+                                 if (in_dir_q == 1'b0 && dev_state_qq != DEFAULT_STATE)
+                                   req_d = REQ_CLEAR_FEATURE;
                               end
-                              REQ_CLEAR_FEATURE : begin
-                                 if (in_dir_q == 1'b1)
-                                   req_d = REQ_UNSUPPORTED;
+                              STD_REQ_GET_CONFIGURATION : begin
+                                 if (in_dir_q == 1'b1 && rec_q == REC_DEVICE && dev_state_qq != DEFAULT_STATE)
+                                   req_d = REQ_GET_CONFIGURATION;
                               end
-                              REQ_SET_ADDRESS : begin
-                                 if ((in_dir_q == 1'b1) || (rec_q != REC_DEVICE))
-                                   req_d = REQ_UNSUPPORTED;
+                              STD_REQ_GET_DESCRIPTOR : begin
+                                 if (in_dir_q == 1'b1 && rec_q == REC_DEVICE)
+                                   req_d = REQ_GET_DESCRIPTOR;
                               end
-                              REQ_GET_DESCRIPTOR : begin
-                                 if ((in_dir_q == 1'b0) || (rec_q != REC_DEVICE))
-                                   req_d = REQ_UNSUPPORTED;
+                              STD_REQ_GET_INTERFACE : begin
+                                 if (in_dir_q == 1'b1 && rec_q == REC_INTERFACE && dev_state_qq == CONFIGURED_STATE)
+                                   req_d = REQ_GET_INTERFACE;
                               end
-                              REQ_GET_CONFIGURATION : begin
-                                 if ((in_dir_q == 1'b0) || (rec_q != REC_DEVICE))
-                                   req_d = REQ_UNSUPPORTED;
+                              STD_REQ_GET_STATUS : begin
+                                 if (in_dir_q == 1'b1 && dev_state_qq != DEFAULT_STATE)
+                                   req_d = REQ_GET_STATUS;
                               end
-                              REQ_SET_CONFIGURATION : begin
-                                 if ((in_dir_q == 1'b1) || (rec_q != REC_DEVICE))
-                                   req_d = REQ_UNSUPPORTED;
+                              STD_REQ_SET_ADDRESS : begin
+                                 if (in_dir_q == 1'b0 && rec_q == REC_DEVICE)
+                                   req_d = REQ_SET_ADDRESS;
                               end
-                              REQ_GET_INTERFACE : begin
-                                 if ((in_dir_q == 1'b0) || (rec_q != REC_INTERFACE))
-                                   req_d = REQ_UNSUPPORTED;
+                              STD_REQ_SET_CONFIGURATION : begin
+                                 if (in_dir_q == 1'b0 && rec_q == REC_DEVICE && dev_state_qq != DEFAULT_STATE)
+                                   req_d = REQ_SET_CONFIGURATION;
                               end
                               default : begin
-                                 req_d = REQ_UNSUPPORTED;
                               end
                             endcase
                          end else begin
-                            req_d = REQ_UNSUPPORTED;
+                            if (dev_state_qq == CONFIGURED_STATE &&
+                                ((out_data_i == CLASS_REQ_SET_LINE_CODING) ||
+                                 (out_data_i == CLASS_REQ_GET_LINE_CODING) ||
+                                 (out_data_i == CLASS_REQ_SET_CONTROL_LINE_STATE) ||
+                                 (out_data_i == CLASS_REQ_SEND_BREAK)))
+                              req_d = REQ_DUMMY;
                          end
-                      end else if (req_q == REQ_CLASS) begin
-                         if ((out_data_i != 8'h20) && (out_data_i != 8'h21) &&
-                             (out_data_i != 8'h22) && (out_data_i != 8'h23))
-                           req_d = REQ_UNSUPPORTED;
                       end
                    end
                    7'd2 : begin // wValue LSB
                       case (req_q)
-                        REQ_GET_STATUS : begin
-                           if (|out_data_i == 1'b1)
-                             req_d = REQ_UNSUPPORTED;
-                        end
                         REQ_CLEAR_FEATURE : begin // ENDPOINT_HALT
                            if (!(rec_q == REC_ENDPOINT && |out_data_i == 1'b0))
                              req_d = REQ_UNSUPPORTED;
                         end
-                        REQ_SET_ADDRESS : begin
-                           if (out_data_i[7] == 1'b0)
-                             addr_d = out_data_i[6:0];
-                           else
+                        REQ_GET_CONFIGURATION : begin
+                           if (|out_data_i == 1'b1)
                              req_d = REQ_UNSUPPORTED;
                         end
                         REQ_GET_DESCRIPTOR : begin
                            if (|out_data_i == 1'b1)
                              req_d = REQ_UNSUPPORTED;
                         end
-                        REQ_GET_CONFIGURATION : begin
+                        REQ_GET_INTERFACE : begin
                            if (|out_data_i == 1'b1)
+                             req_d = REQ_UNSUPPORTED;
+                        end
+                        REQ_GET_STATUS : begin
+                           if (|out_data_i == 1'b1)
+                             req_d = REQ_UNSUPPORTED;
+                        end
+                        REQ_SET_ADDRESS : begin
+                           if (out_data_i[7] == 1'b0)
+                             addr_d = out_data_i[6:0];
+                           else
                              req_d = REQ_UNSUPPORTED;
                         end
                         REQ_SET_CONFIGURATION : begin
@@ -395,25 +439,17 @@ module ctrl_endp
                            else
                              req_d = REQ_UNSUPPORTED;
                         end
-                        REQ_GET_INTERFACE : begin
-                           if (|out_data_i == 1'b1)
-                             req_d = REQ_UNSUPPORTED;
-                        end
                         default : begin
                         end
                       endcase
                    end
                    7'd3 : begin // wValue MSB
                       case (req_q)
-                        REQ_GET_STATUS : begin
-                           if (|out_data_i == 1'b1)
-                             req_d = REQ_UNSUPPORTED;
-                        end
                         REQ_CLEAR_FEATURE : begin
                            if (|out_data_i == 1'b1)
                              req_d = REQ_UNSUPPORTED;
                         end
-                        REQ_SET_ADDRESS : begin
+                        REQ_GET_CONFIGURATION : begin
                            if (|out_data_i == 1'b1)
                              req_d = REQ_UNSUPPORTED;
                         end
@@ -425,15 +461,19 @@ module ctrl_endp
                            else
                              req_d = REQ_UNSUPPORTED;
                         end
-                        REQ_GET_CONFIGURATION : begin
+                        REQ_GET_INTERFACE : begin
+                           if (|out_data_i == 1'b1)
+                             req_d = REQ_UNSUPPORTED;
+                        end
+                        REQ_GET_STATUS : begin
+                           if (|out_data_i == 1'b1)
+                             req_d = REQ_UNSUPPORTED;
+                        end
+                        REQ_SET_ADDRESS : begin
                            if (|out_data_i == 1'b1)
                              req_d = REQ_UNSUPPORTED;
                         end
                         REQ_SET_CONFIGURATION : begin
-                           if (|out_data_i == 1'b1)
-                             req_d = REQ_UNSUPPORTED;
-                        end
-                        REQ_GET_INTERFACE : begin
                            if (|out_data_i == 1'b1)
                              req_d = REQ_UNSUPPORTED;
                         end
@@ -444,6 +484,25 @@ module ctrl_endp
                    7'd4 : begin // wIndex LSB
                       in_endp_d = out_data_i[7];
                       case (req_q)
+                        REQ_CLEAR_FEATURE : begin
+                           if (!((rec_q == REC_ENDPOINT) &&
+                                 (out_data_i == 8'h00 || out_data_i == 8'h80 ||
+                                  out_data_i == 8'h01 || out_data_i == 8'h81 ||
+                                  out_data_i == 8'h82)))
+                             req_d = REQ_UNSUPPORTED;
+                        end
+                        REQ_GET_CONFIGURATION : begin
+                           if (|out_data_i == 1'b1)
+                             req_d = REQ_UNSUPPORTED;
+                        end
+                        REQ_GET_DESCRIPTOR_DEVICE, REQ_GET_DESCRIPTOR_CONFIGURATION : begin
+                           if (|out_data_i == 1'b1)
+                             req_d = REQ_UNSUPPORTED;
+                        end
+                        REQ_GET_INTERFACE : begin
+                           if (!(out_data_i == 8'd0 || out_data_i == 8'd1))
+                             req_d = REQ_UNSUPPORTED;
+                        end
                         REQ_GET_STATUS : begin
                            if (!(((rec_q == REC_DEVICE) && (|out_data_i == 1'b0)) ||
                                  ((rec_q == REC_INTERFACE) && (|out_data_i[7:1] == 1'b0)) ||
@@ -453,32 +512,12 @@ module ctrl_endp
                                    out_data_i == 8'h82))))
                              req_d = REQ_UNSUPPORTED;
                         end
-                        REQ_CLEAR_FEATURE : begin
-                           if (!((rec_q == REC_ENDPOINT) &&
-                                 (out_data_i == 8'h00 || out_data_i == 8'h80 ||
-                                  out_data_i == 8'h01 || out_data_i == 8'h81 ||
-                                  out_data_i == 8'h82)))
-                             req_d = REQ_UNSUPPORTED;
-                        end
                         REQ_SET_ADDRESS : begin
-                           if (|out_data_i == 1'b1)
-                             req_d = REQ_UNSUPPORTED;
-                        end
-                        REQ_GET_DESCRIPTOR_DEVICE,
-                          REQ_GET_DESCRIPTOR_CONFIGURATION : begin
-                             if (|out_data_i == 1'b1)
-                               req_d = REQ_UNSUPPORTED;
-                          end
-                        REQ_GET_CONFIGURATION : begin
                            if (|out_data_i == 1'b1)
                              req_d = REQ_UNSUPPORTED;
                         end
                         REQ_SET_CONFIGURATION : begin
                            if (|out_data_i == 1'b1)
-                             req_d = REQ_UNSUPPORTED;
-                        end
-                        REQ_GET_INTERFACE : begin
-                           if (!(out_data_i == 8'd0 || out_data_i == 8'd1))
                              req_d = REQ_UNSUPPORTED;
                         end
                         default : begin
@@ -487,11 +526,23 @@ module ctrl_endp
                    end
                    7'd5 : begin // wIndex MSB
                       case (req_q)
-                        REQ_GET_STATUS : begin
+                        REQ_CLEAR_FEATURE : begin
                            if (|out_data_i == 1'b1)
                              req_d = REQ_UNSUPPORTED;
                         end
-                        REQ_CLEAR_FEATURE : begin
+                        REQ_GET_CONFIGURATION : begin
+                           if (|out_data_i == 1'b1)
+                             req_d = REQ_UNSUPPORTED;
+                        end
+                        REQ_GET_DESCRIPTOR_DEVICE, REQ_GET_DESCRIPTOR_CONFIGURATION : begin
+                           if (|out_data_i == 1'b1)
+                             req_d = REQ_UNSUPPORTED;
+                        end
+                        REQ_GET_INTERFACE : begin
+                           if (|out_data_i == 1'b1)
+                             req_d = REQ_UNSUPPORTED;
+                        end
+                        REQ_GET_STATUS : begin
                            if (|out_data_i == 1'b1)
                              req_d = REQ_UNSUPPORTED;
                         end
@@ -499,20 +550,7 @@ module ctrl_endp
                            if (|out_data_i == 1'b1)
                              req_d = REQ_UNSUPPORTED;
                         end
-                        REQ_GET_DESCRIPTOR_DEVICE,
-                          REQ_GET_DESCRIPTOR_CONFIGURATION : begin
-                             if (|out_data_i == 1'b1)
-                               req_d = REQ_UNSUPPORTED;
-                          end
-                        REQ_GET_CONFIGURATION : begin
-                           if (|out_data_i == 1'b1)
-                             req_d = REQ_UNSUPPORTED;
-                        end
                         REQ_SET_CONFIGURATION : begin
-                           if (|out_data_i == 1'b1)
-                             req_d = REQ_UNSUPPORTED;
-                        end
-                        REQ_GET_INTERFACE : begin
                            if (|out_data_i == 1'b1)
                              req_d = REQ_UNSUPPORTED;
                         end
@@ -523,33 +561,32 @@ module ctrl_endp
                    7'd6 : begin // wLength LSB
                       max_length_d = out_data_i[6:0];
                       case (req_q)
-                        REQ_GET_STATUS : begin
-                           if (out_data_i != 8'd2)
-                             req_d = REQ_UNSUPPORTED;
-                        end
                         REQ_CLEAR_FEATURE : begin
                            if (|out_data_i == 1'b1)
+                             req_d = REQ_UNSUPPORTED;
+                        end
+                        REQ_GET_CONFIGURATION : begin
+                           if (out_data_i != 8'd1)
+                             req_d = REQ_UNSUPPORTED;
+                        end
+                        REQ_GET_DESCRIPTOR_DEVICE, REQ_GET_DESCRIPTOR_CONFIGURATION : begin
+                           if (out_data_i[7] == 1'b1)
+                             max_length_d = 7'b1111111;
+                        end
+                        REQ_GET_INTERFACE : begin
+                           if (out_data_i != 8'd1)
+                             req_d = REQ_UNSUPPORTED;
+                        end
+                        REQ_GET_STATUS : begin
+                           if (out_data_i != 8'd2)
                              req_d = REQ_UNSUPPORTED;
                         end
                         REQ_SET_ADDRESS : begin
                            if (|out_data_i == 1'b1)
                              req_d = REQ_UNSUPPORTED;
                         end
-                        REQ_GET_DESCRIPTOR_DEVICE,
-                          REQ_GET_DESCRIPTOR_CONFIGURATION : begin
-                             if (out_data_i[7] == 1'b1)
-                               max_length_d = 7'b1111111;
-                          end
-                        REQ_GET_CONFIGURATION : begin
-                           if (out_data_i != 8'd1)
-                             req_d = REQ_UNSUPPORTED;
-                        end
                         REQ_SET_CONFIGURATION : begin
                            if (|out_data_i == 1'b1)
-                             req_d = REQ_UNSUPPORTED;
-                        end
-                        REQ_GET_INTERFACE : begin
-                           if (out_data_i != 8'd1)
                              req_d = REQ_UNSUPPORTED;
                         end
                         default : begin
@@ -558,15 +595,11 @@ module ctrl_endp
                    end
                    7'd7 : begin // wLength MSB
                       case (req_q)
-                        REQ_GET_STATUS : begin
-                           if (|out_data_i == 1'b1)
-                             req_d = REQ_UNSUPPORTED;
-                        end
                         REQ_CLEAR_FEATURE : begin
                            if (|out_data_i == 1'b1)
                              req_d = REQ_UNSUPPORTED;
                         end
-                        REQ_SET_ADDRESS : begin
+                        REQ_GET_CONFIGURATION : begin
                            if (|out_data_i == 1'b1)
                              req_d = REQ_UNSUPPORTED;
                         end
@@ -578,15 +611,19 @@ module ctrl_endp
                            if ((|out_data_i == 1'b1) || (max_length_q > 7'h43))
                              max_length_d = 7'h43;
                         end
-                        REQ_GET_CONFIGURATION : begin
+                        REQ_GET_INTERFACE : begin
+                           if (|out_data_i == 1'b1)
+                             req_d = REQ_UNSUPPORTED;
+                        end
+                        REQ_GET_STATUS : begin
+                           if (|out_data_i == 1'b1)
+                             req_d = REQ_UNSUPPORTED;
+                        end
+                        REQ_SET_ADDRESS : begin
                            if (|out_data_i == 1'b1)
                              req_d = REQ_UNSUPPORTED;
                         end
                         REQ_SET_CONFIGURATION : begin
-                           if (|out_data_i == 1'b1)
-                             req_d = REQ_UNSUPPORTED;
-                        end
-                        REQ_GET_INTERFACE : begin
                            if (|out_data_i == 1'b1)
                              req_d = REQ_UNSUPPORTED;
                         end
@@ -616,102 +653,50 @@ module ctrl_endp
               if (in_dir_q == 1'b1) begin
                  if (out_valid_i == 1'b1) begin
                     state_d = ST_STALL;
-                 end
-                 case (req_q)
-                   REQ_GET_STATUS : begin
-                      if (byte_cnt_q == 7'd2) begin
-                         if (in_req_i == 1'b0)
-                           state_d = ST_STATUS;
-                         else
-                           state_d = ST_STALL;
-                      end else begin
-                         in_data = 8'd0;
-                         in_valid = 1'b1;
+                 end else begin
+                    if (byte_cnt_q == max_length_q) begin
+                       if (in_req_i == 1'b0)
+                         state_d = ST_STATUS;
+                       else
+                         state_d = ST_STALL;
+                    end else begin
+                       if (in_req_i == 1'b1)
                          byte_cnt_d = byte_cnt_q + 1;
-                      end
-                   end
-                   REQ_GET_DESCRIPTOR_DEVICE : begin
-                      if (byte_cnt_q == max_length_q) begin
-                         if (in_req_i == 1'b0)
-                           state_d = ST_STATUS;
-                         else
-                           state_d = ST_STALL;
-                      end else begin
-                         in_data = DEV_DESCR[8*byte_cnt_q +:8];
-                         in_valid = 1'b1;
-                         if (in_req_i == 1'b1)
-                           byte_cnt_d = byte_cnt_q + 1;
-                         else
-                           byte_cnt_d = byte_cnt_q;
-                      end
-                   end
-                   REQ_GET_DESCRIPTOR_CONFIGURATION : begin
-                      if (byte_cnt_q == max_length_q) begin
-                         if (in_req_i == 1'b0)
-                           state_d = ST_STATUS;
-                         else
-                           state_d = ST_STALL;
-                      end else begin
-                         in_data = CONF_DESCR[8*byte_cnt_q +:8];
-                         in_valid = 1'b1;
-                         if (in_req_i == 1'b1)
-                           byte_cnt_d = byte_cnt_q + 1;
-                         else
-                           byte_cnt_d = byte_cnt_q;
-                      end
-                   end
-                   REQ_GET_CONFIGURATION : begin
-                      if (byte_cnt_q == 7'd1) begin
-                         if (in_req_i == 1'b0)
-                           state_d = ST_STATUS;
-                         else
-                           state_d = ST_STALL;
-                      end else begin
-                         if (dev_state_qq == ADDRESS_STATE) begin
+                       else
+                         byte_cnt_d = byte_cnt_q;
+                       case (req_q)
+                         REQ_GET_CONFIGURATION : begin
+                            if (dev_state_qq == ADDRESS_STATE) begin
+                               in_data = 8'd0;
+                               in_valid = 1'b1;
+                            end else if (dev_state_qq == CONFIGURED_STATE) begin
+                               in_data = 8'd1;
+                               in_valid = 1'b1;
+                            end
+                         end
+                         REQ_GET_DESCRIPTOR_DEVICE : begin
+                            in_data = DEV_DESCR[8*byte_cnt_q +:8];
+                            in_valid = 1'b1;
+                         end
+                         REQ_GET_DESCRIPTOR_CONFIGURATION : begin
+                            in_data = CONF_DESCR[8*byte_cnt_q +:8];
+                            in_valid = 1'b1;
+                         end
+                         REQ_GET_INTERFACE : begin
                             in_data = 8'd0;
                             in_valid = 1'b1;
-                            byte_cnt_d = byte_cnt_q + 1;
-                         end else if (dev_state_qq == CONFIGURED_STATE) begin
-                            in_data = 8'd1;
-                            in_valid = 1'b1;
-                            byte_cnt_d = byte_cnt_q + 1;
-                         end else begin
-                            state_d = ST_STALL;
                          end
-                      end
-                   end
-                   REQ_GET_INTERFACE : begin
-                      if (byte_cnt_q == 7'd1) begin
-                         if (in_req_i == 1'b0)
-                           state_d = ST_STATUS;
-                         else
-                           state_d = ST_STALL;
-                      end else begin
-                         if (dev_state_qq == CONFIGURED_STATE) begin
+                         REQ_GET_STATUS : begin
                             in_data = 8'd0;
                             in_valid = 1'b1;
-                            byte_cnt_d = byte_cnt_q + 1;
-                         end else begin
-                            state_d = ST_STALL;
                          end
-                      end
-                   end
-                   default :begin
-                      if (byte_cnt_q == max_length_q) begin
-                         if (in_req_i == 1'b0)
-                           state_d = ST_STATUS;
-                         else
-                           state_d = ST_STALL;
-                      end else begin
-                         in_data = 8'd0;
-                         in_valid = 1'b1;
-                         if (in_req_i == 1'b1)
-                           byte_cnt_d = byte_cnt_q + 1;
-                         else
-                           byte_cnt_d = byte_cnt_q;
-                      end
-                   end
-                 endcase
+                         default :begin
+                            in_data = 8'd0;
+                            in_valid = 1'b1;
+                         end
+                       endcase
+                    end
+                 end
               end else begin
                  if (in_req_i == 1'b1)
                    state_d = ST_STALL;

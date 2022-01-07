@@ -79,6 +79,7 @@ module sie
     output        setup_o,
     // While last correctly checked PID (USB2.0 8.3.1) is SETUP, setup_o shall
     //   be high, otherwise shall be low.
+    input         usb_en_i,
     input [6:0]   addr_i,
     // addr_i shall be the device address.
     // addr_i shall be updated at the end of SET_ADDRESS control transfer.
@@ -93,6 +94,7 @@ module sie
     //   OUT bulk pipe shall be reset to DATA0.
 
     // ---- to/from USB bus physical transmitters/receivers ----------
+    output        dp_pu_o,
     output        tx_en_o,
     output        tx_dp_o,
     output        tx_dn_o,
@@ -522,22 +524,23 @@ module sie
    end
 
    wire tx_en;
-   wire rx_dp, rx_dn;
+   wire rx_en;
 
    assign tx_en_o = tx_en;
-   assign rx_dp = rx_dp_i | tx_en;
-   assign rx_dn = rx_dn_i | tx_en;
+   assign rx_en = ~tx_en & usb_en_i;
 
    phy_rx #(.BIT_SAMPLES(BIT_SAMPLES))
    u_phy_rx (.rx_data_o(rx_data),
              .rx_valid_o(rx_valid),
              .rx_err_o(rx_err),
+             .dp_pu_o(dp_pu_o),
              .usb_reset_o(usb_reset),
              .rx_ready_o(rx_ready),
              .clk_i(clk_i),
              .rstn_i(rstn_i),
-             .rx_dp_i(rx_dp),
-             .rx_dn_i(rx_dn));
+             .rx_en_i(rx_en),
+             .rx_dp_i(rx_dp_i),
+             .rx_dn_i(rx_dn_i));
 
    phy_tx #(.BIT_SAMPLES(BIT_SAMPLES))
    u_phy_tx (.tx_en_o(tx_en),

@@ -16,8 +16,8 @@ module loopback
    wire             clk_div4;
    wire             clk_div8;
    wire             clk_div16;
-   wire             clk_1mhz;
    wire             lock;
+   wire             dp_pu;
    wire             rx_dp;
    wire             rx_dn;
    wire             tx_dp;
@@ -29,6 +29,8 @@ module loopback
    wire [7:0]       in_data;
    wire             in_valid;
    wire             out_ready;
+
+   assign led = ~dp_pu;
 
    // if FEEDBACK_PATH = SIMPLE:
    // clk_freq = (ref_freq * (DIVF + 1)) / (2**DIVQ * (DIVR + 1));
@@ -44,9 +46,9 @@ module loopback
                    .SHIFTREG_DIV_MODE(2'b00),
                    .PLLOUT_SELECT("GENCLK"),
                    .ENABLE_ICEGATE(1'b0))
-   u_pll (.REFERENCECLK(clk),
+   u_pll (.REFERENCECLK(clk), // 16MHz
           .PLLOUTCORE(),
-          .PLLOUTGLOBAL(clk_pll),
+          .PLLOUTGLOBAL(clk_pll), // 192MHz
           .EXTFEEDBACK(1'b0),
           .DYNAMICDELAY(8'd0),
           .LOCK(lock),
@@ -57,51 +59,12 @@ module loopback
           .SCLK(1'b0),
           .LATCHINPUTVALUE(1'b1));
 
-   prescaler u_app_prescaler (.clk_i(clk_pll),
-                              .rstn_i(lock),
-                              .clk_div2_o(clk_div2),
-                              .clk_div4_o(clk_div4),
-                              .clk_div8_o(clk_div8),
-                              .clk_div16_o(clk_div16));
-
-   prescaler u_up_cnt_prescaler (.clk_i(clk),
-                                 .rstn_i(lock),
-                                 .clk_div16_o(clk_1mhz),
-                                 .clk_div8_o(),
-                                 .clk_div4_o(),
-                                 .clk_div2_o());
-
-   reg [1:0]        rstn_sync;
-
-   wire             rstn;
-
-   assign rstn = rstn_sync[0];
-
-   always @(posedge clk or negedge lock) begin
-      if (~lock) begin
-         rstn_sync <= 2'd0;
-      end else begin
-         rstn_sync <= {1'b1, rstn_sync[1]};
-      end
-   end
-
-   reg [20:0] up_cnt;
-   reg        usb_pu_q;
-
-   always @(posedge clk_1mhz or negedge rstn) begin
-      if (~rstn) begin
-         up_cnt <= 'd0;
-         usb_pu_q <= 1'b0;
-      end else begin
-         if (up_cnt[14] == 1'b1)
-           usb_pu_q <= 1'b1; // TSIGATT < 100ms (USB2.0 Tab.7-14 pag.188)
-         if (up_cnt[20] == 1'b0)
-           up_cnt <= up_cnt + 1;
-      end
-   end
-
-   assign led = ~up_cnt[20];
-   assign usb_pu = usb_pu_q;
+   prescaler u_prescaler (.clk_i(clk_pll),
+                          .rstn_i(lock),
+                          .clk_div2_o(clk_div2),
+                          .clk_div4_o(clk_div4),
+                          .clk_div8_o(clk_div8),
+                          .clk_div16_o(clk_div16));
 
    usb_cdc #(.VENDORID(16'h1D50),
              .PRODUCTID(16'h6130),
@@ -112,7 +75,7 @@ module loopback
              .APP_CLK_RATIO(BIT_SAMPLES*12/192))  // BIT_SAMPLES * 12MHz / 192MHz
    u_usb_cdc (.app_clk_i(clk_pll),
               .clk_i(clk_div4),
-              .rstn_i(rstn),
+              .rstn_i(lock),
               .out_ready_i(in_ready),
               .in_data_i(out_data),
               .in_valid_i(out_valid),
@@ -121,6 +84,7 @@ module loopback
               .out_data_o(out_data),
               .out_valid_o(out_valid),
               .in_ready_o(in_ready),
+              .dp_pu_o(dp_pu),
               .tx_en_o(tx_en),
               .tx_dp_o(tx_dp),
               .tx_dn_o(tx_dn));
@@ -150,5 +114,19 @@ module loopback
             .LATCH_INPUT_VALUE(1'b0),
             .INPUT_CLK(1'b0),
             .OUTPUT_CLK(1'b0));
+
+   // drive usb_pu to 3.3V or to high impedance
+   SB_IO #(.PIN_TYPE(6'b101001),
+           .PULLUP(1'b0))
+   u_usb_pu (.PACKAGE_PIN(usb_pu),
+             .OUTPUT_ENABLE(dp_pu),
+             .D_OUT_0(1'b1),
+             .D_IN_0(),
+             .D_OUT_1(1'b0),
+             .D_IN_1(),
+             .CLOCK_ENABLE(1'b0),
+             .LATCH_INPUT_VALUE(1'b0),
+             .INPUT_CLK(1'b0),
+             .OUTPUT_CLK(1'b0));
 
 endmodule

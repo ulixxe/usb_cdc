@@ -26,9 +26,8 @@ module phy_rx
     //   current packet reception and SIE module shall manage the error condition.
     output       usb_reset_o,
     // When rx_dp_i/rx_dn_i change and stay in SE0 condition for 2.5us, usb_reset_o shall be high.
-    // When usb_reset_o changes from low to high, usb_reset_o shall return low after 330ns.
-    // When usb_reset_o changes from high to low and rx_dp_i/rx_dn_i are in SE0 condition,
-    //   usb_reset_o shall return high after 2.5us.
+    // When rx_dp_i/rx_dn_i change from SE0 condition, usb_reset_o shall return low
+    //   after being high for at least 330ns.
     output       rx_ready_o,
     // rx_ready_o shall be high only for one clk_i period.
     // While rx_valid_o and rx_err_o are both low, rx_ready_o shall be high to signal the
@@ -37,8 +36,10 @@ module phy_rx
     // clk_i clock shall have a frequency of 12MHz*BIT_SAMPLES
     input        rstn_i,
     // While rstn_i is low (active low), the module shall be reset
+    input        rx_en_i,
 
-    // ---- from USB bus physical receivers ----------------------
+    // ---- to/from USB bus ------------------------------------------
+    output       dp_pu_o,
     input        rx_dp_i,
     input        rx_dn_i
     );
@@ -70,7 +71,7 @@ module phy_rx
                     SE1 = 2'd3;
    reg [1:0]        nrzi;
 
-   always @(dn_q or dp_q) begin
+   always @(/*AS*/dn_q or dp_q) begin
       if (dp_q[0] == 1'b1 && dn_q[0] == 1'b0)
         nrzi = DJ;
       else if (dp_q[0] == 1'b0 && dn_q[0] == 1'b1)
@@ -103,21 +104,24 @@ module phy_rx
                     ST_DATA = 3'd2,
                     ST_EOP = 3'd3,
                     ST_ERR = 3'd4;
+   localparam       CNT_WIDTH = ceil_log2((2**14+1)*12);
 
    reg [3:0]        nrzi_q;
    reg [2:0]        rx_state_q, rx_state_d;
    reg [8:0]        data_q, data_d;
    reg [2:0]        stuffing_cnt_q, stuffing_cnt_d;
-   reg [5:0]        reset_cnt_q;
    reg              rx_valid_rq, rx_valid_rd;
    reg              rx_valid_fq, rx_valid_fd;
+   reg [CNT_WIDTH-1:0] cnt_q;
+   reg                 dp_pu_q;
+   reg                 rx_en_q;
 
-   wire             rx_ready;
-   wire             rx_err;
-   wire             rx_eop;
-   wire             clk_gate;
+   wire                rx_ready;
+   wire                rx_err;
+   wire                rx_eop;
+   wire                clk_gate;
 
-   localparam       VALID_SAMPLES = BIT_SAMPLES/2; // consecutive valid samples
+   localparam          VALID_SAMPLES = BIT_SAMPLES/2; // consecutive valid samples
 
    assign clk_gate = ({1'b0, clk_cnt_q} == (VALID_SAMPLES-1)) ? 1'b1 : 1'b0;
    assign rx_ready = (data_q[0] == 1'b1 && stuffing_cnt_q != 3'd6) ? 1'b1 : 1'b0;
@@ -128,8 +132,9 @@ module phy_rx
    // rx_valid_o put to 0 early to gain setup time before rx_eop
    assign rx_valid_o = rx_valid_rq ^ rx_valid_fq;
    assign rx_err_o = rx_err;
-   assign usb_reset_o = reset_cnt_q[5];
+   assign usb_reset_o = rx_en_q & cnt_q[5];
    assign rx_data_o = data_q[8:1];
+   assign dp_pu_o = dp_pu_q;
 
    always @(posedge clk_i or negedge rstn_i) begin
       if (~rstn_i) begin
@@ -139,11 +144,16 @@ module phy_rx
          stuffing_cnt_q <= 3'd0;
          rx_valid_rq <= 1'b0;
          rx_valid_fq <= 1'b0;
-         reset_cnt_q <= 6'd0;
+         cnt_q <= 'd0;
+         dp_pu_q <= 1'b0;
+         rx_en_q <= 1'b0;
       end else begin
          if (clk_gate) begin
             nrzi_q <= {nrzi, nrzi_q[3:2]};
-            rx_state_q <= rx_state_d;
+            if (rx_en_i)
+              rx_state_q <= rx_state_d;
+            else
+              rx_state_q <= ST_IDLE;
             data_q <= data_d;
             stuffing_cnt_q <= stuffing_cnt_d;
             rx_valid_rq <= rx_valid_rd;
@@ -151,15 +161,24 @@ module phy_rx
               rx_valid_fq <= rx_valid_rq;
             else
               rx_valid_fq <= rx_valid_fd;
-            if (reset_cnt_q[5] == 1'b1) begin
-               if (reset_cnt_q[2] == 1'b0)
-                 reset_cnt_q <= reset_cnt_q + 1;
+            if (cnt_q[CNT_WIDTH-1 -:2] == 2'b11) begin
+               dp_pu_q <= 1'b1; // TSIGATT=16ms < 100ms (USB2.0 Tab.7-14 pag.188)
+               if (cnt_q[CNT_WIDTH-1-8 -:2] == 2'b11)
+                 rx_en_q <= 1'b1; // 16ms + 64us
+            end
+            if (~rx_en_q)
+              cnt_q <= cnt_q + 1;
+            else begin
+               if (cnt_q[5] == 1'b1) begin // 2.5us < TDETRST=2.67us < 10ms (USB2.0 Tab.7-14 pag.188)
+                  if (cnt_q[2] == 1'b0)
+                    cnt_q <= cnt_q + 1;
+                  else if (nrzi_q[3:2] != SE0)
+                    cnt_q <= 'd0;
+               end else if (nrzi_q[3:2] == SE0)
+                 cnt_q <= cnt_q + 1;
                else
-                 reset_cnt_q <= 6'd0;
-            end else if (nrzi_q[3:2] == SE0)
-              reset_cnt_q <= reset_cnt_q + 1;
-            else
-              reset_cnt_q <= 6'd0;
+                 cnt_q <= 'd0;
+            end
          end
       end
    end

@@ -50,7 +50,7 @@ $(OUT_DIR)/%.json: $(HDL_FILES) | $(OUT_DIR)
 	yosys $(DEFINES) -l $(OUT_DIR)/log_yosys_$(PROJ).txt -p '$(foreach file,$^,read_verilog $(file);)' -p 'synth_ice40 -top $(PROJ); write_json $@'
 
 $(OUT_DIR)/%.asc: $(OUT_DIR)/%.json $(PCF)
-	nextpnr-ice40 --freq 12 --randomize-seed --$(DEVICE) --package $(PKG) -l $(OUT_DIR)/log_nextpnr_$*.txt --pcf $(PCF) --json $< --asc $@
+	nextpnr-ice40 --timing-allow-fail --randomize-seed --$(DEVICE) --package $(PKG) -l $(OUT_DIR)/log_nextpnr_$*.txt --pcf $(PCF) --json $< --pre-pack $(IN_DIR)/pre-pack.py --asc $@
 
 $(OUT_DIR)/%.rpt: $(OUT_DIR)/%.asc
 	icetime -d $(DEVICE) -mtr $@ $<

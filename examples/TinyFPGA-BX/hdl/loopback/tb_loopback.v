@@ -9,7 +9,7 @@ module tb_loopback ( );
 `define USB_CDC_INST tb_loopback.u_loopback.u_usb_cdc
 `include "usb_tasks.v"
 
-   `progress_bar(36)
+   `progress_bar(37)
 
    reg clk;
    reg power_on;
@@ -72,8 +72,8 @@ module tb_loopback ( );
       dataout_toggle = 'd0;
       datain_toggle = 'd0;
       wait_idle(20000000/83*`BIT_TIME);
-      #(10000/83*`BIT_TIME);
-      
+      #(100000/83*`BIT_TIME);
+
       test_usb(address, datain_toggle, dataout_toggle);
 
       test = "OUT BULK DATA";

@@ -20,10 +20,8 @@ architecture fpga of demo is
   signal clk_4mhz      : std_logic;
   signal clk_8mhz      : std_logic;
   signal lock          : std_logic;
-  signal rstn_sync     : std_logic_vector(1 downto 0);
-  signal rstn          : std_logic;
-  signal up_cnt        : unsigned(20 downto 0);
-  signal usb_pu_q      : std_logic;
+  signal usb_pu_int    : std_logic;
+  signal dp_pu         : std_logic;
   signal rx_dp         : std_logic;
   signal rx_dn         : std_logic;
   signal tx_dp         : std_logic;
@@ -79,6 +77,7 @@ architecture fpga of demo is
       out_data_o  : out std_logic_vector(7 downto 0);
       out_valid_o : out std_logic;
       in_ready_o  : out std_logic;
+      dp_pu_o     : out std_logic;
       tx_en_o     : out std_logic;
       tx_dp_o     : out std_logic;
       tx_dn_o     : out std_logic);
@@ -134,6 +133,8 @@ architecture fpga of demo is
       PACKAGE_PIN       : inout std_ulogic);
   end component;
 begin
+  led    <= not(dp_pu);
+
   -- if FEEDBACK_PATH = SIMPLE:
   -- clk_freq = (ref_freq * (DIVF + 1)) / (2**DIVQ * (DIVR + 1));
   u_pll : component SB_PLL40_CORE
@@ -173,39 +174,10 @@ begin
       clk_div4_o  => clk_4mhz,
       clk_div2_o  => clk_8mhz);
 
-  p_rstn : process (clk_1mhz, lock) is
-  begin
-    if lock = '0' then
-      rstn_sync <= (others => '0');
-    elsif clk_1mhz'event and clk_1mhz = '1' then
-      rstn_sync <= '1' & rstn_sync(1);
-    end if;
-  end process p_rstn;
-
-  rstn <= rstn_sync(0);
-
-  p_up : process (clk_1mhz, rstn) is
-  begin
-    if rstn = '0' then
-      up_cnt   <= (others => '0');
-      usb_pu_q <= '0';
-    elsif clk_1mhz'event and clk_1mhz = '1' then
-      if up_cnt(14) = '1' then
-        usb_pu_q <= '1';  -- TSIGATT < 100ms (USB2.0 Tab.7-14 pag.188)
-      end if;
-      if up_cnt(up_cnt'high) = '0' then
-        up_cnt <= up_cnt + 1;
-      end if;
-    end if;
-  end process p_up;
-
-  led    <= not(up_cnt(up_cnt'high));
-  usb_pu <= usb_pu_q;
-
   u_app : component app
     port map (
       clk_i       => clk_2mhz,
-      rstn_i      => rstn,
+      rstn_i      => lock,
       out_data_i  => out_data,
       out_valid_i => out_valid,
       in_ready_i  => in_ready,
@@ -225,7 +197,7 @@ begin
     port map (
       app_clk_i   => clk_2mhz,
       clk_i       => clk_pll,
-      rstn_i      => rstn,
+      rstn_i      => lock,
       out_ready_i => out_ready,
       in_data_i   => in_data,
       in_valid_i  => in_valid,
@@ -234,6 +206,7 @@ begin
       out_data_o  => out_data,
       out_valid_o => out_valid,
       in_ready_o  => in_ready,
+      dp_pu_o     => dp_pu,
       tx_en_o     => tx_en,
       tx_dp_o     => tx_dp,
       tx_dn_o     => tx_dn);
@@ -263,6 +236,25 @@ begin
       OUTPUT_ENABLE     => tx_en,
       D_OUT_0           => tx_dn,
       D_IN_0            => rx_dn,
+      D_OUT_1           => '0',
+      D_IN_1            => open,
+      CLOCK_ENABLE      => '0',
+      LATCH_INPUT_VALUE => '0',
+      INPUT_CLK         => '0',
+      OUTPUT_CLK        => '0');
+
+  -- drive usb_pu to 3.3V or to high impedance
+  usb_pu <= usb_pu_int;
+
+  u_usb_pu : component SB_IO
+    generic map (
+      PIN_TYPE => "101001",
+      PULLUP   => '0')
+    port map (
+      PACKAGE_PIN       => usb_pu_int,
+      OUTPUT_ENABLE     => dp_pu,
+      D_OUT_0           => '1',
+      D_IN_0            => open,
       D_OUT_1           => '0',
       D_IN_1            => open,
       CLOCK_ENABLE      => '0',

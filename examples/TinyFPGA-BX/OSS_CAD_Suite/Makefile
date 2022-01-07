@@ -9,6 +9,8 @@ IN_DIR = input/$(PROJ)
 OUT_DIR = output/$(PROJ)
 INC_DIRS = -I../../common/hdl -I../hdl/$(PROJ)
 ICE40_LIB = $(shell yosys-config --datdir/ice40/cells_sim.v)
+RUN_ONCE =
+run = $(if $(RUN_ONCE),$(1),until $$($(1)) ; do true ; done)
 
 include $(IN_DIR)/hdl_files.mk
 
@@ -21,7 +23,7 @@ $(OUT_DIR)/%.json: $(HDL_FILES) | $(OUT_DIR)
 	yosys -l $(OUT_DIR)/log_yosys_$(PROJ).txt -p '$(foreach file,$^,read_verilog $(file);)' -p 'synth_ice40 -top $(PROJ); write_json $@'
 
 $(OUT_DIR)/%.asc: $(OUT_DIR)/%.json $(IN_DIR)/$(PIN_DEF)
-	nextpnr-ice40 --randomize-seed --$(DEVICE) --package $(PKG) -l $(OUT_DIR)/log_nextpnr_$*.txt --pcf $(IN_DIR)/$(PIN_DEF) --json $< --pre-pack $(IN_DIR)/pre-pack.py --asc $@
+	$(call run,nextpnr-ice40 --randomize-seed --$(DEVICE) --package $(PKG) -l $(OUT_DIR)/log_nextpnr_$*.txt --pcf $(IN_DIR)/$(PIN_DEF) --json $< --pre-pack $(IN_DIR)/pre-pack.py --asc $@)
 
 $(OUT_DIR)/%.bin: $(OUT_DIR)/%.asc
 	icepack $< $@

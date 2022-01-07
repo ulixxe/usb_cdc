@@ -36,6 +36,8 @@ module bulk_endp
     // clk_i clock shall have a frequency of 12MHz*BIT_SAMPLES
     input        rstn_i,
     // While rstn_i is low (active low), the module shall be reset
+    input        usb_reset_i,
+    // While usb_reset_i is high, the module shall be reset
 
     // ---- to/from SIE module ------------------------------------
     output [7:0] in_data_o,
@@ -93,10 +95,13 @@ module bulk_endp
    reg                             out_nak_q, out_nak_d;
    reg                             out_full_q;
 
-   assign out_nak_o = out_nak_q;
+   wire                            rstn;
 
-   always @(posedge clk_i or negedge rstn_i) begin
-      if (~rstn_i) begin
+   assign out_nak_o = out_nak_q;
+   assign rstn = rstn_i & ~usb_reset_i;
+
+   always @(posedge clk_i or negedge rstn) begin
+      if (~rstn) begin
          out_fifo_q <= {OUT_LENGTH{8'd0}};
          out_last_q <= 'd0;
          out_last_qq <= 'd0;
@@ -161,8 +166,8 @@ module bulk_endp
    assign in_data_o = in_fifo_q[8*in_first_qq +:8];
    assign in_valid_o = in_valid_q;
 
-   always @(posedge clk_i or negedge rstn_i) begin
-      if (~rstn_i) begin
+   always @(posedge clk_i or negedge rstn) begin
+      if (~rstn) begin
          in_req_q <= 1'b0;
          in_state_q <= ST_IN_IDLE;
          in_valid_q <= 1'b0;
@@ -193,8 +198,8 @@ module bulk_endp
    assign in_start = (in_req_q == 1'b0 && in_req_i == 1'b1) ? 1'b1 : 1'b0;
    assign in_clk_gate = in_ready_i | out_ready_i | in_start;
 
-   always @(posedge clk_i or negedge rstn_i) begin
-      if (~rstn_i) begin
+   always @(posedge clk_i or negedge rstn) begin
+      if (~rstn) begin
          in_first_q <= 'd0;
          in_first_qq <= 'd0;
       end else begin
@@ -230,8 +235,8 @@ module bulk_endp
          assign app_out_valid_o = ((out_empty == 1'b0 && {1'b0, delay_out_cnt_q} == BIT_SAMPLES-1) ? 1'b1 : 1'b0);
          assign app_out_data_o = out_fifo_q[8*out_first_q +:8];
 
-         always @(posedge clk_i or negedge rstn_i) begin
-            if (~rstn_i) begin
+         always @(posedge clk_i or negedge rstn) begin
+            if (~rstn) begin
                out_first_q <= 'd0;
                delay_out_cnt_q <= 'd0;
                out_full_q <= 1'b0;
@@ -255,8 +260,8 @@ module bulk_endp
 
          assign app_in_ready_o = ((in_full == 1'b0 && {1'b0, delay_in_cnt_q} == BIT_SAMPLES-1) ? 1'b1 : 1'b0);
 
-         always @(posedge clk_i or negedge rstn_i) begin
-            if (~rstn_i) begin
+         always @(posedge clk_i or negedge rstn) begin
+            if (~rstn) begin
                in_fifo_q <= {IN_LENGTH{8'd0}};
                in_last_q <= 'd0;
                delay_in_cnt_q <= 'd0;
@@ -284,8 +289,8 @@ module bulk_endp
 
          assign data_rstn = data_rstn_sq[0];
 
-         always @(posedge app_clk_i or negedge rstn_i) begin
-            if (~rstn_i) begin
+         always @(posedge app_clk_i or negedge rstn) begin
+            if (~rstn) begin
                data_rstn_sq <= 2'd0;
             end else begin
                data_rstn_sq <= {1'b1, data_rstn_sq[1]};
@@ -299,8 +304,8 @@ module bulk_endp
          assign app_out_valid_o = out_valid_q;
          assign app_out_data_o = out_fifo_q[8*out_first_q +:8];
 
-         always @(posedge clk_i or negedge rstn_i) begin
-            if (~rstn_i) begin
+         always @(posedge clk_i or negedge rstn) begin
+            if (~rstn) begin
                out_first_q <= 'd0;
                delay_out_cnt_q <= 'd0;
                out_full_q <= 1'b0;
@@ -346,8 +351,8 @@ module bulk_endp
 
          assign app_in_ready_o = in_ready_q;
 
-         always @(posedge clk_i or negedge rstn_i) begin
-            if (~rstn_i) begin
+         always @(posedge clk_i or negedge rstn) begin
+            if (~rstn) begin
                in_fifo_q <= {IN_LENGTH{8'd0}};
                in_last_q <= 'd0;
                delay_in_cnt_q <= 'd0;
@@ -394,8 +399,8 @@ module bulk_endp
 
          assign data_rstn = data_rstn_sq[0];
 
-         always @(posedge app_clk_i or negedge rstn_i) begin
-            if (~rstn_i) begin
+         always @(posedge app_clk_i or negedge rstn) begin
+            if (~rstn) begin
                data_rstn_sq <= 2'd0;
             end else begin
                data_rstn_sq <= {1'b1, data_rstn_sq[1]};
@@ -407,8 +412,8 @@ module bulk_endp
          reg       out_ovalid_mask_q;
          reg [7:0] out_data_q;
 
-         always @(posedge clk_i or negedge rstn_i) begin
-            if (~rstn_i) begin
+         always @(posedge clk_i or negedge rstn) begin
+            if (~rstn) begin
                out_first_q <= 'd0;
                delay_out_cnt_q <= 'd0;
                out_full_q <= 1'b0;
@@ -459,8 +464,8 @@ module bulk_endp
          reg       in_iready_mask_q;
          reg [7:0] in_data_q;
 
-         always @(posedge clk_i or negedge rstn_i) begin
-            if (~rstn_i) begin
+         always @(posedge clk_i or negedge rstn) begin
+            if (~rstn) begin
                in_fifo_q <= {IN_LENGTH{8'd0}};
                in_last_q <= 'd0;
                delay_in_cnt_q <= 'd0;

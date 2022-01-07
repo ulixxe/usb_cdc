@@ -72,10 +72,6 @@ localparam [7:0] REQ_GET_STATUS = 'd0,
                  REQ_SET_CONTROL_LINE_STATE = 'h22,
                  REQ_SEND_BREAK = 'h23;
 
-localparam [1:0] DEFAULT_STATE = 2'd0,
-                 ADDRESS_STATE = 2'd1,
-                 CONFIGURED_STATE = 2'd2;
-
 localparam       IN_BULK_MAXPACKETSIZE = 'd8;
 localparam       OUT_BULK_MAXPACKETSIZE = 'd8;
 localparam       CTRL_MAXPACKETSIZE = 'd8;
@@ -85,7 +81,8 @@ localparam [3:0] ENDP_CTRL = 'd0,
                  ENDP_BULK = 'd1,
                  ENDP_INT = 'd2;
 
-localparam [8*'h12-1:0] DEV_DESCR = {8'h12, // bLength
+localparam [8*'h12-1:0] DEV_DESCR = { // Standard Device Descriptor, USB2.0 9.6.1, page 261-263, Table 9-8
+                                     8'h12, // bLength
                                      8'h01, // bDescriptorType (DEVICE)
                                      8'h00, // bcdUSB[0]
                                      8'h02, // bcdUSB[1] (2.00)
@@ -104,7 +101,8 @@ localparam [8*'h12-1:0] DEV_DESCR = {8'h12, // bLength
                                      8'h00, // iSerialNumber (no string)
                                      8'h01}; // bNumConfigurations
 
-localparam [8*'h43-1:0] CONF_DESCR = {8'h09, // bLength
+localparam [8*'h43-1:0] CONF_DESCR = { // Standard Configuration Descriptor, USB2.0 9.6.3, page 264-266, Table 9-10
+                                      8'h09, // bLength
                                       8'h02, // bDescriptorType (CONFIGURATION)
                                       8'h43, // wTotalLength[0]
                                       8'h00, // wTotalLength[1]
@@ -114,7 +112,7 @@ localparam [8*'h43-1:0] CONF_DESCR = {8'h09, // bLength
                                       8'h80, // bmAttributes (bus powered, no remote wakeup)
                                       8'h32, // bMaxPower (100mA)
 
-                                      // interface descriptor, USB spec 9.6.5, page 267-269, Table 9-12
+                                      // Standard Interface Descriptor, USB2.0 9.6.5, page 267-269, Table 9-12
                                       8'h09, // bLength
                                       8'h04, // bDescriptorType (INTERFACE)
                                       8'h00, // bInterfaceNumber
@@ -125,34 +123,34 @@ localparam [8*'h43-1:0] CONF_DESCR = {8'h09, // bLength
                                       8'h01, // bInterfaceProtocol (AT Commands in ITU V.25ter)
                                       8'h00, // iInterface (no string)
 
-                                      // Header Functional Descriptor, CDC Spec 5.2.3.1, Table 26
+                                      // Header Functional Descriptor, CDC1.1 5.2.3.1, Table 26
                                       8'h05, // bFunctionLength
                                       8'h24, // bDescriptorType (CS_INTERFACE)
-                                      8'h00, // bDescriptorSubtype (header)
+                                      8'h00, // bDescriptorSubtype (Header Functional)
                                       8'h10, // bcdCDC[0]
                                       8'h01, // bcdCDC[1] (1.1)
 
-                                      // Abstract Control Management Functional Descriptor, CDC Spec 5.2.3.3, Table 28
-                                      8'h04, // bFunctionLength
-                                      8'h24, // bDescriptorType (CS_INTERFACE)
-                                      8'h02, // bDescriptorSubtype (Abstract Control Management)
-                                      8'h00, // bmCapabilities (none)
-
-                                      // Union Functional Descriptor, CDC Spec 5.2.3.8, Table 33
+                                      // Call Management Functional Descriptor, CDC1.1 5.2.3.2, Table 27
                                       8'h05, // bFunctionLength
                                       8'h24, // bDescriptorType (CS_INTERFACE)
-                                      8'h06, // bDescriptorSubtype (union)
-                                      8'h00, // bMasterInterface
-                                      8'h01, // bSlaveInterface0
-
-                                      // Call Management Functional Descriptor, CDC Spec 5.2.3.2, Table 27
-                                      8'h05, // bFunctionLength
-                                      8'h24, // bDescriptorType (CS_INTERFACE)
-                                      8'h01, // bDescriptorSubtype (Call Management)
+                                      8'h01, // bDescriptorSubtype (Call Management Functional)
                                       8'h00, // bmCapabilities (no call mgmnt)
                                       8'h01, // bDataInterface
 
-                                      // endpoint descriptor, USB spec 9.6.6, page 269-271, Table 9-13
+                                      // Abstract Control Management Functional Descriptor, CDC1.1 5.2.3.3, Table 28
+                                      8'h04, // bFunctionLength
+                                      8'h24, // bDescriptorType (CS_INTERFACE)
+                                      8'h02, // bDescriptorSubtype (Abstract Control Management Functional)
+                                      8'h00, // bmCapabilities (none)
+
+                                      // Union Functional Descriptor, CDC1.1 5.2.3.8, Table 33
+                                      8'h05, // bFunctionLength
+                                      8'h24, // bDescriptorType (CS_INTERFACE)
+                                      8'h06, // bDescriptorSubtype (Union Functional)
+                                      8'h00, // bMasterInterface
+                                      8'h01, // bSlaveInterface0
+
+                                      // Standard Endpoint Descriptor, USB2.0 9.6.6, page 269-271, Table 9-13
                                       8'h07, // bLength
                                       8'h05, // bDescriptorType (ENDPOINT)
                                       {4'h8, ENDP_INT}, // bEndpointAddress (2 IN)
@@ -161,7 +159,7 @@ localparam [8*'h43-1:0] CONF_DESCR = {8'h09, // bLength
                                       8'h00, // wMaxPacketSize[1]
                                       8'hFF, // bInterval (255 ms)
 
-                                      // interface descriptor, USB spec 9.6.5, page 267-269, Table 9-12
+                                      // Standard Interface Descriptor, USB2.0 9.6.5, page 267-269, Table 9-12
                                       8'h09, // bLength
                                       8'h04, // bDescriptorType (INTERFACE)
                                       8'h01, // bInterfaceNumber
@@ -172,7 +170,7 @@ localparam [8*'h43-1:0] CONF_DESCR = {8'h09, // bLength
                                       8'h00, // bInterfaceProtocol
                                       8'h00, // iInterface (no string)
 
-                                      // endpoint descriptor, USB spec 9.6.6, page 269-271, Table 9-13
+                                      // Standard Endpoint Descriptor, USB2.0 9.6.6, page 269-271, Table 9-13
                                       8'h07, // bLength
                                       8'h05, // bDescriptorType (ENDPOINT)
                                       {4'h0, ENDP_BULK}, // bEndpointAddress (1 OUT)
@@ -181,7 +179,7 @@ localparam [8*'h43-1:0] CONF_DESCR = {8'h09, // bLength
                                       8'h00, // wMaxPacketSize[1]
                                       8'h00, // bInterval
 
-                                      // endpoint descriptor, USB spec 9.6.6, page 269-271, Table 9-13
+                                      // Standard Endpoint Descriptor, USB2.0 9.6.6, page 269-271, Table 9-13
                                       8'h07, // bLength
                                       8'h05, // bDescriptorType (ENDPOINT)
                                       {4'h8, ENDP_BULK}, // bEndpointAddress (1 IN)
@@ -357,10 +355,11 @@ task automatic wait_idle
                disable u_fork;
             end
             begin
-               @(dp_sense or dn_sense);
-               wait_time = timeout-($time-start_time);
                if (dp_sense === 1'b1 && dn_sense === 1'b0)
                  exit = 1;
+               else
+                 @(dp_sense or dn_sense);
+               wait_time = timeout-($time-start_time);
                disable u_fork;
             end
          join
@@ -800,23 +799,24 @@ endtask
 
 task automatic test_sof
   (
-   input [10:0] frame
+   input [10:0] frame,
+   input [10:0] expected_frame
    );
    begin
       sof_tx(frame, 8, `BIT_TIME);
       #(4*`BIT_TIME);
-      `assert("SOF packet", `USB_CDC_INST.u_sie.frame_o, frame)
+      `assert("SOF packet", `USB_CDC_INST.u_sie.frame_o, expected_frame)
    end
 endtask
 
 task automatic test_sof_crc_error
   (
-   input [10:0] frame
+   input [10:0] expected_frame
    );
    begin
       usb_tx('hA50378, 3, 8, `BIT_TIME); // A50379 => frame=11'h103
       #(4*`BIT_TIME);
-      `assert("SOF packet accepted with CRC error", `USB_CDC_INST.u_sie.frame_o, frame)
+      `assert("SOF packet accepted with CRC error", `USB_CDC_INST.u_sie.frame_o, expected_frame)
    end
 endtask
 
@@ -939,12 +939,12 @@ task automatic test_setup_in
    input [8*`MAX_BYTES-1:0] data,
    input integer            bytes,
    input integer            max_data_transactions,
-   input                    device_stall, 
-   inout [15:0]             datain_toggle,
-   inout [15:0]             dataout_toggle
+   input                    device_stall
    );
    localparam               TIMEOUT = 6; // TRSPIPD1 (USB2.0 Tab.7-14 pag.188)
    reg [3:0]                pid;
+   reg [15:0]               datain_toggle;
+   reg [15:0]               dataout_toggle;
    reg [8*`MAX_BYTES-1:0]   device_data;
    integer                  device_bytes;
    begin : u_task
@@ -974,12 +974,12 @@ task automatic test_setup_out
    input [8*`MAX_BYTES-1:0] data,
    input integer            bytes,
    input integer            max_data_transactions,
-   input                    device_stall, 
-   inout [15:0]             datain_toggle,
-   inout [15:0]             dataout_toggle
+   input                    device_stall
    );
    localparam               TIMEOUT = 6; // TRSPIPD1 (USB2.0 Tab.7-14 pag.188)
    reg [3:0]                pid;
+   reg [15:0]               datain_toggle;
+   reg [15:0]               dataout_toggle;
    reg [8*`MAX_BYTES-1:0]   device_data;
    integer                  device_bytes;
    begin : u_task
@@ -1007,17 +1007,15 @@ endtask
 task automatic test_set_address
   (
    input [6:0]  new_address,
-   inout [6:0]  address,
-   inout [15:0] datain_toggle,
-   inout [15:0] dataout_toggle
+   inout [6:0]  address
    );
    begin
       test_setup_out(address, 8'h00, REQ_SET_ADDRESS, new_address, 16'h0000, 16'h0000,
-                     8'd0, 0, 0, 0, datain_toggle, dataout_toggle);
+                     8'd0, 0, 0, 0);
       #(10*`BIT_TIME);
       address = new_address;
-      `assert("Device address error", `USB_CDC_INST.u_ctrl_endp.addr_o, address)
-      `assert("Device state error", `USB_CDC_INST.u_ctrl_endp.dev_state_qq, ADDRESS_STATE)
+      test_setup_in(address, 8'h80, REQ_GET_CONFIGURATION, 16'h0000, 16'h0000, 16'h0001,
+                    8'd0, 1, 256, 0);
    end
 endtask
 
@@ -1033,8 +1031,8 @@ task automatic test_usb_reset
       dn_force = 1'bZ;
       #(1*`BIT_TIME);
       address = 'd0;
-      `assert("Device address error", `USB_CDC_INST.u_ctrl_endp.addr_o, address)
-      `assert("Device state error", `USB_CDC_INST.u_ctrl_endp.dev_state_qq, DEFAULT_STATE)
+//      `assert("Device address error", `USB_CDC_INST.u_ctrl_endp.addr_o, address)
+//      `assert("Device state error", `USB_CDC_INST.u_ctrl_endp.dev_state_qq, DEFAULT_STATE)
    end
 endtask
 
@@ -1048,22 +1046,21 @@ task automatic test_poweron_reset
       power_on = 1'b1;
       #(20000000/83*`BIT_TIME);
       address = 'd0;
-      `assert("Device address error", `USB_CDC_INST.u_ctrl_endp.addr_o, address)
-      `assert("Device state error", `USB_CDC_INST.u_ctrl_endp.dev_state_qq, DEFAULT_STATE)
+//      `assert("Device address error", `USB_CDC_INST.u_ctrl_endp.addr_o, address)
+//      `assert("Device state error", `USB_CDC_INST.u_ctrl_endp.dev_state_qq, POWERED_STATE)
    end
 endtask
 
 task automatic test_set_configuration
   (
-   inout [6:0]  address,
-   inout [15:0] datain_toggle,
-   inout [15:0] dataout_toggle
+   inout [6:0]  address
    );
    begin
       test_setup_out(address, 8'h00, REQ_SET_CONFIGURATION, 16'h0001, 16'h0000, 16'h0000,
-                     8'd0, 0, 0, 0, datain_toggle, dataout_toggle);
+                     8'd0, 0, 0, 0);
       #(10*`BIT_TIME);
-      `assert("Device state error", `USB_CDC_INST.u_ctrl_endp.dev_state_qq, CONFIGURED_STATE)
+      test_setup_in(address, 8'h80, REQ_GET_CONFIGURATION, 16'h0000, 16'h0000, 16'h0001,
+                    8'd1, 1, 256, 0);
    end
 endtask
 
@@ -1073,65 +1070,76 @@ task automatic test_usb
    inout [15:0] datain_toggle,
    inout [15:0] dataout_toggle
    );
-   reg [10:0]   frame;
    begin
 
       test = "SOF packet";
-      frame = 11'h113;
-      test_sof(frame);
+      test_sof(11'h113, 11'h000);
+
+      test = "USB reset";
+      test_usb_reset(address);
+
+      test = "SOF packet";
+      test_sof(11'h113, 11'h113);
 
       test = "SOF packet with CRC error";
-      test_sof_crc_error(frame);
+      test_sof_crc_error(11'h113);
 
       test = "GET_DESCRIPTOR Device";
       test_setup_in(address, 8'h80, REQ_GET_DESCRIPTOR, 16'h0100, 16'h0000, 16'h0040,
-                    DEV_DESCR, 'h12, 1, 0, datain_toggle, dataout_toggle);
+                    DEV_DESCR, 'h12, 1, 0);
 
       test = "SET_ADDRESS";
-      test_set_address('d2, address, datain_toggle, dataout_toggle);
+      test_set_address('d2, address);
 
       test = "USB reset";
       test_usb_reset(address);
 
       test = "SET_ADDRESS";
-      test_set_address('d7, address, datain_toggle, dataout_toggle);
+      test_set_address('d7, address);
 
       test = "Power-on reset";
       test_poweron_reset(address);
 
+      test = "USB reset";
+      test_usb_reset(address);
+
       test = "SET_ADDRESS";
-      test_set_address('d3, address, datain_toggle, dataout_toggle);
+      test_set_address('d3, address);
 
       test = "GET_DESCRIPTOR Configuration";
       test_setup_in(address, 8'h80, REQ_GET_DESCRIPTOR, 16'h0200, 16'h0000, 16'h00FF,
-                    CONF_DESCR, 'h43, 256, 0, datain_toggle, dataout_toggle);
-      
+                    CONF_DESCR, 'h43, 256, 0);
+
       test = "GET_DESCRIPTOR String not supported";
       test_setup_in(address, 8'h80, REQ_GET_DESCRIPTOR, 16'h0300, 16'h0000, 16'h00FF,
-                    8'd0, 'h8, 1, 1, datain_toggle, dataout_toggle);
+                    8'd0, 'h8, 1, 1);
 
       test = "SET_CONFIGURATION";
-      test_set_configuration(address, datain_toggle, dataout_toggle);
+      test_set_configuration(address);
 
       test = "GET_LINE_CODING";
       test_setup_in(address, 8'hA1, REQ_GET_LINE_CODING, 16'h0000, 16'h0000, 16'h0007,
-                    {7{8'd0}}, 7, 256, 0, datain_toggle, dataout_toggle);
+                    {7{8'd0}}, 7, 256, 0);
 
       test = "SET_LINE_CODING";
       test_setup_out(address, 8'h21, REQ_SET_LINE_CODING, 16'h0000, 16'h0000, 16'h0007,
-                     {7{8'd0}}, 7, 256, 0, datain_toggle, dataout_toggle);
+                     {7{8'd0}}, 7, 256, 0);
 
       test = "SET_CONTROL_LINE_STATE";
       test_setup_out(address, 8'h21, REQ_SET_CONTROL_LINE_STATE, 16'h0000, 16'h0000, 16'h0000,
-                     8'd0, 0, 0, 0, datain_toggle, dataout_toggle);
+                     8'd0, 0, 0, 0);
+
+      test = "SEND_BREAK";
+      test_setup_out(address, 8'h21, REQ_SEND_BREAK, 16'h0000, 16'h0000, 16'h0000,
+                     8'd0, 0, 0, 0);
 
       test = "GET_INTERFACE";
       test_setup_in(address, 8'h81, REQ_GET_INTERFACE, 16'h0000, 16'h0001, 16'h0001,
-                    8'd0, 1, 256, 0, datain_toggle, dataout_toggle);
+                    8'd0, 1, 256, 0);
 
       test = "SET_INTERFACE not supported";
       test_setup_out(address, 8'h01, REQ_SET_INTERFACE, 16'h0001, 16'h0001, 16'h0000,
-                     8'd0, 0, 0, 1, datain_toggle, dataout_toggle);
+                     8'd0, 0, 0, 1);
 
       test = "IN INT DATA";
       test_data_in(address, ENDP_INT,

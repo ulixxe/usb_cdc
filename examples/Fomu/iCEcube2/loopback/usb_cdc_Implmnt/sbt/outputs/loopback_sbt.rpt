@@ -6,7 +6,7 @@
 
 * Build Date:         Dec 10 2020 17:24:17
 
-* File Generated:     Dec 28 2021 19:18:19
+* File Generated:     Jan 10 2022 22:37:17
 
 * Purpose:            General info of design implementation
 
@@ -27,8 +27,8 @@ Device Info:
 
 Design statistics:
 ------------------
-    FFs:                  397
-    LUTs:                 1140
+    FFs:                  389
+    LUTs:                 1213
     RAMs:                 0
     IOBs:                 4
     GBs:                  6
@@ -46,12 +46,12 @@ Design statistics:
 
 Logic Resource Utilization:
 ---------------------------
-    Total Logic Cells: 1142/5280
-        Combinational Logic Cells: 745      out of   5280      14.1098%
-        Sequential Logic Cells:    397      out of   5280      7.51894%
-        Logic Tiles:               183      out of   660       27.7273%
+    Total Logic Cells: 1216/5280
+        Combinational Logic Cells: 827      out of   5280      15.6629%
+        Sequential Logic Cells:    389      out of   5280      7.36742%
+        Logic Tiles:               203      out of   660       30.7576%
     Registers: 
-        Logic Registers:           397      out of   5280      7.51894%
+        Logic Registers:           389      out of   5280      7.36742%
         IO Registers:              0        out of   480       0
     Block RAMs:                    0        out of   30        0%
     Warm Boots:                    0        out of   1         0%
@@ -88,7 +88,7 @@ Detailed I/O Info:
     Output Pins: 
     Pin Number  Direction  IO Standard  Pull Up  IO Bank  IO Function                                Signal Name
     ----------  ---------  -----------  -------  -------  -----------                                -----------
-    A4          Output     SB_LVCMOS    No       0        Simple Output                              usb_dp_pu  
+    A4          Output     SB_LVCMOS    No       0        Output Tristatable by Enable               usb_dp_pu  
 
     Inoutput Pins: 
     Pin Number  Direction  IO Standard  Pull Up  IO Bank  IO Function                                Signal Name
@@ -101,23 +101,23 @@ Detailed Global Buffer Info:
     Buffer Number  IO Bank  Driven By  Fanout  Signal Name                       
     -------------  -------  ---------  ------  -----------                       
     5              2                   56      u_usb_cdc.u_sie.clk_gate_0_i_g    
-    4              0                   326     u_usb_cdc.rstn_i_3_g              
-    3              0                   45      u_usb_cdc.u_ctrl_endp.clk_gate_g  
-    1              0                   83      u_usb_cdc.bulk_out_ready_g        
-    6              2                   397     clk_0                             
-    7              2                   22      N_23_g                            
+    4              0                   324     u_usb_cdc.usb_reset_i_0_0_g       
+    3              0                   39      u_usb_cdc.u_sie.N_664_0_g         
+    1              0                   83      u_usb_cdc.N_84_0_g                
+    7              2                   47      u_usb_cdc.u_ctrl_endp.clk_gate_g  
+    6              2                   377     clk                               
 
 
 Router Summary:
 ---------------
     Status:  Successful
-    Runtime: 11 seconds
+    Runtime: 13 seconds
 
 Routing Resource Utilization:
 -----------------------------
-              Local line of tile     8186 out of 110555      7.40446%
-                          Span 4     1883 out of  23008      8.18411%
-                         Span 12      276 out of   4464      6.1828%
+              Local line of tile     8689 out of 110555      7.85944%
+                          Span 4     2026 out of  23008      8.80563%
+                         Span 12      287 out of   4464      6.42921%
                   Global network        6 out of      8      75%
-      Vertical Inter-LUT Connect      287 out of   4620      6.21212%
+      Vertical Inter-LUT Connect      305 out of   4620      6.60173%
 

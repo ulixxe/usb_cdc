@@ -10,10 +10,10 @@ module tb_demo ( );
 `include "usb_tasks.v"
 `include "demo_tasks.v"
 
-   `progress_bar(38)
+   `progress_bar(39)
 
-   reg                     clk;
-   reg                     power_on;
+   reg clk;
+   reg power_on;
 
    initial begin
       clk = 0;
@@ -73,8 +73,8 @@ module tb_demo ( );
       dataout_toggle = 'd0;
       datain_toggle = 'd0;
       wait_idle(20000000/83*`BIT_TIME);
-      #(10000/83*`BIT_TIME);
-      
+      #(100000/83*`BIT_TIME);
+
       test_usb(address, datain_toggle, dataout_toggle);
 
       test = "OUT BULK DATA";

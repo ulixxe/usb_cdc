@@ -16,27 +16,27 @@ entity demo is
 end entity demo;
 
 architecture fpga of demo is
-  signal clk_3mhz    : std_logic;
-  signal clk_6mhz    : std_logic;
-  signal clk_12mhz   : std_logic;
-  signal clk_24mhz   : std_logic;
-  signal rstn_sync   : std_logic_vector(1 downto 0) := "00";
-  signal rstn        : std_logic;
-  signal clk         : std_logic;
-  signal up_cnt      : unsigned(21 downto 0);
-  signal usb_dp_pu_q : std_logic;
-  signal led         : unsigned(2 downto 0);
-  signal rx_dp       : std_logic;
-  signal rx_dn       : std_logic;
-  signal tx_dp       : std_logic;
-  signal tx_dn       : std_logic;
-  signal tx_en       : std_logic;
-  signal out_data    : std_logic_vector(7 downto 0);
-  signal out_valid   : std_logic;
-  signal in_ready    : std_logic;
-  signal in_data     : std_logic_vector(7 downto 0);
-  signal in_valid    : std_logic;
-  signal out_ready   : std_logic;
+  signal clk_3mhz      : std_logic;
+  signal clk_6mhz      : std_logic;
+  signal clk_12mhz     : std_logic;
+  signal clk_24mhz     : std_logic;
+  signal rstn_sync     : std_logic_vector(1 downto 0) := "00";
+  signal rstn          : std_logic;
+  signal clk           : std_logic;
+  signal usb_dp_pu_int : std_logic;
+  signal dp_pu         : std_logic;
+  signal led           : unsigned(2 downto 0);
+  signal rx_dp         : std_logic;
+  signal rx_dn         : std_logic;
+  signal tx_dp         : std_logic;
+  signal tx_dn         : std_logic;
+  signal tx_en         : std_logic;
+  signal out_data      : std_logic_vector(7 downto 0);
+  signal out_valid     : std_logic;
+  signal in_ready      : std_logic;
+  signal in_data       : std_logic_vector(7 downto 0);
+  signal in_valid      : std_logic;
+  signal out_ready     : std_logic;
 
   component prescaler is
     port (
@@ -81,6 +81,7 @@ architecture fpga of demo is
       out_data_o  : out std_logic_vector(7 downto 0);
       out_valid_o : out std_logic;
       in_ready_o  : out std_logic;
+      dp_pu_o     : out std_logic;
       tx_en_o     : out std_logic;
       tx_dp_o     : out std_logic;
       tx_dn_o     : out std_logic);
@@ -128,6 +129,8 @@ architecture fpga of demo is
       PACKAGE_PIN       : inout std_ulogic);
   end component;
 begin
+  led       <= "00" & not(dp_pu);
+
   -- Connect to system clock (with buffering)
   u_gb : component SB_GB
     port map (
@@ -151,25 +154,6 @@ begin
       clk_div8_o  => clk_6mhz,
       clk_div4_o  => clk_12mhz,
       clk_div2_o  => clk_24mhz);
-
-  p_up : process (clk_3mhz, rstn) is
-  begin
-    if rstn = '0' then
-      up_cnt      <= (others => '0');
-      usb_dp_pu_q <= '0';
-    elsif clk_3mhz'event and clk_3mhz = '1' then
-      if up_cnt(15 downto 14) = "11" then
-        usb_dp_pu_q <= '1';  -- TSIGATT < 100ms (USB2.0 Tab.7-14 pag.188)
-      end if;
-      if up_cnt(21 downto 20) /= "11" then
-        up_cnt <= up_cnt + 1;
-      end if;
-    end if;
-  end process p_up;
-
-  led       <= "00" & not(up_cnt(21) and up_cnt(20));
-  usb_dp_pu <= usb_dp_pu_q;
-
 
   -- Instantiate iCE40 LED driver hard logic.
   --
@@ -227,6 +211,7 @@ begin
       out_data_o  => out_data,
       out_valid_o => out_valid,
       in_ready_o  => in_ready,
+      dp_pu_o     => dp_pu,
       tx_en_o     => tx_en,
       tx_dp_o     => tx_dp,
       tx_dn_o     => tx_dn);
@@ -256,6 +241,25 @@ begin
       OUTPUT_ENABLE     => tx_en,
       D_OUT_0           => tx_dn,
       D_IN_0            => rx_dn,
+      D_OUT_1           => '0',
+      D_IN_1            => open,
+      CLOCK_ENABLE      => '0',
+      LATCH_INPUT_VALUE => '0',
+      INPUT_CLK         => '0',
+      OUTPUT_CLK        => '0');
+
+  -- drive usb_pu to 3.3V or to high impedance
+  usb_dp_pu <= usb_dp_pu_int;
+
+  u_usb_pu : component SB_IO
+    generic map (
+      PIN_TYPE => "101001",
+      PULLUP   => '0')
+    port map (
+      PACKAGE_PIN       => usb_dp_pu_int,
+      OUTPUT_ENABLE     => dp_pu,
+      D_OUT_0           => '1',
+      D_IN_0            => open,
       D_OUT_1           => '0',
       D_IN_1            => open,
       CLOCK_ENABLE      => '0',

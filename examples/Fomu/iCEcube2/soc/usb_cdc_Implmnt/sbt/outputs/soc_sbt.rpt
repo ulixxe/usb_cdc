@@ -6,7 +6,7 @@
 
 * Build Date:         Dec 10 2020 17:24:17
 
-* File Generated:     Dec 28 2021 19:32:47
+* File Generated:     Jan 10 2022 22:41:13
 
 * Purpose:            General info of design implementation
 
@@ -17,7 +17,7 @@
 Synthesis/Placement Summary:
 ----------------------------
     Status:  Successful
-    Runtime: 3 seconds
+    Runtime: 2 seconds
 
 Device Info:
 ------------
@@ -27,11 +27,11 @@ Device Info:
 
 Design statistics:
 ------------------
-    FFs:                  441
-    LUTs:                 1257
+    FFs:                  456
+    LUTs:                 1288
     RAMs:                 0
     IOBs:                 4
-    GBs:                  6
+    GBs:                  8
     PLLs:                 0
     Warm Boots:           0
     SPIs:                 0
@@ -46,12 +46,12 @@ Design statistics:
 
 Logic Resource Utilization:
 ---------------------------
-    Total Logic Cells: 1259/5280
-        Combinational Logic Cells: 818      out of   5280      15.4924%
-        Sequential Logic Cells:    441      out of   5280      8.35227%
+    Total Logic Cells: 1291/5280
+        Combinational Logic Cells: 835      out of   5280      15.8144%
+        Sequential Logic Cells:    456      out of   5280      8.63636%
         Logic Tiles:               217      out of   660       32.8788%
     Registers: 
-        Logic Registers:           441      out of   5280      8.35227%
+        Logic Registers:           456      out of   5280      8.63636%
         IO Registers:              0        out of   480       0
     Block RAMs:                    0        out of   30        0%
     Warm Boots:                    0        out of   1         0%
@@ -68,7 +68,7 @@ Logic Resource Utilization:
         Input Pins:                1        out of   21        4.7619%
         Output Pins:               1        out of   21        4.7619%
         InOut Pins:                2        out of   21        9.52381%
-    Global Buffers:                6        out of   8         75%
+    Global Buffers:                8        out of   8         100%
     PLLs:                          0        out of   1         0%
 
 IO Bank Utilization:
@@ -88,7 +88,7 @@ Detailed I/O Info:
     Output Pins: 
     Pin Number  Direction  IO Standard  Pull Up  IO Bank  IO Function                                Signal Name
     ----------  ---------  -----------  -------  -------  -----------                                -----------
-    A4          Output     SB_LVCMOS    No       0        Simple Output                              usb_dp_pu  
+    A4          Output     SB_LVCMOS    No       0        Output Tristatable by Enable               usb_dp_pu  
 
     Inoutput Pins: 
     Pin Number  Direction  IO Standard  Pull Up  IO Bank  IO Function                                Signal Name
@@ -98,26 +98,28 @@ Detailed I/O Info:
 
 Detailed Global Buffer Info:
 ----------------------------
-    Buffer Number  IO Bank  Driven By  Fanout  Signal Name                       
-    -------------  -------  ---------  ------  -----------                       
-    5              2                   56      u_usb_cdc.u_sie.clk_gate_0_i_g    
-    4              0                   326     u_usb_cdc.rstn_i_3_g              
-    3              0                   45      u_usb_cdc.u_ctrl_endp.clk_gate_g  
-    1              0                   83      u_usb_cdc.bulk_out_ready_g        
-    6              2                   441     clk_0                             
-    7              2                   25      N_45_g                            
+    Buffer Number  IO Bank  Driven By  Fanout  Signal Name                          
+    -------------  -------  ---------  ------  -----------                          
+    4              0                   324     u_usb_cdc.usb_reset_g                
+    5              2                   56      u_usb_cdc.u_sie.clk_gate_0_i_g       
+    3              0                   34      u_usb_cdc.u_sie.u_phy_rx.clk_gate_g  
+    1              0                   47      u_usb_cdc.u_ctrl_endp.clk_gate_g     
+    7              2                   83      u_usb_cdc.bulk_out_ready_g           
+    0              2                   379     clk                                  
+    2              0                   24      clk_3mhz_g                           
+    6              2                   54      clk_12mhz_g                          
 
 
 Router Summary:
 ---------------
     Status:  Successful
-    Runtime: 18 seconds
+    Runtime: 13 seconds
 
 Routing Resource Utilization:
 -----------------------------
-              Local line of tile     8896 out of 110555      8.04667%
-                          Span 4     1945 out of  23008      8.45358%
-                         Span 12      312 out of   4464      6.98925%
-                  Global network        6 out of      8      75%
-      Vertical Inter-LUT Connect      305 out of   4620      6.60173%
+              Local line of tile     8951 out of 110555      8.09642%
+                          Span 4     1931 out of  23008      8.39273%
+                         Span 12      267 out of   4464      5.98118%
+                  Global network        8 out of      8      100%
+      Vertical Inter-LUT Connect      307 out of   4620      6.64502%
 

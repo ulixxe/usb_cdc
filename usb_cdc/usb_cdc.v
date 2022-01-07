@@ -36,6 +36,7 @@ module usb_cdc
     //   be consumed.
 
     // ---- to USB bus physical transmitters/receivers --------------
+    output       dp_pu_o,
     output       tx_en_o,
     output       tx_dp_o,
     output       tx_dn_o,
@@ -67,8 +68,9 @@ module usb_cdc
    wire             rstn, usb_reset;
    wire             in_ready, ctrl_in_ready, bulk_in_ready;
    wire             out_ready, ctrl_out_ready, bulk_out_ready;
+   wire             usb_en;
 
-   assign rstn = rstn_sq[0] & ~usb_reset;
+   assign rstn = rstn_sq[0];
    assign ctrl_in_ready = (endp == ENDP_CTRL) ? in_ready : 1'b0;
    assign ctrl_out_ready = (endp == ENDP_CTRL) ? out_ready : 1'b0;
    assign bulk_in_ready = (endp == ENDP_BULK) ? in_ready : 1'b0;
@@ -88,13 +90,14 @@ module usb_cdc
          rstn_sq <= {1'b1, rstn_sq[1]};
       end
    end
-   
+
    sie #(.CTRL_MAXPACKETSIZE(CTRL_MAXPACKETSIZE),
          .IN_BULK_MAXPACKETSIZE(IN_BULK_MAXPACKETSIZE),
          .ENDP_CTRL(ENDP_CTRL),
          .ENDP_BULK(ENDP_BULK),
          .BIT_SAMPLES(BIT_SAMPLES))
    u_sie (.usb_reset_o(usb_reset),
+          .dp_pu_o(dp_pu_o),
           .tx_en_o(tx_en_o),
           .tx_dp_o(tx_dp_o),
           .tx_dn_o(tx_dn_o),
@@ -108,7 +111,8 @@ module usb_cdc
           .out_ready_o(out_ready),
           .in_ready_o(in_ready),
           .clk_i(clk_i),
-          .rstn_i(rstn_sq[0]),
+          .rstn_i(rstn),
+          .usb_en_i(usb_en),
           .rx_dp_i(rx_dp_i),
           .rx_dn_i(rx_dn_i),
           .addr_i(addr),
@@ -127,7 +131,8 @@ module usb_cdc
                .OUT_BULK_MAXPACKETSIZE(OUT_BULK_MAXPACKETSIZE),
                .ENDP_BULK(ENDP_BULK),
                .ENDP_INT(ENDP_INT))
-   u_ctrl_endp (.addr_o(addr),
+   u_ctrl_endp (.usb_en_o(usb_en),
+                .addr_o(addr),
                 .in_data_o(ctrl_in_data),
                 .in_zlp_o(ctrl_in_zlp),
                 .in_valid_o(ctrl_in_valid),
@@ -136,6 +141,7 @@ module usb_cdc
                 .out_toggle_reset_o(out_toggle_reset),
                 .clk_i(clk_i),
                 .rstn_i(rstn),
+                .usb_reset_i(usb_reset),
                 .out_data_i(out_data),
                 .out_valid_i(out_valid),
                 .out_err_i(out_err),
@@ -158,6 +164,7 @@ module usb_cdc
                 .clk_i(clk_i),
                 .app_clk_i(app_clk_i),
                 .rstn_i(rstn),
+                .usb_reset_i(usb_reset),
                 .out_data_i(out_data),
                 .out_valid_i(out_valid),
                 .out_err_i(out_err),

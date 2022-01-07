@@ -78,8 +78,8 @@ module tb_soc ( );
       dataout_toggle = 'd0;
       datain_toggle = 'd0;
       wait_idle(20000000/83*`BIT_TIME);
-      #(10000/83*`BIT_TIME);
-      
+      #(100000/83*`BIT_TIME);
+
       test_usb(address, datain_toggle, dataout_toggle);
 
       test = "OUT BULK DATA";

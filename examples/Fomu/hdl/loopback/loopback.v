@@ -29,6 +29,7 @@ module loopback
    wire   clk_6mhz;
    wire   clk_12mhz;
    wire   clk_24mhz;
+   wire   dp_pu;
    wire   rx_dp;
    wire   rx_dn;
    wire   tx_dp;
@@ -40,6 +41,9 @@ module loopback
    wire [7:0] in_data;
    wire       in_valid;
    wire       out_ready;
+   wire [2:0] led;
+
+   assign led = {2'b00, ~dp_pu};
 
    // Connect to system clock (with buffering)
    wire       clk;
@@ -62,26 +66,6 @@ module loopback
                           .clk_div8_o(clk_6mhz),
                           .clk_div4_o(clk_12mhz),
                           .clk_div2_o(clk_24mhz));
-
-   reg [21:0] up_cnt;
-   reg        usb_dp_pu_q;
-
-   always @(posedge clk_3mhz or negedge rstn) begin
-      if (~rstn) begin
-         up_cnt <= 'd0;
-         usb_dp_pu_q <= 1'b0;
-      end else begin
-         if (up_cnt[15:14] == 2'b11)
-           usb_dp_pu_q <= 1'b1; // TSIGATT < 100ms (USB2.0 Tab.7-14 pag.188)
-         if (up_cnt[21:20] != 2'b11)
-           up_cnt <= up_cnt + 1;
-      end
-   end
-
-   wire [2:0] led;
-
-   assign led = {2'b00, ~&up_cnt[21:20]};
-   assign usb_dp_pu = usb_dp_pu_q;
 
    // Instantiate iCE40 LED driver hard logic.
    //
@@ -122,6 +106,7 @@ module loopback
               .out_data_o(out_data),
               .out_valid_o(out_valid),
               .in_ready_o(in_ready),
+              .dp_pu_o(dp_pu),
               .tx_en_o(tx_en),
               .tx_dp_o(tx_dp),
               .tx_dn_o(tx_dn));
@@ -145,6 +130,20 @@ module loopback
              .OUTPUT_ENABLE(tx_en),
              .D_OUT_0(tx_dn),
              .D_IN_0(rx_dn),
+             .D_OUT_1(1'b0),
+             .D_IN_1(),
+             .CLOCK_ENABLE(1'b0),
+             .LATCH_INPUT_VALUE(1'b0),
+             .INPUT_CLK(1'b0),
+             .OUTPUT_CLK(1'b0));
+
+   // drive usb_pu to 3.3V or to high impedance
+   SB_IO #(.PIN_TYPE(6'b101001),
+           .PULLUP(1'b0))
+   u_usb_pu (.PACKAGE_PIN(usb_dp_pu),
+             .OUTPUT_ENABLE(dp_pu),
+             .D_OUT_0(1'b1),
+             .D_IN_0(),
              .D_OUT_1(1'b0),
              .D_IN_1(),
              .CLOCK_ENABLE(1'b0),

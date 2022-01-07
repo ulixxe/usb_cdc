@@ -6,7 +6,7 @@
 
 * Build Date:         Dec 10 2020 17:24:17
 
-* File Generated:     Dec 28 2021 19:52:14
+* File Generated:     Jan 10 2022 22:18:45
 
 * Purpose:            General info of design implementation
 
@@ -27,8 +27,8 @@ Device Info:
 
 Design statistics:
 ------------------
-    FFs:                  545
-    LUTs:                 1698
+    FFs:                  536
+    LUTs:                 1684
     RAMs:                 4
     IOBs:                 5
     GBs:                  7
@@ -37,12 +37,12 @@ Design statistics:
 
 Logic Resource Utilization:
 ---------------------------
-    Total Logic Cells: 1702/7680
-        Combinational Logic Cells: 1157     out of   7680      15.0651%
-        Sequential Logic Cells:    545      out of   7680      7.09635%
-        Logic Tiles:               273      out of   960       28.4375%
+    Total Logic Cells: 1688/7680
+        Combinational Logic Cells: 1152     out of   7680      15%
+        Sequential Logic Cells:    536      out of   7680      6.97917%
+        Logic Tiles:               277      out of   960       28.8542%
     Registers: 
-        Logic Registers:           545      out of   7680      7.09635%
+        Logic Registers:           536      out of   7680      6.97917%
         IO Registers:              0        out of   1280      0
     Block RAMs:                    4        out of   32        12.5%
     Warm Boots:                    0        out of   1         0%
@@ -70,7 +70,7 @@ Detailed I/O Info:
     Output Pins: 
     Pin Number  Direction  IO Standard  Pull Up  IO Bank  IO Function                                Signal Name
     ----------  ---------  -----------  -------  -------  -----------                                -----------
-    A3          Output     SB_LVCMOS    No       0        Simple Output                              usb_pu  
+    A3          Output     SB_LVCMOS    No       0        Output Tristatable by Enable               usb_pu  
     B3          Output     SB_LVCMOS    No       0        Simple Output                              led     
 
     Inoutput Pins: 
@@ -81,27 +81,27 @@ Detailed I/O Info:
 
 Detailed Global Buffer Info:
 ----------------------------
-    Buffer Number  IO Bank  Driven By  Fanout  Signal Name                       
-    -------------  -------  ---------  ------  -----------                       
-    5              2                   29      clk_0                             
-    3              3                   56      u_usb_cdc.u_sie.clk_gate_0_i_g    
-    1              0                   45      u_usb_cdc.u_ctrl_endp.clk_gate_g  
-    2              1                   324     u_usb_cdc.rstn_i_g                
-    7              1                   83      u_usb_cdc.bulk_out_ready_g        
-    4              0                   138     u_app.rstn_sq_i_g_0               
-    0              2                   162     clk_2mhz_g                        
+    Buffer Number  IO Bank  Driven By  Fanout  Signal Name                     
+    -------------  -------  ---------  ------  -----------                     
+    5              2                   4       clk_c_g                         
+    3              3                   56      u_usb_cdc.u_sie.clk_gate_0_i_g  
+    0              2                   323     u_usb_cdc.rstn_i_g              
+    2              1                   54      u_usb_cdc.rstn_sq_i_g_0         
+    1              0                   83      u_usb_cdc.bulk_out_ready_g      
+    4              0                   138     u_app.rstn_sq_i_g_0             
+    7              1                   163     clk_2mhz_g                      
 
 
 Router Summary:
 ---------------
     Status:  Successful
-    Runtime: 23 seconds
+    Runtime: 18 seconds
 
 Routing Resource Utilization:
 -----------------------------
-              Local line of tile    12595 out of 146184      8.61585%
-                          Span 4     2891 out of  29696      9.73532%
-                         Span 12      410 out of   5632      7.27983%
+              Local line of tile    12407 out of 146184      8.48725%
+                          Span 4     2889 out of  29696      9.72858%
+                         Span 12      414 out of   5632      7.35085%
                   Global network        8 out of      8      100%
-      Vertical Inter-LUT Connect      459 out of   6720      6.83036%
+      Vertical Inter-LUT Connect      477 out of   6720      7.09821%
 
