@@ -1,6 +1,6 @@
 # 
-## name ## phy_rx.rx_state_q
-## name ## phy_rx.rx_state_d
+## name ## phy_rx\.rx_state_q
+## name ## phy_rx\.rx_state_d
 ## color ## Blue
 ## data ## Decimal
 

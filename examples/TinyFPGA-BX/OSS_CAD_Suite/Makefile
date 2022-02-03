@@ -25,11 +25,11 @@ $(OUT_DIR)/%.json: $(HDL_FILES) | $(OUT_DIR)
 $(OUT_DIR)/%.asc: $(OUT_DIR)/%.json $(IN_DIR)/$(PIN_DEF)
 	$(call run,nextpnr-ice40 --randomize-seed --$(DEVICE) --package $(PKG) -l $(OUT_DIR)/log_nextpnr_$*.txt --pcf $(IN_DIR)/$(PIN_DEF) --json $< --pre-pack $(IN_DIR)/pre-pack.py --asc $@)
 
-$(OUT_DIR)/%.bin: $(OUT_DIR)/%.asc
-	icepack $< $@
-
 $(OUT_DIR)/%.rpt: $(OUT_DIR)/%.asc
 	icetime -d $(DEVICE) -mtr $@ $<
+
+$(OUT_DIR)/%.bin: $(OUT_DIR)/%.asc
+	icepack $< $@
 
 prog: $(OUT_DIR)/$(PROJ).bin
 	tinyprog -p $<
@@ -37,16 +37,19 @@ prog: $(OUT_DIR)/$(PROJ).bin
 lint: $(HDL_FILES)
 	verilator --lint-only --default-language 1364-2001 -Wall -Wno-UNUSED -Wno-UNDRIVEN -Wno-TIMESCALEMOD -DBLACKBOX -DNO_ICE40_DEFAULT_ASSIGNMENTS --top $(PROJ) $(INC_DIRS) -v $(ICE40_LIB) $^
 
-$(OUT_DIR)/%.vvp: $(HDL_FILES) SB_PLL40_CORE.v tb_$(PROJ).v | $(OUT_DIR)
-	patch $(ICE40_LIB) -o $(OUT_DIR)/cells_sim.v < ../../common/hdl/ice40/cells_sim.v.patch && iverilog -g2001 -DNO_ICE40_DEFAULT_ASSIGNMENTS -t vvp -s tb_$(PROJ) $(INC_DIRS) -l $(OUT_DIR)/cells_sim.v -o $@ $^
+$(OUT_DIR)/cells_sim.v:
+	patch $(ICE40_LIB) -o $(OUT_DIR)/cells_sim.v < ../../common/hdl/ice40/cells_sim.v.patch
+
+$(OUT_DIR)/%.vvp: $(HDL_FILES) $(TB_HDL_FILES) | $(OUT_DIR) $(OUT_DIR)/cells_sim.v
+	iverilog -g2001 -DNO_ICE40_DEFAULT_ASSIGNMENTS -t vvp -s tb_$(PROJ) $(INC_DIRS) -l $(OUT_DIR)/cells_sim.v -o $@ $^
 
 $(OUT_DIR)/%.fst: $(OUT_DIR)/%.vvp
 	vvp -N $< -fst && mv tb.dump $@
 
 sim: $(OUT_DIR)/$(PROJ).fst
 
-$(OUT_DIR)/%.xml: $(HDL_FILES) tb_$(PROJ).v | $(OUT_DIR)
-	verilator -xml-only --bbox-unsup --bbox-sys -Wno-lint -Wno-TIMESCALEMOD -Wno-STMTDLY -Wno-INFINITELOOP -DNO_ICE40_DEFAULT_ASSIGNMENTS --top tb_$(PROJ) $(INC_DIRS) -v $(ICE40_LIB) $^ --xml-output $@
+$(OUT_DIR)/%.xml: $(HDL_FILES) $(TB_HDL_FILES) | $(OUT_DIR) $(OUT_DIR)/cells_sim.v
+	verilator -xml-only --bbox-unsup --bbox-sys -Wno-lint -Wno-TIMESCALEMOD -Wno-STMTDLY -Wno-INFINITELOOP -DBLACKBOX -DNO_ICE40_DEFAULT_ASSIGNMENTS --top tb_$(PROJ) $(INC_DIRS) -v $(OUT_DIR)/cells_sim.v $^ --xml-output $@
 
 $(OUT_DIR)/%.stems: $(OUT_DIR)/%.xml
 	xml2stems $< $@

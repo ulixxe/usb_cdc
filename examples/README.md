@@ -16,7 +16,8 @@ The GTKWave console makes available a few commands (such as `top`, `out`, `phy_r
 Purpose of `demo` example is to test reliability and speed of USB CDC data transmission.
 These tests are executed with python script `examples/<board name>/python/demo/run.py`.
 
-Here, RAM and ROM are instantiated to check USB IN/OUT transmissions.
+Here, RAM and ROM are instantiated to check USB IN/OUT transmissions.  
+`demo` example allows to read and program TinyFPGA-BX FLASH memory too.
 
 ## `loopback`
 This is an example with minimal logic outside USB_CDC to test its functionality.

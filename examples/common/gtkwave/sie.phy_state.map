@@ -1,6 +1,6 @@
 # 
-## name ## sie.phy_state_q
-## name ## sie.phy_state_d
+## name ## sie\.phy_state_q
+## name ## sie\.phy_state_d
 ## color ## Blue
 ## data ## Decimal
 

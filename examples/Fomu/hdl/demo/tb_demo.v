@@ -7,13 +7,29 @@ module tb_demo ( );
 `define MAX_BYTES 1280
 `define MAX_STRING 128
 `define USB_CDC_INST tb_demo.u_demo.u_usb_cdc
+
+   reg  dp_force;
+   reg  dn_force;
+   reg  power_on;
+   reg [8*`MAX_STRING-1:0] test;
+
+   wire dp_sense;
+   wire dn_sense;
+
+   integer errors;
+   integer warnings;
+
+   localparam IN_BULK_MAXPACKETSIZE = 'd8;
+   localparam OUT_BULK_MAXPACKETSIZE = 'd8;
+   localparam VENDORID = 16'h1209;
+   localparam PRODUCTID = 16'h5BF0;
+
 `include "usb_tasks.v"
 `include "demo_tasks.v"
 
    `progress_bar(38)
 
    reg clk;
-   reg power_on;
 
    initial begin
       clk = 0;
@@ -41,12 +57,6 @@ module tb_demo ( );
                 .usb_dn(usb_n),
                 .usb_dp_pu(usb_pu));
 
-   reg        dp_force;
-   reg        dn_force;
-
-   wire       dp_sense;
-   wire       dn_sense;
-
    assign usb_p = dp_force;
    assign usb_n = dn_force;
 
@@ -63,8 +73,6 @@ module tb_demo ( );
    reg [6:0]  address;
    reg [15:0] datain_toggle;
    reg [15:0] dataout_toggle;
-   reg [8*`MAX_STRING-1:0] test;
-   reg                     device_fail;
 
    initial begin : u_host
       $timeformat(-6, 3, "us", 3);
@@ -74,7 +82,8 @@ module tb_demo ( );
       power_on = 1'b1;
       dp_force = 1'bZ;
       dn_force = 1'bZ;
-      device_fail = 0;
+      errors = 0;
+      warnings = 0;
       address = 'd0;
       dataout_toggle = 'd0;
       datain_toggle = 'd0;
@@ -86,65 +95,83 @@ module tb_demo ( );
       test = "OUT BULK DATA";
       test_data_out(address, ENDP_BULK,
                     {8'h01, 8'h02, 8'h03, 8'h04, 8'h05, 8'h06, 8'h07},
-                    7, 256, 256, PID_NAK, OUT_BULK_MAXPACKETSIZE, 0, dataout_toggle);
+                    7, PID_ACK, OUT_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, dataout_toggle);
 
       test = "IN BULK DATA";
       test_data_in(address, ENDP_BULK,
                    {8'h01, 8'h02, 8'h03, 8'h04, 8'h05, 8'h06, 8'h07},
-                   7, 256, 256, PID_NAK, IN_BULK_MAXPACKETSIZE, 0, datain_toggle);
+                   7, PID_ACK, IN_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle);
 
       test = "IN BULK DATA with NAK";
       test_data_in(address, ENDP_BULK,
                    {8'h01, 8'h02, 8'h03, 8'h04, 8'h05, 8'h06, 8'h07},
-                   7, 256, 0, PID_NAK, IN_BULK_MAXPACKETSIZE, 0, datain_toggle);
+                   7, PID_NAK, IN_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle);
 
       test = "OUT BULK DATA";
       test_data_out(address, ENDP_BULK,
                     {8'h11, 8'h12, 8'h13, 8'h14, 8'h15, 8'h16, 8'h17, 8'h18},
-                    8, 256, 256, PID_NAK, OUT_BULK_MAXPACKETSIZE, 0, dataout_toggle);
+                    8, PID_ACK, OUT_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, dataout_toggle);
 
       test = "IN BULK DATA with ZLP";
       test_data_in(address, ENDP_BULK,
                    {8'h11, 8'h12, 8'h13, 8'h14, 8'h15, 8'h16, 8'h17, 8'h18},
-                   8, 256, 256, PID_NAK, IN_BULK_MAXPACKETSIZE, 0, datain_toggle);
+                   8, PID_ACK, IN_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle);
 
       test = "OUT BULK DATA";
       test_data_out(address, ENDP_BULK,
                     {8'h21, 8'h22, 8'h23, 8'h24, 8'h25, 8'h26, 8'h27, 8'h28,
                      8'h31, 8'h32, 8'h33, 8'h34, 8'h35, 8'h36, 8'h37, 8'h38},
-                    16, 256, 256, PID_NAK, OUT_BULK_MAXPACKETSIZE, 0, dataout_toggle);
+                    16, PID_ACK, OUT_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, dataout_toggle);
 
       test = "IN BULK DATA with ZLP";
       test_data_in(address, ENDP_BULK,
                    {8'h21, 8'h22, 8'h23, 8'h24, 8'h25, 8'h26, 8'h27, 8'h28,
                     8'h31, 8'h32, 8'h33, 8'h34, 8'h35, 8'h36, 8'h37, 8'h38},
-                   16, 256, 256, PID_NAK, IN_BULK_MAXPACKETSIZE, 0, datain_toggle);
+                   16, PID_ACK, IN_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle);
+
+      test = "WAIT CMD";
+      test_demo_cmd1(address, ENDP_BULK, WAIT_CMD, 8'd0,
+                     OUT_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, dataout_toggle);
+      #(30*`BIT_TIME);
+      `assert_error("WAIT write error", tb_demo.u_demo.u_app.wait_q, 8'd0)
 
       test = "OUT BULK DATA";
       test_data_out(address, ENDP_BULK,
                     {8'h41, 8'h42, 8'h43, 8'h44, 8'h45, 8'h46, 8'h47, 8'h48,
                      8'h51, 8'h52, 8'h53, 8'h54, 8'h55, 8'h56, 8'h57, 8'h58,
                      8'h61, 8'h62},
-                    18, 256, 2, PID_NAK, OUT_BULK_MAXPACKETSIZE, 0, dataout_toggle);
+                    18, PID_NAK, OUT_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, dataout_toggle);
 
       test = "IN BULK DATA with ZLP";
       test_data_in(address, ENDP_BULK,
                    {8'h41, 8'h42, 8'h43, 8'h44, 8'h45, 8'h46, 8'h47, 8'h48,
                     8'h51, 8'h52, 8'h53, 8'h54, 8'h55, 8'h56, 8'h57, 8'h58},
-                   16, 256, 256, PID_NAK, IN_BULK_MAXPACKETSIZE, 0, datain_toggle);
+                   16, PID_ACK, IN_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle);
+
+      test = "ADDR CMD";
+      test_demo_cmd3(address, ENDP_BULK, ADDR_CMD, 24'h000000,
+                     OUT_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, dataout_toggle);
+      #(30*`BIT_TIME);
+      `assert_error("ADDR write error", tb_demo.u_demo.u_app.mem_addr_q, 24'h000000)
 
       test = "ROM READ CMD";
-      test_demo_cmd(address, ENDP_BULK, ROM_READ_CMD, 1024-1,
-                    OUT_BULK_MAXPACKETSIZE, dataout_toggle);
+      test_demo_cmd3(address, ENDP_BULK, ROM_READ_CMD, 1024-1,
+                     OUT_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, dataout_toggle);
 
       test = "ROM READ";
       test_data_in(address, ENDP_BULK,
                    ROM_DATA,
-                   1024, 2000, 2000, PID_NAK, IN_BULK_MAXPACKETSIZE, 0, datain_toggle);
+                   1024, PID_ACK, IN_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle);
+
+      test = "ADDR CMD";
+      test_demo_cmd3(address, ENDP_BULK, ADDR_CMD, 24'h000000,
+                     OUT_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, dataout_toggle);
+      #(30*`BIT_TIME);
+      `assert_error("ADDR write error", tb_demo.u_demo.u_app.mem_addr_q, 24'h000000)
 
       test = "RAM READ CMD";
-      test_demo_cmd(address, ENDP_BULK, RAM_READ_CMD, 55-1,
-                    OUT_BULK_MAXPACKETSIZE, dataout_toggle);
+      test_demo_cmd3(address, ENDP_BULK, RAM_READ_CMD, 55-1,
+                     OUT_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, dataout_toggle);
 
       test = "RAM READ";
       test_data_in(address, ENDP_BULK,
@@ -155,36 +182,36 @@ module tb_demo ( );
                     8'h41, 8'h42, 8'h43, 8'h44, 8'h45, 8'h46, 8'h47, 8'h48,
                     8'h51, 8'h52, 8'h53, 8'h54, 8'h55, 8'h56, 8'h57, 8'h58,
                     RAM_DATA[8*(1024-47)-1 -:64]},
-                   55, 2000, 2000, PID_NAK, IN_BULK_MAXPACKETSIZE, 0, datain_toggle);
+                   55, PID_ACK, IN_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle);
 
       test = "LFSR WRITE CMD";
-      test_demo_cmd(address, ENDP_BULK, LFSR_WRITE_CMD, 24'h333881,
-                    OUT_BULK_MAXPACKETSIZE, dataout_toggle);
+      test_demo_cmd3(address, ENDP_BULK, LFSR_WRITE_CMD, 24'h333881,
+                     OUT_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, dataout_toggle);
       #(30*`BIT_TIME);
-      `assert("LFSR write error", tb_demo.u_demo.u_app.lfsr_q, 24'h333881)
+      `assert_error("LFSR write error", tb_demo.u_demo.u_app.lfsr_q, 24'h333881)
 
       test = "IN CMD";
-      test_demo_cmd(address, ENDP_BULK, IN_CMD, 10-1,
-                    OUT_BULK_MAXPACKETSIZE, dataout_toggle);
+      test_demo_cmd3(address, ENDP_BULK, IN_CMD, 10-1,
+                     OUT_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, dataout_toggle);
 
       test = "IN";
       test_demo_in(address, ENDP_BULK, 10,
-                   IN_BULK_MAXPACKETSIZE, 0, datain_toggle);
+                   IN_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle);
 
       test = "OUT CMD";
-      test_demo_cmd(address, ENDP_BULK, OUT_CMD, 10-1,
-                    OUT_BULK_MAXPACKETSIZE, dataout_toggle);
+      test_demo_cmd3(address, ENDP_BULK, OUT_CMD, 10-1,
+                     OUT_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, dataout_toggle);
 
       test = "OUT";
       test_demo_out(address, ENDP_BULK,
                     {8'h71, 8'h72, 8'h73, 8'h74, 8'h75, 8'h76, 8'h77, 8'h78,
                      8'h79, 8'h7A},
                     10, IN_BULK_MAXPACKETSIZE, OUT_BULK_MAXPACKETSIZE,
-                    0, datain_toggle, dataout_toggle);
+                    100000/83*`BIT_TIME, 0, datain_toggle, dataout_toggle);
 
-      
+
       test = "Test END";
       #(100*`BIT_TIME);
-      `assert_end("All tests correctly executed!");
+      `report_end("All tests correctly executed!")
    end
 endmodule

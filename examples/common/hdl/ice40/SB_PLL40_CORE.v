@@ -51,7 +51,8 @@ module SB_PLL40_CORE (
       clk = 0;
       lock_reg = 1;
       timeout = 4*CLK_RATIO;
-      #100 lock_reg = 0; // negedge to trigger reset
+      #1 lock_reg = 0; // negedge to trigger reset
+      #100;
       ref_per = 0;
       clk_per = 100000000;
    end

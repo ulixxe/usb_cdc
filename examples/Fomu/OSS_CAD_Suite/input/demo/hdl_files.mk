@@ -13,6 +13,9 @@ ram.v \
 app.v \
 demo.v \
 
+# Testbench HDL files
+TB_HDL_FILES = \
+tb_demo.v \
 
 # list of HDL files directories separated by ":"
 VPATH = ../../../usb_cdc: \

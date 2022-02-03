@@ -1,14 +1,19 @@
 # 
-## name ## app.cmd_q
-## name ## app.cmd_d
+## name ## app\.cmd_q
+## name ## app\.cmd_d
 ## color ## Blue
 ## data ## Decimal
 
-0 NO_CMD
-1 IN_CMD
-2 OUT_CMD
-3 WAIT_CMD
-4 LFSR_WRITE_CMD
-5 LFSR_READ_CMD
-6 ROM_READ_CMD
-7 RAM_READ_CMD
+0  NO_CMD
+1  IN_CMD
+2  OUT_CMD
+3  ADDR_CMD
+4  WAIT_CMD
+5  LFSR_WRITE_CMD
+6  LFSR_READ_CMD
+7  ROM_READ_CMD
+8  RAM_READ_CMD
+9  FLASH_READ_CMD
+10 FLASH_WRITE_CMD
+11 FLASH_READ_STATUS_CMD
+12 FLASH_CLEAR_STATUS_CMD

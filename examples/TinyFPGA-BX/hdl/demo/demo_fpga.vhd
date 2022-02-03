@@ -8,7 +8,11 @@ entity demo is
     led    : out   std_logic;           -- User LED ON=1, OFF=0
     usb_p  : inout std_logic;           -- USB+
     usb_n  : inout std_logic;           -- USB-
-    usb_pu : out   std_logic);          -- USB 1.5kOhm Pullup EN
+    usb_pu : out   std_logic;           -- USB 1.5kOhm Pullup EN
+    sck    : out   std_logic;
+    ss     : out   std_logic;
+    sdo    : out   std_logic;
+    sdi    : in    std_logic);
 end entity demo;
 
 architecture fpga of demo is
@@ -53,7 +57,11 @@ architecture fpga of demo is
       in_ready_i  : in  std_logic;
       out_ready_o : out std_logic;
       in_data_o   : out std_logic_vector(7 downto 0);
-      in_valid_o  : out std_logic);
+      in_valid_o  : out std_logic;
+      sck_o       : out std_logic;
+      csn_o       : out std_logic;
+      mosi_o      : out std_logic;
+      miso_i      : in  std_logic);
   end component app;
 
   component usb_cdc is
@@ -133,7 +141,7 @@ architecture fpga of demo is
       PACKAGE_PIN       : inout std_ulogic);
   end component;
 begin
-  led    <= not(dp_pu);
+  led <= not(dp_pu);
 
   -- if FEEDBACK_PATH = SIMPLE:
   -- clk_freq = (ref_freq * (DIVF + 1)) / (2**DIVQ * (DIVR + 1));
@@ -183,7 +191,11 @@ begin
       in_ready_i  => in_ready,
       out_ready_o => out_ready,
       in_data_o   => in_data,
-      in_valid_o  => in_valid);
+      in_valid_o  => in_valid,
+      sck_o       => sck,
+      csn_o       => ss,
+      mosi_o      => sdo,
+      miso_i      => sdi);
 
   u_usb_cdc : component usb_cdc
     generic map (

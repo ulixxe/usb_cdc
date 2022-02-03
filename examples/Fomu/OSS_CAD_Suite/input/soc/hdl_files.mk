@@ -11,6 +11,9 @@ fifo_if.v \
 app.v \
 soc.v \
 
+# Testbench HDL files
+TB_HDL_FILES = \
+tb_soc.v \
 
 # list of HDL files directories separated by ":"
 VPATH = ../../../usb_cdc: \

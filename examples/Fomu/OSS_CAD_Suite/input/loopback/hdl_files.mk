@@ -9,6 +9,9 @@ usb_cdc.v \
 prescaler.v \
 loopback.v \
 
+# Testbench HDL files
+TB_HDL_FILES = \
+tb_loopback.v \
 
 # list of HDL files directories separated by ":"
 VPATH = ../../../usb_cdc: \

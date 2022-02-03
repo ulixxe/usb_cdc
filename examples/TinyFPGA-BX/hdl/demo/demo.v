@@ -5,7 +5,11 @@ module demo
    output led, // User LED ON=1, OFF=0
    inout  usb_p, // USB+
    inout  usb_n, // USB-
-   output usb_pu  // USB 1.5kOhm Pullup EN
+   output usb_pu, // USB 1.5kOhm Pullup EN
+   output sck,
+   output ss,
+   output sdo,
+   input sdi
    );
 
    localparam BIT_SAMPLES = 'd4;
@@ -73,7 +77,11 @@ module demo
               .in_ready_i(in_ready),
               .out_ready_o(out_ready),
               .in_data_o(in_data),
-              .in_valid_o(in_valid));
+              .in_valid_o(in_valid),
+              .sck_o(sck),
+              .csn_o(ss),
+              .mosi_o(sdo),
+              .miso_i(sdi));
 
    usb_cdc #(.VENDORID(16'h1D50),
              .PRODUCTID(16'h6130),

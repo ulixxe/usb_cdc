@@ -1,6 +1,6 @@
 # 
-## name ## phy_tx.tx_state_q
-## name ## phy_tx.tx_state_d
+## name ## phy_tx\.tx_state_q
+## name ## phy_tx\.tx_state_d
 ## color ## Blue
 ## data ## Decimal
 

@@ -29,7 +29,7 @@ RAM_DATA = bytearray((base64.b64encode(os.urandom(length)).decode('utf-8')[0:len
 ser.write(RAM_DATA)
 time.sleep(1)
 ser.read(ser.inWaiting())
-ser.write(b'\x00\x07' + (length-1).to_bytes(3, 'little'))
+ser.write(b'\x00\x08' + (length-1).to_bytes(3, 'little'))
 data = bytearray(length)
 data = ser.read(length)
 if (data != RAM_DATA):

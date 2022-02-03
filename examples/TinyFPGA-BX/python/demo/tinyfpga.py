@@ -22,8 +22,8 @@ def port():
 	for device in device_list:
 		if (device.vid != None or device.pid != None):
 			if (device.vid == VID and device.pid == PID):
-					portValue = device.device
-					break
+				portValue = device.device
+				break
 	return portValue
 
 
@@ -51,13 +51,16 @@ def open():
 		return None
 
 def wait(cycles, ser):
-	ser.write(b'\x00\x03' + cycles.to_bytes(1, 'little'))
+	ser.write(b'\x00\x04' + cycles.to_bytes(1, 'little'))
+
+def addr_write(value, ser):
+	ser.write(b'\x00\x03' + value.to_bytes(3, 'little'))
 
 def lfsr_write(value, ser):
-	ser.write(b'\x00\x04' + value.to_bytes(3, 'little'))
+	ser.write(b'\x00\x05' + value.to_bytes(3, 'little'))
 
 def lfsr_read(ser):
-	ser.write(b'\x00\x05')
+	ser.write(b'\x00\x06')
 	lfsr = ser.read(4)
 	if (len(lfsr) < 4):
 		print(f"{bcolors.FAIL}{4-len(lfsr)} LFSR bytes are missing{bcolors.ENDC}")
@@ -119,7 +122,7 @@ def rom_read(length, ser, verbose=0):
 	if (length > 2**24):
 		length = 2**24
 		print(f"{bcolors.FAIL}Data length limited to {length} bytes{bcolors.ENDC}")
-	ser.write(b'\x00\x06' + (length-1).to_bytes(3, 'little'))
+	ser.write(b'\x00\x07' + (length-1).to_bytes(3, 'little'))
 	i = 0
 	data = bytearray(length)
 	start = time.time()
@@ -178,7 +181,7 @@ def ram_read(length, ser, verbose=0):
 	if (length > 2**24):
 		length = 2**24
 		print(f"{bcolors.WARNING}Data length limited to {length} bytes{bcolors.ENDC}")
-	ser.write(b'\x00\x07' + (length-1).to_bytes(3, 'little'))
+	ser.write(b'\x00\x08' + (length-1).to_bytes(3, 'little'))
 	i = 0
 	data = bytearray(length)
 	start = time.time()
@@ -193,6 +196,78 @@ def ram_read(length, ser, verbose=0):
 		print(dump.data_dump(data))
 	if (len(data) < length):
 		print(f"{length-len(data)} bytes are missing")
+	elif (end != start):
+		print(f"{bcolors.OKGREEN}OK! {length} bytes transferred in {round(end-start, 3)} sec ({round(length/1000/(end-start), 1)} kB/s){bcolors.ENDC}")
+	else:
+		print(f"{bcolors.OKGREEN}OK! {length} bytes transferred in {round(end-start, 3)} sec{bcolors.ENDC}")
+
+def flash_read(length, ser, verbose=0):
+	if (length > 2**24):
+		length = 2**24
+		print(f"{bcolors.WARNING}Data length limited to {length} bytes{bcolors.ENDC}")
+	ser.write(b'\x00\x09' + (length-1).to_bytes(3, 'little'))
+	i = 0
+	data = bytearray(length)
+	start = time.time()
+	while i < length:
+		j = min(i+4096, length)
+		data[i:j] = ser.read(j-i)
+		i = j
+	end = time.time()
+	if (verbose == 1):
+		print(binascii.hexlify(data))
+	elif (verbose == 2):
+		print(dump.data_dump(data))
+	if (len(data) < length):
+		print(f"{length-len(data)} bytes are missing")
+	elif (end != start):
+		print(f"{bcolors.OKGREEN}OK! {length} bytes transferred in {round(end-start, 3)} sec ({round(length/1000/(end-start), 1)} kB/s){bcolors.ENDC}")
+	else:
+		print(f"{bcolors.OKGREEN}OK! {length} bytes transferred in {round(end-start, 3)} sec{bcolors.ENDC}")
+
+def flash_status_read(ser):
+	ser.write(b'\x00\x0B')
+	status = ser.read(4)
+	if (len(status) < 4):
+		print(f"{bcolors.FAIL}{4-len(status)} Status bytes are missing{bcolors.ENDC}")
+	else:
+		status = int.from_bytes(status, 'little')
+		if (status == 0x0):
+			print(f"Flash Status = {hex(status)} (OK)")
+		elif (status == 0x5):
+			print(f"Flash Status = {hex(status)} (errCHECK_ERASED)")
+		elif (status == 0x7):
+			print(f"Flash Status = {hex(status)} (errVERIFY)")
+		elif (status == 0x8):
+			print(f"Flash Status = {hex(status)} (errADDRESS)")
+		elif (status == 0xF):
+			print(f"Flash Status = {hex(status)} (BUSY)")
+		else:
+			print(f"Flash Status = {hex(status)} (unknown)")
+
+def flash_clear_status(ser):
+	ser.write(b'\x00\x0C')
+
+def flash_write(data, ser):
+	length = len(data)
+	if (length > 2**24):
+		length = 2**24
+		print(f"{bcolors.WARNING}Data length limited to {length} bytes{bcolors.ENDC}")
+	ser.write(b'\x00\x0A' + (length-1).to_bytes(3, 'little'))
+	i = 0
+	start = time.time()
+	while i < length:
+		j = min(i+4096, length)
+		ser.write(data[i:j])
+		i = j
+	end = time.time()
+	time.sleep(0.5)
+	crc = ser.read(4)
+	crc32 = binascii.crc32(data[0:length])
+	if (len(crc) < 4):
+		print(f"{bcolors.FAIL}{4-len(crc)} CRC32 bytes are missing{bcolors.ENDC}")
+	elif (int.from_bytes(crc, "little") != crc32):
+		print(f"{bcolors.FAIL}CRC error: CRC32={hex(crc32)} should be {hex(int.from_bytes(crc, 'little'))}{bcolors.ENDC}")
 	elif (end != start):
 		print(f"{bcolors.OKGREEN}OK! {length} bytes transferred in {round(end-start, 3)} sec ({round(length/1000/(end-start), 1)} kB/s){bcolors.ENDC}")
 	else:

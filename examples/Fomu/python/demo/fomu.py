@@ -22,8 +22,8 @@ def port():
 	for device in device_list:
 		if (device.vid != None or device.pid != None):
 			if (device.vid == VID and device.pid == PID):
-					portValue = device.device
-					break
+				portValue = device.device
+				break
 	return portValue
 
 
@@ -40,13 +40,16 @@ def open():
 		return None
 
 def wait(cycles, ser):
-	ser.write(b'\x00\x03' + cycles.to_bytes(1, 'little'))
+	ser.write(b'\x00\x04' + cycles.to_bytes(1, 'little'))
+
+def addr_write(value, ser):
+	ser.write(b'\x00\x03' + value.to_bytes(3, 'little'))
 
 def lfsr_write(value, ser):
-	ser.write(b'\x00\x04' + value.to_bytes(3, 'little'))
+	ser.write(b'\x00\x05' + value.to_bytes(3, 'little'))
 
 def lfsr_read(ser):
-	ser.write(b'\x00\x05')
+	ser.write(b'\x00\x06')
 	lfsr = ser.read(4)
 	if (len(lfsr) < 4):
 		print(f"{bcolors.FAIL}{4-len(lfsr)} LFSR bytes are missing{bcolors.ENDC}")
@@ -108,7 +111,7 @@ def rom_read(length, ser, verbose=0):
 	if (length > 2**24):
 		length = 2**24
 		print(f"{bcolors.FAIL}Data length limited to {length} bytes{bcolors.ENDC}")
-	ser.write(b'\x00\x06' + (length-1).to_bytes(3, 'little'))
+	ser.write(b'\x00\x07' + (length-1).to_bytes(3, 'little'))
 	i = 0
 	data = bytearray(length)
 	start = time.time()
@@ -167,7 +170,7 @@ def ram_read(length, ser, verbose=0):
 	if (length > 2**24):
 		length = 2**24
 		print(f"{bcolors.WARNING}Data length limited to {length} bytes{bcolors.ENDC}")
-	ser.write(b'\x00\x07' + (length-1).to_bytes(3, 'little'))
+	ser.write(b'\x00\x08' + (length-1).to_bytes(3, 'little'))
 	i = 0
 	data = bytearray(length)
 	start = time.time()
