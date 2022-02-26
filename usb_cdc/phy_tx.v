@@ -25,12 +25,13 @@ module phy_tx
     // When both tx_valid_i and tx_ready_o are high, the 8-bit tx_data_i shall be consumed.
     // When tx_data_i is consumed, tx_ready_o shall be high only for one clk_i period.
     input       clk_i,
-    // clk_i clock shall have a frequency of 12MHz*BIT_SAMPLES
+    // clk_i clock shall have a frequency of 12MHz*BIT_SAMPLES.
     input       rstn_i,
-    // While rstn_i is low (active low), the module shall be reset
+    // While rstn_i is low (active low), the module shall be reset.
     input       tx_valid_i,
     // When tx_valid_i changes from low to high, PHY_TX shall start a
     //   new packet transmission as soon as possible (USB2.0 7.1.18.1).
+    // When the last packet byte is consumed, tx_valid_i shall return low.
     input [7:0] tx_data_i
     // While tx_valid_i is high, the tx_data_i shall be valid and both
     //   tx_valid_i and tx_data_i shall not change until consumed.

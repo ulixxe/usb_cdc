@@ -659,6 +659,10 @@ task automatic test_usb
       test_setup_in(address, 8'h80, REQ_GET_DESCRIPTOR, 16'h0100, 16'h0000, 16'h0040,
                     DEV_DESCR, 'h12, 0);
 
+      test = "GET_DESCRIPTOR Device (partial)";
+      test_setup_in(address, 8'h80, REQ_GET_DESCRIPTOR, 16'h0100, 16'h0000, 16'h0008,
+                    DEV_DESCR>>8*('h12-'h08), 'h08, 0);
+
       test = "SET_ADDRESS";
       test_set_address('d2, address);
 

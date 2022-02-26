@@ -99,11 +99,13 @@ proc phy_rx {} {
                            {phy_rx\.nrzi\[} \
                            {phy_rx\.rx_state_q} \
                            {phy_rx\.clk_gate$} \
+                           {phy_rx\.rx_en_i$} \
                            {phy_rx\.rx_err_o$} \
                            {phy_rx\.rx_ready_o$} \
                            {phy_rx\.rx_valid_o$} \
-                           {phy_rx\.usb_reset_o$} \
                            {phy_rx\.rx_data_o\[.*\]$} \
+                           {phy_rx\.usb_reset_o$} \
+                           {phy_rx\.dp_pu_o$} \
                           ]
     addSignals $sigFilterList
     wavesFormat ../../common/gtkwave

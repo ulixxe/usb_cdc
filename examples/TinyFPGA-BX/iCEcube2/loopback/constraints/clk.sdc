@@ -17,3 +17,7 @@ set_false_path -to [get_ports {led usb_pu}]
 
 set root_path "u_usb_cdc"
 source ../../../../common/synplifypro/usb_cdc.sdc
+
+set fid [open all_registers.txt w]
+file_puts $fid "all_registers:" [all_registers]
+close $fid

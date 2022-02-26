@@ -6,7 +6,7 @@
 
 * Build Date:         Dec 10 2020 17:24:17
 
-* File Generated:     Jan 10 2022 15:02:28
+* File Generated:     Feb 19 2022 17:02:20
 
 * Purpose:            General info of design implementation
 
@@ -28,7 +28,7 @@ Device Info:
 Design statistics:
 ------------------
     FFs:                  404
-    LUTs:                 1178
+    LUTs:                 1154
     RAMs:                 0
     IOBs:                 5
     GBs:                  7
@@ -37,10 +37,10 @@ Design statistics:
 
 Logic Resource Utilization:
 ---------------------------
-    Total Logic Cells: 1181/7680
-        Combinational Logic Cells: 777      out of   7680      10.1172%
+    Total Logic Cells: 1156/7680
+        Combinational Logic Cells: 752      out of   7680      9.79167%
         Sequential Logic Cells:    404      out of   7680      5.26042%
-        Logic Tiles:               213      out of   960       22.1875%
+        Logic Tiles:               240      out of   960       25%
     Registers: 
         Logic Registers:           404      out of   7680      5.26042%
         IO Registers:              0        out of   1280      0
@@ -84,7 +84,7 @@ Detailed Global Buffer Info:
     Buffer Number  IO Bank  Driven By  Fanout  Signal Name                       
     -------------  -------  ---------  ------  -----------                       
     3              3                   56      u_usb_cdc.u_sie.clk_gate_0_i_g    
-    1              0                   37      u_usb_cdc.clk_gate_g              
+    1              0                   37      u_usb_cdc.u_sie.clk_gate_g        
     2              1                   332     u_usb_cdc.rstn_i_g                
     7              1                   47      u_usb_cdc.u_ctrl_endp.clk_gate_g  
     4              0                   54      u_usb_cdc.rstn_sq_i_g_0           
@@ -95,13 +95,13 @@ Detailed Global Buffer Info:
 Router Summary:
 ---------------
     Status:  Successful
-    Runtime: 14 seconds
+    Runtime: 16 seconds
 
 Routing Resource Utilization:
 -----------------------------
-              Local line of tile     8562 out of 146184      5.857%
-                          Span 4     2197 out of  29696      7.3983%
-                         Span 12      296 out of   5632      5.25568%
+              Local line of tile     8372 out of 146184      5.72703%
+                          Span 4     2009 out of  29696      6.76522%
+                         Span 12      262 out of   5632      4.65199%
                   Global network        8 out of      8      100%
-      Vertical Inter-LUT Connect      305 out of   6720      4.53869%
+      Vertical Inter-LUT Connect      268 out of   6720      3.9881%
 

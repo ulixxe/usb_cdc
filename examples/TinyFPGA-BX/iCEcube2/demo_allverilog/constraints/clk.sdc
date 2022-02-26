@@ -20,3 +20,4 @@ source ../../../../common/synplifypro/usb_cdc.sdc
 
 set fid [open all_registers.txt w]
 file_puts $fid "all_registers:" [all_registers]
+close $fid

@@ -113,6 +113,7 @@ module usb_cdc
           .clk_i(clk_i),
           .rstn_i(rstn),
           .usb_en_i(usb_en),
+          .usb_detach_i(1'b0),
           .rx_dp_i(rx_dp_i),
           .rx_dn_i(rx_dn_i),
           .addr_i(addr),

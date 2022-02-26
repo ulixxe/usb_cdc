@@ -10,6 +10,7 @@
 //   - USB Reset detection.
 // PHY_RX module shall convert bitstream from the USB bus physical receivers 
 //   to 8-bit parallel data for the SIE module.
+// PHY_RX module shall manage the 1.5kOhm pull-up resistor on dp line.
 
 module phy_rx
   #(parameter BIT_SAMPLES = 'd4)
@@ -28,18 +29,27 @@ module phy_rx
     // When rx_dp_i/rx_dn_i change and stay in SE0 condition for 2.5us, usb_reset_o shall be high.
     // When rx_dp_i/rx_dn_i change from SE0 condition, usb_reset_o shall return low
     //   after being high for at least 330ns.
+    // When usb_detach_i is high and a usb detach has started, usb_reset_o shall be high.
     output       rx_ready_o,
     // rx_ready_o shall be high only for one clk_i period.
     // While rx_valid_o and rx_err_o are both low, rx_ready_o shall be high to signal the
     //   end of packet (EOP).
     input        clk_i,
-    // clk_i clock shall have a frequency of 12MHz*BIT_SAMPLES
+    // clk_i clock shall have a frequency of 12MHz*BIT_SAMPLES.
     input        rstn_i,
-    // While rstn_i is low (active low), the module shall be reset
+    // While rstn_i is low (active low), the module shall be reset.
     input        rx_en_i,
+    // While rx_en_i is low, the module shall be disabled.
+    // When rx_en_i changes from low to high, the module shall start to monitor dp/dn lines
+    //   for the start of a new packet.
+    input        usb_detach_i,
+    // When usb_detach_i is high, a usb detach shall be requested.
 
     // ---- to/from USB bus ------------------------------------------
     output       dp_pu_o,
+    // While dp_pu_o is high, a 1.5KOhm resistor shall pull-up the dp line.
+    // At power-on or when usb_detach_i is high, dp_pu_o shall be low.
+    // After TSIGATT time from power-on or from usb_detach_i change to low, dp_pu_o shall be high.
     input        rx_dp_i,
     input        rx_dn_i
     );
@@ -132,7 +142,7 @@ module phy_rx
    // rx_valid_o put to 0 early to gain setup time before rx_eop
    assign rx_valid_o = rx_valid_rq ^ rx_valid_fq;
    assign rx_err_o = rx_err;
-   assign usb_reset_o = rx_en_q & cnt_q[5];
+   assign usb_reset_o = (rx_en_q & cnt_q[5]) | (usb_detach_i & ~rx_en_q & ~dp_pu_q);
    assign rx_data_o = data_q[8:1];
    assign dp_pu_o = dp_pu_q;
 
@@ -150,7 +160,7 @@ module phy_rx
       end else begin
          if (clk_gate) begin
             nrzi_q <= {nrzi, nrzi_q[3:2]};
-            if (rx_en_i)
+            if (rx_en_i & rx_en_q)
               rx_state_q <= rx_state_d;
             else
               rx_state_q <= ST_IDLE;
@@ -166,9 +176,13 @@ module phy_rx
                if (cnt_q[CNT_WIDTH-1-8 -:2] == 2'b11)
                  rx_en_q <= 1'b1; // 16ms + 64us
             end
-            if (~rx_en_q)
-              cnt_q <= cnt_q + 1;
-            else begin
+            if (usb_detach_i) begin
+               dp_pu_q <= 1'b0;
+               rx_en_q <= 1'b0;
+               cnt_q <= 'd0;
+            end else if (~rx_en_q) begin
+               cnt_q <= cnt_q + 1;
+            end else begin
                if (cnt_q[5] == 1'b1) begin // 2.5us < TDETRST=2.67us < 10ms (USB2.0 Tab.7-14 pag.188)
                   if (cnt_q[2] == 1'b0)
                     cnt_q <= cnt_q + 1;

@@ -24,9 +24,9 @@ module sie
     // ---- to/from USB_CDC module ------------------------------------
     output        usb_reset_o,
     // When rx_dp_i/rx_dn_i change and stay in SE0 condition for 2.5us, usb_reset_o shall be high.
-    // When usb_reset_o changes from low to high, usb_reset_o shall return low after 330ns.
-    // When usb_reset_o changes from high to low and rx_dp_i/rx_dn_i are in SE0 condition,
-    //   usb_reset_o shall return high after 2.5us.
+    // When rx_dp_i/rx_dn_i change from SE0 condition, usb_reset_o shall return low
+    //   after being high for at least 330ns.
+    // When usb_detach_i is high and a usb detach has started, usb_reset_o shall be high.
     output [3:0]  endp_o,
     // endp_o shall be last recognized endpoint address and shall be
     //   updated at the end of next valid token packet.
@@ -34,9 +34,9 @@ module sie
     // frame_o shall be last recognized frame number and shall be
     //   updated at the end of next valid Start-of-Frame token packet.
     input         clk_i,
-    // clk_i clock shall have a frequency of 12MHz*BIT_SAMPLES
+    // clk_i clock shall have a frequency of 12MHz*BIT_SAMPLES.
     input         rstn_i,
-    // While rstn_i is low (active low), the module shall be reset
+    // While rstn_i is low (active low), the module shall be reset.
 
     // ---- to/from OUT Endpoints ------------------------------------
     output [7:0]  out_data_o,
@@ -80,6 +80,9 @@ module sie
     // While last correctly checked PID (USB2.0 8.3.1) is SETUP, setup_o shall
     //   be high, otherwise shall be low.
     input         usb_en_i,
+    // While usb_en_i is low, the phy_rx module shall be disabled.
+    input         usb_detach_i,
+    // When usb_detach_i is high, a usb detach shall be requested.
     input [6:0]   addr_i,
     // addr_i shall be the device address.
     // addr_i shall be updated at the end of SET_ADDRESS control transfer.
@@ -95,6 +98,9 @@ module sie
 
     // ---- to/from USB bus physical transmitters/receivers ----------
     output        dp_pu_o,
+    // While dp_pu_o is high, a 1.5KOhm resistor shall pull-up dp line.
+    // At power-on, dp_pu_o shall be low.
+    // After TSIGATT time from power-on, dp_pu_o shall be high.
     output        tx_en_o,
     output        tx_dp_o,
     output        tx_dn_o,
@@ -539,6 +545,7 @@ module sie
              .clk_i(clk_i),
              .rstn_i(rstn_i),
              .rx_en_i(rx_en),
+             .usb_detach_i(usb_detach_i),
              .rx_dp_i(rx_dp_i),
              .rx_dn_i(rx_dn_i));
 
