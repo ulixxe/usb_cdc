@@ -11,10 +11,10 @@ localparam [3:0] PID_OUT = 4'b0001,
                  PID_STALL = 4'b1110;
 
 function automatic [4:0] crc5;
-   input [`MAX_BITS-1:0] data;
-   input integer         bits;
-   localparam [4:0]      POLY5 = 5'b00101;
-   integer               i;
+   input [MAX_BITS-1:0] data;
+   input integer        bits;
+   localparam [4:0]     POLY5 = 5'b00101;
+   integer              i;
    begin
       crc5 = 5'b11111;
       for (i = 0; i <= bits-1; i = i + 1) begin
@@ -27,10 +27,10 @@ function automatic [4:0] crc5;
 endfunction
 
 function automatic [15:0] crc16;
-   input [8*`MAX_BYTES-1:0] data;
-   input integer            bytes;
-   localparam [15:0]        POLY16 = 16'h8005;
-   integer                  i,j;
+   input [8*MAX_BYTES-1:0] data;
+   input integer           bytes;
+   localparam [15:0]       POLY16 = 16'h8005;
+   integer                 i,j;
    begin
       crc16 = 16'hFFFF;
       for (j = bytes-1; j >= 0; j = j-1) begin
@@ -113,18 +113,18 @@ endtask
 
 task automatic raw_packet_rx
   (
-   output [8*`MAX_BYTES-1:0] data,
-   output integer            bytes,
-   input time                bit_time,
-   input integer             timeout // number of bit_time periods
+   output [8*MAX_BYTES-1:0] data,
+   output integer           bytes,
+   input time               bit_time,
+   input integer            timeout // number of bit_time periods
    );
-   time                      start_time;
-   integer                   byte_index;
-   integer                   bit_index;
-   integer                   bit_counter;
-   reg                       nrzi_bit;
-   reg                       last_nrzi_bit;
-   reg                       exit;
+   time                     start_time;
+   integer                  byte_index;
+   integer                  bit_index;
+   integer                  bit_counter;
+   reg                      nrzi_bit;
+   reg                      last_nrzi_bit;
+   reg                      exit;
 
    begin : u_raw_packet_rx_task
       data = 'bX;
@@ -157,7 +157,7 @@ task automatic raw_packet_rx
 
       // data transmission
       bit_counter = 1;
-      byte_index = `MAX_BYTES-1;
+      byte_index = MAX_BYTES-1;
       exit = 1'b0;
       while (byte_index >= -1 && exit == 1'b0) begin : u_byte
          bit_index = 0;
@@ -212,20 +212,20 @@ endtask
 
 task automatic packet_rx
   (
-   output [3:0]              pid,
-   output [6:0]              addr,
-   output [3:0]              endp,
-   output [10:0]             frame,
-   output [8*`MAX_BYTES-1:0] data,
-   output integer            bytes,
-   input time                bit_time,
-   input integer             timeout // number of bit_time periods
+   output [3:0]             pid,
+   output [6:0]             addr,
+   output [3:0]             endp,
+   output [10:0]            frame,
+   output [8*MAX_BYTES-1:0] data,
+   output integer           bytes,
+   input time               bit_time,
+   input integer            timeout // number of bit_time periods
    );
-   localparam [4:0]          POLY5_RESIDUAL = 5'b01100;
-   localparam [15:0]         POLY16_RESIDUAL = 16'b1000000000001101;
-   reg [8*`MAX_BYTES-1:0]    raw_data;
-   integer                   raw_bytes;
-   integer                   i;
+   localparam [4:0]         POLY5_RESIDUAL = 5'b01100;
+   localparam [15:0]        POLY16_RESIDUAL = 16'b1000000000001101;
+   reg [8*MAX_BYTES-1:0]    raw_data;
+   integer                  raw_bytes;
+   integer                  i;
    begin : u_packet_rx_task
       pid = 'bX;
       addr = 'bX;
@@ -234,8 +234,8 @@ task automatic packet_rx
       data = 'bX;
       bytes = 0;
       raw_packet_rx(raw_data, raw_bytes, bit_time, timeout);
-      if (raw_data[8*(`MAX_BYTES-1) +:4] == ~raw_data[8*(`MAX_BYTES-1)+4 +:4]) begin
-         pid = raw_data[8*(`MAX_BYTES-1) +:4];
+      if (raw_data[8*(MAX_BYTES-1) +:4] == ~raw_data[8*(MAX_BYTES-1)+4 +:4]) begin
+         pid = raw_data[8*(MAX_BYTES-1) +:4];
       end else begin
          `report_warning("packet_rx(): PID field check error")
          disable u_packet_rx_task;
@@ -245,12 +245,12 @@ task automatic packet_rx
            if (raw_bytes != 3) begin
               `report_warning("packet_rx(): Received bytes doesn't match Token Packet size")
               disable u_packet_rx_task;
-           end else if (crc5({raw_data[8*(`MAX_BYTES-3) +:8], raw_data[8*(`MAX_BYTES-2) +:8]}, 16) == POLY5_RESIDUAL) begin
+           end else if (crc5({raw_data[8*(MAX_BYTES-3) +:8], raw_data[8*(MAX_BYTES-2) +:8]}, 16) == POLY5_RESIDUAL) begin
               if (pid == PID_SOF) begin
-                 frame = {raw_data[8*(`MAX_BYTES-3) +:3], raw_data[8*(`MAX_BYTES-2) +:8]};
+                 frame = {raw_data[8*(MAX_BYTES-3) +:3], raw_data[8*(MAX_BYTES-2) +:8]};
               end else begin
-                 addr = raw_data[8*(`MAX_BYTES-2) +:7];
-                 endp = {raw_data[8*(`MAX_BYTES-3) +:3], raw_data[8*(`MAX_BYTES-2)+7]};
+                 addr = raw_data[8*(MAX_BYTES-2) +:7];
+                 endp = {raw_data[8*(MAX_BYTES-3) +:3], raw_data[8*(MAX_BYTES-2)+7]};
               end
            end else begin
               `report_warning("packet_rx(): token CRC error")
@@ -263,12 +263,12 @@ task automatic packet_rx
               disable u_packet_rx_task;
            end else begin
               for (i = 1; i <= raw_bytes-1; i = i+1)
-                data[8*(raw_bytes-1-i) +:8] = raw_data[8*(`MAX_BYTES-1-i) +:8];
+                data[8*(raw_bytes-1-i) +:8] = raw_data[8*(MAX_BYTES-1-i) +:8];
               if (crc16(data, raw_bytes-1) == POLY16_RESIDUAL) begin
                  bytes = raw_bytes-3;
                  data = 'bX;
                  for (i = 1; i <= raw_bytes-3; i = i+1)
-                   data[8*(`MAX_BYTES-i) +:8] = raw_data[8*(`MAX_BYTES-1-i) +:8];
+                   data[8*(MAX_BYTES-i) +:8] = raw_data[8*(MAX_BYTES-1-i) +:8];
               end else begin
                  data = 'bX;
                  `report_warning("packet_rx(): CRC error")
@@ -299,8 +299,8 @@ task automatic handshake_rx
    reg [6:0]     addr;
    reg [3:0]     endp;
    reg [10:0]    frame;
-   reg [8*`MAX_BYTES-1:0] data;
-   integer                bytes;
+   reg [8*MAX_BYTES-1:0] data;
+   integer               bytes;
    begin : u_handshake_rx_task
       packet_rx(pid, addr, endp, frame, data, bytes,
                 bit_time, timeout);
@@ -313,15 +313,15 @@ endtask
 
 task automatic data_rx
   (
-   output [3:0]              pid,
-   output [8*`MAX_BYTES-1:0] data,
-   output integer            bytes,
-   input time                bit_time,
-   input integer             timeout // number of bit_time periods
+   output [3:0]             pid,
+   output [8*MAX_BYTES-1:0] data,
+   output integer           bytes,
+   input time               bit_time,
+   input integer            timeout // number of bit_time periods
    );
-   reg [6:0]                 addr;
-   reg [3:0]                 endp;
-   reg [10:0]                frame;
+   reg [6:0]                addr;
+   reg [3:0]                endp;
+   reg [10:0]               frame;
    begin : u_data_rx_task
       packet_rx(pid, addr, endp, frame, data, bytes,
                 bit_time, timeout);

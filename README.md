@@ -36,12 +36,16 @@ Furthermore, USB\_CDC was designed from scratch to keep FPGA resource utilizatio
 * `in_ready_o`: ready control signal
 
 ### USB I/O buffers
-* `rx_dp_i`: D+ input bit stream
-* `rx_dn_i`: D- input bit stream
-* `tx_dp_o`: D+ output bit stream
-* `tx_dn_o`: D- output bit stream
+* `dp_rx_i`: D+ input bit stream
+* `dn_rx_i`: D- input bit stream
+* `dp_tx_o`: D+ output bit stream
+* `dn_tx_o`: D- output bit stream
 * `tx_en_o`: D+/D- output enable
 * `dp_up_o`: 1.5k&Omega; D+ pullup enable
+
+### USB device status
+* `frame_o`: last received USB frame number
+* `configured_o`: 1 if USB device is in configured state, 0 otherwise
 
 ## FIFO interface
 USB\_CDC provides a FIFO interface to transfer data to/from FPGA application. Both `in_*` and `out_*` channels use the same transmission protocol.
@@ -104,12 +108,12 @@ The USB\_CDC code alone (with IN/OUT data in simple loopback configuration and a
 ```
 Logic Resource Utilization:
 ---------------------------
-    Total Logic Cells: 1214/7680
-        Combinational Logic Cells: 812      out of   7680      10.5729%
-        Sequential Logic Cells:    402      out of   7680      5.23438%
-        Logic Tiles:               218      out of   960       22.7083%
+    Total Logic Cells: 1151/7680
+        Combinational Logic Cells: 745      out of   7680      9.70052%
+        Sequential Logic Cells:    406      out of   7680      5.28646%
+        Logic Tiles:               213      out of   960       22.1875%
     Registers: 
-        Logic Registers:           402      out of   7680      5.23438%
+        Logic Registers:           406      out of   7680      5.28646%
         IO Registers:              0        out of   1280      0
     Block RAMs:                    0        out of   32        0%
     Warm Boots:                    0        out of   1         0%
@@ -139,6 +143,8 @@ Clock: clk_usb           | Frequency: 109.31 MHz  | Target: 48.01 MHz  |
 ├── usb_cdc                              --> USB_CDC verilog files
 │   ├── bulk_endp.v
 │   ├── ctrl_endp.v
+│   ├── in_fifo.v
+│   ├── out_fifo.v
 │   ├── phy_rx.v
 │   ├── phy_tx.v
 │   ├── sie.v

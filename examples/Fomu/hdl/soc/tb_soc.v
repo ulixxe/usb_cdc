@@ -3,15 +3,16 @@
 `define CLK_PER (1000/48)
 
 module tb_soc ( );
-`define MAX_BITS 128
-`define MAX_BYTES 128
-`define MAX_STRING 128
 `define USB_CDC_INST tb_soc.u_soc.u_usb_cdc
+
+   localparam MAX_BITS = 128;
+   localparam MAX_BYTES = 128;
+   localparam MAX_STRING = 128;
 
    reg  dp_force;
    reg  dn_force;
    reg  power_on;
-   reg [8*`MAX_STRING-1:0] test;
+   reg [8*MAX_STRING-1:0] test;
 
    wire dp_sense;
    wire dn_sense;
@@ -99,12 +100,12 @@ module tb_soc ( );
       test = "IN BULK DATA";
       test_data_in(address, ENDP_BULK,
                    {8'h01, 8'h02, 8'h03, 8'h04, 8'h05, 8'h06, 8'h07},
-                   7, PID_ACK, IN_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle);
+                   7, PID_ACK, IN_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle, ZLP);
 
       test = "IN BULK DATA with NAK";
       test_data_in(address, ENDP_BULK,
                    {8'h01, 8'h02, 8'h03, 8'h04, 8'h05, 8'h06, 8'h07},
-                   7, PID_NAK, IN_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle);
+                   7, PID_NAK, IN_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle, ZLP);
 
       test = "OUT BULK DATA";
       test_data_out(address, ENDP_BULK,
@@ -114,7 +115,7 @@ module tb_soc ( );
       test = "IN BULK DATA with ZLP";
       test_data_in(address, ENDP_BULK,
                    {8'h11, 8'h12, 8'h13, 8'h14, 8'h15, 8'h16, 8'h17, 8'h18},
-                   8, PID_ACK, IN_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle);
+                   8, PID_ACK, IN_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle, ZLP);
 
       test = "OUT BULK DATA";
       test_data_out(address, ENDP_BULK,
@@ -126,7 +127,7 @@ module tb_soc ( );
       test_data_in(address, ENDP_BULK,
                    {8'h21, 8'h22, 8'h23, 8'h24, 8'h25, 8'h26, 8'h27, 8'h28,
                     "23456789"},
-                   16, PID_ACK, IN_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle);
+                   16, PID_ACK, IN_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle, ZLP);
 
       test = "OUT BULK DATA";
       test_data_out(address, ENDP_BULK,
@@ -139,7 +140,7 @@ module tb_soc ( );
       test_data_in(address, ENDP_BULK,
                    {"abcdefgh",
                     "qrstuvwx"},
-                   16, PID_ACK, IN_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle);
+                   16, PID_ACK, IN_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle, ZLP);
 
       test = "Test END";
       #(100*`BIT_TIME);

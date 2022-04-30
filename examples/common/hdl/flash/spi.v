@@ -25,13 +25,13 @@ module spi
     // While en_i is high and when both wr_valid_i and wr_ready_o are high, the 8-bit
     //   wr_data_i shall be consumed.
     output [7:0] rd_data_o,
-    // When both rd_valid_o and rd_ready_i are high, rd_data_o shall be consumed
-    //   by application module.
+    // While en_i is high and when both rd_valid_o and rd_ready_i are high, rd_data_o
+    //   shall be consumed by application module.
     output       rd_valid_o,
-    // When rd_data_o is valid, rx_valid_o shall be high only for one clk_i period.
+    // When rd_data_o is valid, rd_valid_o shall be high only for one clk_i period.
     input        rd_ready_i,
     // While both en_i and rd_ready_i are high, a read bitstream shall continue at
-    //  the end of the current one.
+    //  the end of the current byte transmission.
 
     // ---- to/from serial bus ----------------------
     output       sck_o,

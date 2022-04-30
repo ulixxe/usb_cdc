@@ -14,34 +14,38 @@ module usb_cdc
     parameter USE_APP_CLK = 0,
     parameter APP_CLK_RATIO = 'd4)
    (
-    input        clk_i,
+    input         clk_i,
     // clk_i clock shall have a frequency of 12MHz*BIT_SAMPLES
-    input        rstn_i,
+    input         rstn_i,
     // While rstn_i is low (active low), the module shall be reset
 
     // ---- to/from Application ------------------------------------
-    input        app_clk_i,
-    output [7:0] out_data_o,
-    output       out_valid_o,
+    input         app_clk_i,
+    output [7:0]  out_data_o,
+    output        out_valid_o,
     // While out_valid_o is high, the out_data_o shall be valid and both
     //   out_valid_o and out_data_o shall not change until consumed.
-    input        out_ready_i,
+    input         out_ready_i,
     // When both out_valid_o and out_ready_i are high, the out_data_o shall
     //   be consumed.
-    input [7:0]  in_data_i,
-    input        in_valid_i,
+    input [7:0]   in_data_i,
+    input         in_valid_i,
     // While in_valid_i is high, in_data_i shall be valid.
-    output       in_ready_o,
+    output        in_ready_o,
     // When both in_ready_o and in_valid_i are high, in_data_i shall
     //   be consumed.
+    output [10:0] frame_o,
+    // frame_o shall be last recognized USB frame number sent by USB host.
+    output        configured_o,
+    // While USB_CDC is in configured state, configured_o shall be high.
 
     // ---- to USB bus physical transmitters/receivers --------------
-    output       dp_pu_o,
-    output       tx_en_o,
-    output       tx_dp_o,
-    output       tx_dn_o,
-    input        rx_dp_i,
-    input        rx_dn_i
+    output        dp_pu_o,
+    output        tx_en_o,
+    output        dp_tx_o,
+    output        dn_tx_o,
+    input         dp_rx_i,
+    input         dn_rx_i
     );
 
    localparam    CTRL_MAXPACKETSIZE = 'd8;
@@ -67,6 +71,7 @@ module usb_cdc
    wire             out_toggle_reset;
    wire             rstn, usb_reset;
    wire             in_ready, ctrl_in_ready, bulk_in_ready;
+   wire             in_data_ack;
    wire             out_ready, ctrl_out_ready, bulk_out_ready;
    wire             usb_en;
 
@@ -99,10 +104,10 @@ module usb_cdc
    u_sie (.usb_reset_o(usb_reset),
           .dp_pu_o(dp_pu_o),
           .tx_en_o(tx_en_o),
-          .tx_dp_o(tx_dp_o),
-          .tx_dn_o(tx_dn_o),
+          .dp_tx_o(dp_tx_o),
+          .dn_tx_o(dn_tx_o),
           .endp_o(endp),
-          .frame_o(),
+          .frame_o(frame_o),
           .out_data_o(out_data),
           .out_valid_o(out_valid),
           .out_err_o(out_err),
@@ -110,17 +115,19 @@ module usb_cdc
           .setup_o(setup),
           .out_ready_o(out_ready),
           .in_ready_o(in_ready),
+          .in_data_ack_o(in_data_ack),
           .clk_i(clk_i),
           .rstn_i(rstn),
           .usb_en_i(usb_en),
           .usb_detach_i(1'b0),
-          .rx_dp_i(rx_dp_i),
-          .rx_dn_i(rx_dn_i),
+          .dp_rx_i(dp_rx_i),
+          .dn_rx_i(dn_rx_i),
           .addr_i(addr),
           .in_valid_i(in_valid),
           .in_data_i(in_data),
           .in_zlp_i(in_zlp),
           .out_nak_i(out_nak),
+          .in_nak_i(1'b0),
           .stall_i(stall),
           .in_toggle_reset_i(in_toggle_reset),
           .out_toggle_reset_i(out_toggle_reset));
@@ -132,7 +139,8 @@ module usb_cdc
                .OUT_BULK_MAXPACKETSIZE(OUT_BULK_MAXPACKETSIZE),
                .ENDP_BULK(ENDP_BULK),
                .ENDP_INT(ENDP_INT))
-   u_ctrl_endp (.usb_en_o(usb_en),
+   u_ctrl_endp (.configured_o(configured_o),
+                .usb_en_o(usb_en),
                 .addr_o(addr),
                 .in_data_o(ctrl_in_data),
                 .in_zlp_o(ctrl_in_zlp),
@@ -148,6 +156,7 @@ module usb_cdc
                 .out_err_i(out_err),
                 .in_req_i(ctrl_in_req),
                 .setup_i(setup),
+                .in_data_ack_i(in_data_ack),
                 .out_ready_i(ctrl_out_ready),
                 .in_ready_i(ctrl_in_ready));
 
@@ -170,6 +179,7 @@ module usb_cdc
                 .out_valid_i(out_valid),
                 .out_err_i(out_err),
                 .in_req_i(bulk_in_req),
+                .in_data_ack_i(in_data_ack),
                 .app_in_data_i(in_data_i),
                 .app_in_valid_i(in_valid_i),
                 .out_ready_i(bulk_out_ready),

@@ -32,15 +32,17 @@ module ctrl_endp
     parameter ENDP_BULK = 4'd1,
     parameter ENDP_INT = 4'd2)
    (
-    // ---- from USB_CDC module ------------------------------------
+    // ---- to/from USB_CDC module ---------------------------------
     input        clk_i,
-    // clk_i clock shall have a frequency of 12MHz*BIT_SAMPLES
+    // clk_i clock shall have a frequency of 12MHz*BIT_SAMPLES.
     input        rstn_i,
-    // While rstn_i is low (active low), the module shall be reset
+    // While rstn_i is low (active low), the module shall be reset.
+    output       configured_o,
+    // While USB_CDC is in configured state, configured_o shall be high.
 
     // ---- to/from SIE module ------------------------------------
     input        usb_reset_i,
-    // While usb_reset_i is high, the module shall be reset
+    // While usb_reset_i is high, the module shall be reset.
     output       usb_en_o,
     output [6:0] addr_o,
     // addr_o shall be the device address.
@@ -71,6 +73,8 @@ module ctrl_endp
     input        setup_i,
     // While last correctly checked PID (USB2.0 8.3.1) is SETUP, setup_i shall
     //   be high, otherwise shall be low.
+    input        in_data_ack_i,
+    // When in_data_ack_i is high and out_ready_i is high, an ACK packet shall be received.
     input [7:0]  out_data_i,
     input        out_valid_i,
     // While out_valid_i is high, the out_data_i shall be valid and both
@@ -84,8 +88,8 @@ module ctrl_endp
     //   be consumed.
     // When setup_i is high and out_ready_i is high, a new SETUP transaction shall be
     //   received.
-    // When setup_i, out_valid_i and out_err_i are low and out_ready_i is high, the
-    //   on-going OUT transaction shall end or an ACK packet shall be received.
+    // When setup_i, in_data_ack_i, out_valid_i and out_err_i are low and out_ready_i is high, the
+    //   on-going OUT transaction shall end.
     // out_ready_i shall be high only for one clk_i period.
     );
 
@@ -263,16 +267,18 @@ module ctrl_endp
    reg                     in_zlp;
    reg                     in_valid;
    reg                     in_toggle_reset, out_toggle_reset;
+   reg                     in_req_q;
    reg                     usb_reset_q;
 
    wire                    clk_gate /* synthesis syn_direct_enable = 1 */;
    wire                    rstn;
 
+   assign configured_o = (dev_state_qq == CONFIGURED_STATE) ? 1'b1 : 1'b0;
    assign addr_o = addr_qq;
    assign stall_o = (state_q == ST_STALL) ? 1'b1 : 1'b0;
    assign in_data_o = in_data;
-   assign in_zlp_o = in_zlp;
-   assign in_valid_o = in_valid;
+   assign in_zlp_o = in_zlp & in_req_q;
+   assign in_valid_o = in_valid & in_req_q;
    assign in_toggle_reset_o = in_toggle_reset;
    assign out_toggle_reset_o = out_toggle_reset;
 
@@ -280,9 +286,11 @@ module ctrl_endp
 
    always @(posedge clk_i or negedge rstn_i) begin
       if (~rstn_i) begin
+         in_req_q <= 1'b0;
          usb_reset_q <= 1'b0;
          dev_state_qq <= POWERED_STATE;
       end else begin
+         in_req_q <= in_req_i;
          usb_reset_q <= usb_reset_i | usb_reset_q;
          if (clk_gate) begin
             if (usb_reset_q) begin
@@ -328,9 +336,10 @@ module ctrl_endp
    end
 
    always @(/*AS*/addr_q or addr_qq or byte_cnt_q or class_q
-            or dev_state_q or dev_state_qq or in_dir_q or in_endp_q
-            or in_req_i or max_length_q or out_data_i or out_err_i
-            or out_valid_i or rec_q or req_q or setup_i or state_q) begin
+            or dev_state_q or dev_state_qq or in_data_ack_i
+            or in_dir_q or in_endp_q or in_req_q or max_length_q
+            or out_data_i or out_err_i or out_valid_i or rec_q
+            or req_q or setup_i or state_q) begin
       state_d = state_q;
       byte_cnt_d = 'd0;
       max_length_d = max_length_q;
@@ -662,6 +671,7 @@ module ctrl_endp
               end
            end
            ST_DATA : begin
+              byte_cnt_d = byte_cnt_q;
               if (in_dir_q == 1'b1) begin
                  if (out_valid_i == 1'b1) begin
                     state_d = ST_STALL;
@@ -669,15 +679,14 @@ module ctrl_endp
                     if (byte_cnt_q == max_length_q ||
                         (byte_cnt_q == 'h12 && req_q == REQ_GET_DESCRIPTOR_DEVICE) ||
                         (byte_cnt_q == 'h43 && req_q == REQ_GET_DESCRIPTOR_CONFIGURATION)) begin
-                       if (in_req_i == 1'b0)
-                         state_d = ST_STATUS;
-                       else
+                       if (in_req_q == 1'b0) begin
+                          if (in_data_ack_i == 1'b1)
+                            state_d = ST_STATUS;
+                       end else
                          state_d = ST_STALL;
                     end else begin
-                       if (in_req_i == 1'b1)
+                       if (in_req_q == 1'b1)
                          byte_cnt_d = byte_cnt_q + 1;
-                       else
-                         byte_cnt_d = byte_cnt_q;
                        case (req_q)
                          REQ_GET_CONFIGURATION : begin
                             if (dev_state_qq == ADDRESS_STATE) begin
@@ -712,40 +721,51 @@ module ctrl_endp
                     end
                  end
               end else begin
-                 if (in_req_i == 1'b1)
+                 if (in_req_q == 1'b1)
                    state_d = ST_STALL;
                  else if (out_valid_i == 1'b0)
                    state_d = ST_STATUS;
               end
            end
            ST_STATUS : begin
+              byte_cnt_d = byte_cnt_q;
               if (in_dir_q == 1'b0) begin
                  in_zlp = 1'b1;
                  in_valid = 1'b1;
-                 case (req_q)
-                   REQ_SET_ADDRESS : begin
-                      addr_dd = addr_q;
-                      if (addr_q == 7'd0)
-                        dev_state_dd = DEFAULT_STATE;
-                      else
-                        dev_state_dd = ADDRESS_STATE;
-                   end
-                   REQ_CLEAR_FEATURE : begin
-                      if (in_endp_q == 1'b1)
-                        in_toggle_reset = 1'b1;
-                      else
-                        out_toggle_reset = 1'b1;
-                   end
-                   REQ_SET_CONFIGURATION : begin
-                      dev_state_dd = dev_state_q;
-                      in_toggle_reset = 1'b1;
-                      out_toggle_reset = 1'b1;
-                   end
-                   default : begin
-                   end
-                 endcase
+                 if (in_data_ack_i) begin
+                    case (req_q)
+                      REQ_SET_ADDRESS : begin
+                         addr_dd = addr_q;
+                         if (addr_q == 7'd0)
+                           dev_state_dd = DEFAULT_STATE;
+                         else
+                           dev_state_dd = ADDRESS_STATE;
+                      end
+                      REQ_CLEAR_FEATURE : begin
+                         if (in_endp_q == 1'b1)
+                           in_toggle_reset = 1'b1;
+                         else
+                           out_toggle_reset = 1'b1;
+                      end
+                      REQ_SET_CONFIGURATION : begin
+                         dev_state_dd = dev_state_q;
+                         in_toggle_reset = 1'b1;
+                         out_toggle_reset = 1'b1;
+                      end
+                      default : begin
+                      end
+                    endcase
+                    state_d = ST_IDLE;
+                 end else begin
+                    state_d = ST_STALL;
+                 end
+              end else begin
+                 if (~in_data_ack_i & ~out_valid_i) begin
+                    state_d = ST_IDLE;
+                 end else if (out_valid_i) begin
+                    state_d = ST_STALL;
+                 end
               end
-              state_d = ST_IDLE;
            end
            default : begin
               state_d = ST_IDLE;

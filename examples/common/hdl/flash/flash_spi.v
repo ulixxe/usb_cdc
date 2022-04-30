@@ -45,15 +45,18 @@ module flash_spi
     output [7:0]                                            in_data_o,
     // While in_valid_o is high, the in_data_o shall be valid.
     output                                                  in_valid_o,
-    // When both in_valid_o and in_ready_i are high, in_data_o shall be consumed
-    //   by application module.
+    // While en_i is high and when both in_valid_o and in_ready_i are high, in_data_o
+    //   shall be consumed by application module.
+    // in_valid_o shall be high only for one clk_i period.
     input                                                   in_ready_i,
-    // When both en_i and in_valid_i change from low to high, a new read
+    // When both en_i and in_ready_i change from low to high, a new read
     //   operation shall start.
     input                                                   clear_status_i,
-    // While status_o reports an error, when clear_status_i is high, status_o shall
-    //   be cleared to 4'b0000.
+    // While status_o reports an error or the end of programming/read operation (4'bF),
+    //   when clear_status_i is high, status_o shall be cleared to 4'h0.
     output [3:0]                                            status_o,
+    // status_o shall report an error (4'h5, 4'h7 or 4'h8) or the end of a correct
+    //   programming/read operation (4'hF), otherwise shall be 4'h0.
 
     // ---- to/from serial bus ----------------------
     output                                                  sck_o,
@@ -91,7 +94,7 @@ module flash_spi
                     STATUS_errCHECK_ERASED = 4'h5,
                     STATUS_errVERIFY = 4'h7,
                     STATUS_errADDRESS = 4'h8,
-                    STATUS_BUSY = 4'hF;
+                    STATUS_END = 4'hF;
 
    localparam [7:0] FLASH_CMD_RESUME_DPD = 8'hAB,
                     FLASH_CMD_DATA_READ = 8'h0B,
@@ -122,7 +125,9 @@ module flash_spi
                     ST_WR_DATA_CHECK = 'd18,
                     ST_WR_DATA_ERROR = 'd19,
                     ST_WR_ADDR_ERROR = 'd20,
-                    ST_DPD = 'd21;
+                    ST_DPD = 'd21,
+                    ST_DPD_END = 'd22,
+                    ST_END = 'd23;
 
    localparam       BYTE_CNT_WIDTH = ceil_log2(PAGE_SIZE);
    localparam       PAGE_ADDR_WIDTH = ceil_log2(FLASH_SIZE)-BYTE_CNT_WIDTH;
@@ -177,11 +182,11 @@ module flash_spi
    assign out_ready_o = out_ready;
    assign out_valid = out_valid_i & en_i;
    assign in_ready = in_ready_i & en_i;
-   assign status_o = (state_q == ST_IDLE) ? STATUS_OK :
+   assign status_o = (state_q == ST_END) ? STATUS_END :
                      (state_q == ST_WR_ERASE_ERROR) ? STATUS_errCHECK_ERASED :
                      (state_q == ST_WR_DATA_ERROR) ? STATUS_errVERIFY :
                      (state_q == ST_WR_ADDR_ERROR) ? STATUS_errADDRESS :
-                     STATUS_BUSY;
+                     STATUS_OK;
 
    always @(/*AS*/byte_cnt_q or clear_status_i or crc16_q or en_i
             or en_q or end_block_addr_i or in_ready or last_byte_q
@@ -299,7 +304,7 @@ module flash_spi
                  end
               end
            end else begin
-              state_d = ST_DPD;
+              state_d = ST_DPD_END;
               byte_cnt_d = 'd0;
            end
         end
@@ -611,7 +616,7 @@ module flash_spi
                  end else
                    state_d = ST_WR_DATA_ENABLE;
               end else
-                state_d = ST_DPD;
+                state_d = ST_DPD_END;
            end else begin
               state_d = ST_WR_DATA_ERROR;
            end
@@ -624,7 +629,7 @@ module flash_spi
            if (clear_status_i)
              state_d = ST_IDLE;
         end
-        ST_DPD : begin
+        ST_DPD, ST_DPD_END : begin
            if (byte_cnt_q == 'd0) begin
               en = 1'b1;
               wr_data = FLASH_CMD_DPD;
@@ -632,9 +637,16 @@ module flash_spi
               if (wr_ready == 1'b1)
                 byte_cnt_d = byte_cnt_q + 1;
            end else begin
-              state_d = ST_IDLE;
+              if (state_q == ST_DPD_END)
+                state_d = ST_END;
+              else
+                state_d = ST_IDLE;
               byte_cnt_d = 'd0;
            end
+        end
+        ST_END : begin
+           if (clear_status_i)
+             state_d = ST_IDLE;
         end
         default : begin
            state_d = ST_IDLE;

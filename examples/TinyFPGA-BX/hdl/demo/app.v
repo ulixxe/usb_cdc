@@ -255,6 +255,8 @@ module app
                  end
               end
            end
+           if (&flash_status)
+             flash_clear_status = 1'b1;
         end
         CMD0_STATE: begin
            out_ready = 1'b1;
@@ -528,7 +530,7 @@ module app
            flash_in_ready = in_ready;
            in_data = flash_in_data;
            in_valid = flash_in_valid;
-           if (~&flash_status) begin  // not BUSY
+           if (|flash_status) begin  // End of operation
               flash_in_ready = 1'b0;
               in_valid = 1'b0;
               state_d = LOOPBACK_STATE;
@@ -547,7 +549,7 @@ module app
            end_block_addr = {(ceil_log2(FLASH_SIZE)-ceil_log2(FLASH_BLOCK_SIZE)){1'b1}};
            out_ready = flash_out_ready;
            flash_out_valid = out_valid_q;
-           if (~&flash_status) begin  // not BUSY
+           if (|flash_status) begin  // End of operation
               out_ready = 1'b1;
               flash_out_valid = 1'b0;
               if (out_valid_q) begin

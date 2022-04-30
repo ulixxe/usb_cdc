@@ -26,10 +26,10 @@ architecture fpga of demo is
   signal usb_dp_pu_int : std_logic;
   signal dp_pu         : std_logic;
   signal led           : unsigned(2 downto 0);
-  signal rx_dp         : std_logic;
-  signal rx_dn         : std_logic;
-  signal tx_dp         : std_logic;
-  signal tx_dn         : std_logic;
+  signal dp_rx         : std_logic;
+  signal dn_rx         : std_logic;
+  signal dp_tx         : std_logic;
+  signal dn_tx         : std_logic;
   signal tx_en         : std_logic;
   signal out_data      : std_logic_vector(7 downto 0);
   signal out_valid     : std_logic;
@@ -70,21 +70,23 @@ architecture fpga of demo is
       USE_APP_CLK            : integer                       := 0;
       APP_CLK_RATIO          : integer                       := 4);
     port (
-      app_clk_i   : in  std_logic;
-      clk_i       : in  std_logic;
-      rstn_i      : in  std_logic;
-      out_ready_i : in  std_logic;
-      in_data_i   : in  std_logic_vector(7 downto 0);
-      in_valid_i  : in  std_logic;
-      rx_dp_i     : in  std_logic;
-      rx_dn_i     : in  std_logic;
-      out_data_o  : out std_logic_vector(7 downto 0);
-      out_valid_o : out std_logic;
-      in_ready_o  : out std_logic;
-      dp_pu_o     : out std_logic;
-      tx_en_o     : out std_logic;
-      tx_dp_o     : out std_logic;
-      tx_dn_o     : out std_logic);
+      app_clk_i    : in  std_logic;
+      clk_i        : in  std_logic;
+      rstn_i       : in  std_logic;
+      out_ready_i  : in  std_logic;
+      in_data_i    : in  std_logic_vector(7 downto 0);
+      in_valid_i   : in  std_logic;
+      dp_rx_i      : in  std_logic;
+      dn_rx_i      : in  std_logic;
+      frame_o      : out std_logic_vector(10 downto 0);
+      configured_o : out std_logic;
+      out_data_o   : out std_logic_vector(7 downto 0);
+      out_valid_o  : out std_logic;
+      in_ready_o   : out std_logic;
+      dp_pu_o      : out std_logic;
+      tx_en_o      : out std_logic;
+      dp_tx_o      : out std_logic;
+      dn_tx_o      : out std_logic);
   end component usb_cdc;
 
   component SB_GB
@@ -129,7 +131,7 @@ architecture fpga of demo is
       PACKAGE_PIN       : inout std_ulogic);
   end component;
 begin
-  led       <= "00" & not(dp_pu);
+  led <= "00" & not(dp_pu);
 
   -- Connect to system clock (with buffering)
   u_gb : component SB_GB
@@ -200,21 +202,23 @@ begin
       USE_APP_CLK            => 1,
       APP_CLK_RATIO          => 48/12)  -- 48MHz / 12MHz
     port map (
-      app_clk_i   => clk_12mhz,
-      clk_i       => clk,
-      rstn_i      => rstn,
-      out_ready_i => out_ready,
-      in_data_i   => in_data,
-      in_valid_i  => in_valid,
-      rx_dp_i     => rx_dp,
-      rx_dn_i     => rx_dn,
-      out_data_o  => out_data,
-      out_valid_o => out_valid,
-      in_ready_o  => in_ready,
-      dp_pu_o     => dp_pu,
-      tx_en_o     => tx_en,
-      tx_dp_o     => tx_dp,
-      tx_dn_o     => tx_dn);
+      app_clk_i    => clk_12mhz,
+      clk_i        => clk,
+      rstn_i       => rstn,
+      out_ready_i  => out_ready,
+      in_data_i    => in_data,
+      in_valid_i   => in_valid,
+      dp_rx_i      => dp_rx,
+      dn_rx_i      => dn_rx,
+      frame_o      => open,
+      configured_o => open,
+      out_data_o   => out_data,
+      out_valid_o  => out_valid,
+      in_ready_o   => in_ready,
+      dp_pu_o      => dp_pu,
+      tx_en_o      => tx_en,
+      dp_tx_o      => dp_tx,
+      dn_tx_o      => dn_tx);
 
   u_usb_dp : component SB_IO
     generic map (
@@ -223,8 +227,8 @@ begin
     port map (
       PACKAGE_PIN       => usb_dp,
       OUTPUT_ENABLE     => tx_en,
-      D_OUT_0           => tx_dp,
-      D_IN_0            => rx_dp,
+      D_OUT_0           => dp_tx,
+      D_IN_0            => dp_rx,
       D_OUT_1           => '0',
       D_IN_1            => open,
       CLOCK_ENABLE      => '0',
@@ -239,8 +243,8 @@ begin
     port map (
       PACKAGE_PIN       => usb_dn,
       OUTPUT_ENABLE     => tx_en,
-      D_OUT_0           => tx_dn,
-      D_IN_0            => rx_dn,
+      D_OUT_0           => dn_tx,
+      D_IN_0            => dn_rx,
       D_OUT_1           => '0',
       D_IN_1            => open,
       CLOCK_ENABLE      => '0',

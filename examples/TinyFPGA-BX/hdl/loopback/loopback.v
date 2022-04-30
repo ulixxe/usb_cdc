@@ -18,10 +18,10 @@ module loopback
    wire             clk_div16;
    wire             lock;
    wire             dp_pu;
-   wire             rx_dp;
-   wire             rx_dn;
-   wire             tx_dp;
-   wire             tx_dn;
+   wire             dp_rx;
+   wire             dn_rx;
+   wire             dp_tx;
+   wire             dn_tx;
    wire             tx_en;
    wire [7:0]       out_data;
    wire             out_valid;
@@ -73,28 +73,30 @@ module loopback
              .BIT_SAMPLES(BIT_SAMPLES),
              .USE_APP_CLK(1),
              .APP_CLK_RATIO(BIT_SAMPLES*12/192))  // BIT_SAMPLES * 12MHz / 192MHz
-   u_usb_cdc (.app_clk_i(clk_pll),
+   u_usb_cdc (.frame_o(),
+              .configured_o(),
+              .app_clk_i(clk_pll),
               .clk_i(clk_div4),
               .rstn_i(lock),
               .out_ready_i(in_ready),
               .in_data_i(out_data),
               .in_valid_i(out_valid),
-              .rx_dp_i(rx_dp),
-              .rx_dn_i(rx_dn),
+              .dp_rx_i(dp_rx),
+              .dn_rx_i(dn_rx),
               .out_data_o(out_data),
               .out_valid_o(out_valid),
               .in_ready_o(in_ready),
               .dp_pu_o(dp_pu),
               .tx_en_o(tx_en),
-              .tx_dp_o(tx_dp),
-              .tx_dn_o(tx_dn));
+              .dp_tx_o(dp_tx),
+              .dn_tx_o(dn_tx));
 
    SB_IO #(.PIN_TYPE(6'b101001),
            .PULLUP(1'b0))
    u_usb_p (.PACKAGE_PIN(usb_p),
             .OUTPUT_ENABLE(tx_en),
-            .D_OUT_0(tx_dp),
-            .D_IN_0(rx_dp),
+            .D_OUT_0(dp_tx),
+            .D_IN_0(dp_rx),
             .D_OUT_1(1'b0),
             .D_IN_1(),
             .CLOCK_ENABLE(1'b0),
@@ -106,8 +108,8 @@ module loopback
            .PULLUP(1'b0))
    u_usb_n (.PACKAGE_PIN(usb_n),
             .OUTPUT_ENABLE(tx_en),
-            .D_OUT_0(tx_dn),
-            .D_IN_0(rx_dn),
+            .D_OUT_0(dn_tx),
+            .D_IN_0(dn_rx),
             .D_OUT_1(1'b0),
             .D_IN_1(),
             .CLOCK_ENABLE(1'b0),

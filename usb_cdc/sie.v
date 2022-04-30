@@ -23,8 +23,8 @@ module sie
    (
     // ---- to/from USB_CDC module ------------------------------------
     output        usb_reset_o,
-    // When rx_dp_i/rx_dn_i change and stay in SE0 condition for 2.5us, usb_reset_o shall be high.
-    // When rx_dp_i/rx_dn_i change from SE0 condition, usb_reset_o shall return low
+    // When dp_rx_i/dn_rx_i change and stay in SE0 condition for 2.5us, usb_reset_o shall be high.
+    // When dp_rx_i/dn_rx_i change from SE0 condition, usb_reset_o shall return low
     //   after being high for at least 330ns.
     // When usb_detach_i is high and a usb detach has started, usb_reset_o shall be high.
     output [3:0]  endp_o,
@@ -52,8 +52,8 @@ module sie
     //   be consumed.
     // When setup_o is high and out_ready_o is high, a new SETUP transaction shall be
     //   received.
-    // When setup_o, out_valid_o and out_err_o are low and out_ready_o is high, the
-    //   on-going OUT transaction shall end or an ACK packet shall be received.
+    // When setup_o, in_data_ack_o, out_valid_o and out_err_o are low and out_ready_o
+    //   is high, the on-going OUT transaction shall end.
     // out_ready_o shall be high only for one clk_i period.
     input         out_nak_i,
     // When out_nak_i is high at the end of an OUT transaction, SIE shall send a NAK
@@ -66,6 +66,8 @@ module sie
     //   packet shall be consumed.
     // When in_data_i or zlp is consumed, in_ready_o shall be high only for
     //   one clk_i period.
+    output        in_data_ack_o,
+    // When in_data_ack_o is high and out_ready_o is high, an ACK packet shall be received.
     input         in_valid_i,
     // While in_req_o is high and IN Endpoints have data or zero length packet
     //   available, IN Endpoints shall put in_valid_i high.
@@ -74,6 +76,9 @@ module sie
     input         in_zlp_i,
     // While in_req_o is high and IN Endpoints have zero length packet available,
     //   IN Endpoints shall put both in_zlp_i and in_valid_i high.
+    input         in_nak_i,
+    // When in_nak_i is high at the start of an IN transaction, SIE shall send a NAK
+    //   packet.
 
     // ---- to/from CONTROL Endpoint ---------------------------------
     output        setup_o,
@@ -102,10 +107,10 @@ module sie
     // At power-on, dp_pu_o shall be low.
     // After TSIGATT time from power-on, dp_pu_o shall be high.
     output        tx_en_o,
-    output        tx_dp_o,
-    output        tx_dn_o,
-    input         rx_dp_i,
-    input         rx_dn_i
+    output        dp_tx_o,
+    output        dn_tx_o,
+    input         dp_rx_i,
+    input         dn_rx_i
     );
 
    function integer ceil_log2;
@@ -207,6 +212,7 @@ module sie
    reg                out_valid;
    reg                out_err;
    reg                out_eop;
+   reg                in_data_ack;
    reg [7:0]          tx_data;
    reg                tx_valid;
    reg                in_ready;
@@ -214,6 +220,7 @@ module sie
    reg [ceil_log2(8*BIT_SAMPLES)-1:0] delay_cnt_q;
    reg                                out_err_q;
    reg                                out_eop_q;
+   reg                                in_data_ack_q;
 
    wire [7:0]                         rx_data;
    wire                               rx_valid;
@@ -233,6 +240,7 @@ module sie
    assign out_err_o = out_err_q;
    assign in_req_o = in_req;
    assign setup_o = (pid_q == PID_SETUP) ? 1'b1 : 1'b0;
+   assign in_data_ack_o = in_data_ack_q;
    assign delay_end = ((delay_cnt_q == 8*BIT_SAMPLES-1) ? 1'b1 : 1'b0);
    assign out_ready_o = (rx_ready & out_valid) |
                         (delay_end & (out_err_q | out_eop_q));
@@ -245,6 +253,7 @@ module sie
          delay_cnt_q <= 'd0;
          out_err_q <= 1'b0;
          out_eop_q <= 1'b0;
+         in_data_ack_q <= 1'b0;
       end else begin
          if (phy_state_q == PHY_RX_PID || phy_state_q == PHY_RX_ENDP ||
              phy_state_q == PHY_RX_DATA) begin
@@ -252,11 +261,13 @@ module sie
             if (phy_state_q == PHY_RX_DATA)
               out_err_q <= out_err | out_err_q;
             out_eop_q <= out_eop | out_eop_q;
+            in_data_ack_q <= in_data_ack | in_data_ack_q;
          end else if (!delay_end) begin
             delay_cnt_q <= delay_cnt_q + 1;
          end else begin
             out_err_q <= 1'b0;
             out_eop_q <= 1'b0;
+            in_data_ack_q <= 1'b0;
          end
       end
    end
@@ -297,10 +308,10 @@ module sie
 
    always @(/*AS*/addr_i or addr_q or crc16_q or data_q
             or datain_toggle_q or dataout_toggle_q or endp_q
-            or frame_q or in_byte_q or in_data_i or in_toggle_reset_i
-            or in_valid_i or in_zlp_i or out_nak_i
-            or out_toggle_reset_i or phy_state_q or pid_q or rx_data
-            or rx_err or rx_valid or stall_i) begin
+            or frame_q or in_byte_q or in_data_i or in_nak_i
+            or in_toggle_reset_i or in_valid_i or in_zlp_i
+            or out_nak_i or out_toggle_reset_i or phy_state_q or pid_q
+            or rx_data or rx_err or rx_valid or stall_i) begin
       phy_state_d = phy_state_q;
       pid_d = pid_q;
       addr_d = addr_q;
@@ -314,6 +325,7 @@ module sie
       out_valid = 1'b0;
       out_err = 1'b0;
       out_eop = 1'b0;
+      in_data_ack = 1'b0;
       tx_data = 8'd0;
       tx_valid = 1'b0;
       in_ready = 1'b0;
@@ -369,6 +381,7 @@ module sie
                          if (data_q[3:2] == PID_ACK[3:2] && addr_q == addr_i) begin // ACK
                             datain_toggle_d[endp_q] = ~datain_toggle_q[endp_q];
                             out_eop = 1'b1;
+                            in_data_ack = 1'b1;
                          end
                       end else begin
                          phy_state_d = PHY_RX_WAIT_EOP;
@@ -469,10 +482,11 @@ module sie
                  pid_d = PID_STALL;
                  tx_data = {~PID_STALL, PID_STALL};
                  phy_state_d = PHY_IDLE;
-              end else if (in_valid_i == 1'b0 &&
-                           ((endp_q == ENDP_BULK && in_byte_q != IN_BULK_MAXPACKETSIZE[IN_WIDTH-1:0]) ||
-                            (endp_q == ENDP_CTRL && in_byte_q != CTRL_MAXPACKETSIZE[IN_WIDTH-1:0]) ||
-                            (endp_q != ENDP_CTRL && endp_q != ENDP_BULK))) begin
+              end else if ((endp_q != ENDP_CTRL && endp_q != ENDP_BULK) ||
+                           (in_nak_i == 1'b1) ||
+                           (in_valid_i == 1'b0 &&
+                            ((endp_q == ENDP_BULK && in_byte_q != IN_BULK_MAXPACKETSIZE[IN_WIDTH-1:0]) ||
+                             (endp_q == ENDP_CTRL && in_byte_q != CTRL_MAXPACKETSIZE[IN_WIDTH-1:0])))) begin
                  pid_d = PID_NAK;
                  tx_data = {~PID_NAK, PID_NAK};
                  phy_state_d = PHY_IDLE;
@@ -546,13 +560,13 @@ module sie
              .rstn_i(rstn_i),
              .rx_en_i(rx_en),
              .usb_detach_i(usb_detach_i),
-             .rx_dp_i(rx_dp_i),
-             .rx_dn_i(rx_dn_i));
+             .dp_rx_i(dp_rx_i),
+             .dn_rx_i(dn_rx_i));
 
    phy_tx #(.BIT_SAMPLES(BIT_SAMPLES))
    u_phy_tx (.tx_en_o(tx_en),
-             .tx_dp_o(tx_dp_o),
-             .tx_dn_o(tx_dn_o),
+             .dp_tx_o(dp_tx_o),
+             .dn_tx_o(dn_tx_o),
              .tx_ready_o(tx_ready),
              .clk_i(clk_i),
              .rstn_i(rstn),

@@ -81,7 +81,7 @@ file_puts $fid "09" $gated_cells
 set_multicycle_path -setup [expr 8 * $BIT_SAMPLES] -to $gated_cells
 set_multicycle_path -hold [expr 8 * $BIT_SAMPLES - 1] -to $gated_cells
 
-set gated_cells [remove_from_collection -intersect [all_registers] [get_cells "${root_path}.u_bulk_endp.u_*.in_fifo_q*"]]
+set gated_cells [remove_from_collection -intersect [all_registers] [get_cells "${root_path}.u_bulk_endp.u_in_fifo.u_*.in_fifo_q*"]]
 file_puts $fid "10" $gated_cells
 set_multicycle_path -setup [expr $BIT_SAMPLES] -to $gated_cells
 set_multicycle_path -hold [expr $BIT_SAMPLES - 1] -to $gated_cells

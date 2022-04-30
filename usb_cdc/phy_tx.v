@@ -15,9 +15,9 @@ module phy_tx
    (
     // ---- to USB bus physical transmitters ----------------------
     output      tx_en_o,
-    output      tx_dp_o,
-    output      tx_dn_o,
-    // tx_dp_o and tx_dn_o shall have a negligible timing mismatch
+    output      dp_tx_o,
+    output      dn_tx_o,
+    // dp_tx_o and dn_tx_o shall have a negligible timing mismatch
     //   (< clk_i period /2).
 
     // ---- to/from SIE module ------------------------------------
@@ -63,8 +63,8 @@ module phy_tx
    wire                             clk_gate;
 
    assign tx_en_o = (tx_state_q == ST_IDLE) ? 1'b0 : 1'b1;
-   assign tx_dp_o = (tx_state_q == ST_EOP && data_q[0] == 1'b0) ? 1'b0 : nrzi_q;
-   assign tx_dn_o = (tx_state_q == ST_EOP && data_q[0] == 1'b0) ? 1'b0 : ~nrzi_q;
+   assign dp_tx_o = (tx_state_q == ST_EOP && data_q[0] == 1'b0) ? 1'b0 : nrzi_q;
+   assign dn_tx_o = (tx_state_q == ST_EOP && data_q[0] == 1'b0) ? 1'b0 : ~nrzi_q;
 
    always @(posedge clk_i or negedge rstn_i) begin
       if (~rstn_i) begin

@@ -26,8 +26,8 @@ module phy_rx
     // When both rx_err_o and rx_ready_o are high, PHY_RX module shall abort the
     //   current packet reception and SIE module shall manage the error condition.
     output       usb_reset_o,
-    // When rx_dp_i/rx_dn_i change and stay in SE0 condition for 2.5us, usb_reset_o shall be high.
-    // When rx_dp_i/rx_dn_i change from SE0 condition, usb_reset_o shall return low
+    // When dp_rx_i/dn_rx_i change and stay in SE0 condition for 2.5us, usb_reset_o shall be high.
+    // When dp_rx_i/dn_rx_i change from SE0 condition, usb_reset_o shall return low
     //   after being high for at least 330ns.
     // When usb_detach_i is high and a usb detach has started, usb_reset_o shall be high.
     output       rx_ready_o,
@@ -50,8 +50,8 @@ module phy_rx
     // While dp_pu_o is high, a 1.5KOhm resistor shall pull-up the dp line.
     // At power-on or when usb_detach_i is high, dp_pu_o shall be low.
     // After TSIGATT time from power-on or from usb_detach_i change to low, dp_pu_o shall be high.
-    input        rx_dp_i,
-    input        rx_dn_i
+    input        dp_rx_i,
+    input        dn_rx_i
     );
 
    function integer ceil_log2;
@@ -70,8 +70,8 @@ module phy_rx
          dp_q <= 3'b000;
          dn_q <= 3'b000;
       end else begin
-         dp_q <= {rx_dp_i, dp_q[2:1]};
-         dn_q <= {rx_dn_i, dn_q[2:1]};
+         dp_q <= {dp_rx_i, dp_q[2:1]};
+         dn_q <= {dn_rx_i, dn_q[2:1]};
       end
    end
 

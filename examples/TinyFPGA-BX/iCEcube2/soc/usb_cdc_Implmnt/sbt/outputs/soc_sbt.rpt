@@ -6,7 +6,7 @@
 
 * Build Date:         Dec 10 2020 17:24:17
 
-* File Generated:     Feb 19 2022 17:18:13
+* File Generated:     Aug 28 2022 15:54:34
 
 * Purpose:            General info of design implementation
 
@@ -17,7 +17,7 @@
 Synthesis/Placement Summary:
 ----------------------------
     Status:  Successful
-    Runtime: 1 seconds
+    Runtime: 2 seconds
 
 Device Info:
 ------------
@@ -27,8 +27,8 @@ Device Info:
 
 Design statistics:
 ------------------
-    FFs:                  463
-    LUTs:                 1249
+    FFs:                  465
+    LUTs:                 1272
     RAMs:                 0
     IOBs:                 5
     GBs:                  7
@@ -37,12 +37,12 @@ Design statistics:
 
 Logic Resource Utilization:
 ---------------------------
-    Total Logic Cells: 1252/7680
-        Combinational Logic Cells: 789      out of   7680      10.2734%
-        Sequential Logic Cells:    463      out of   7680      6.02865%
-        Logic Tiles:               211      out of   960       21.9792%
+    Total Logic Cells: 1275/7680
+        Combinational Logic Cells: 810      out of   7680      10.5469%
+        Sequential Logic Cells:    465      out of   7680      6.05469%
+        Logic Tiles:               238      out of   960       24.7917%
     Registers: 
-        Logic Registers:           463      out of   7680      6.02865%
+        Logic Registers:           465      out of   7680      6.05469%
         IO Registers:              0        out of   1280      0
     Block RAMs:                    0        out of   32        0%
     Warm Boots:                    0        out of   1         0%
@@ -81,27 +81,27 @@ Detailed I/O Info:
 
 Detailed Global Buffer Info:
 ----------------------------
-    Buffer Number  IO Bank  Driven By  Fanout  Signal Name                       
-    -------------  -------  ---------  ------  -----------                       
-    5              2                   30      clk_0_c_g                         
-    3              3                   56      u_usb_cdc.u_sie.clk_gate_0_i_g    
-    2              1                   323     u_usb_cdc.rstn_i_g                
-    1              0                   47      u_usb_cdc.u_ctrl_endp.clk_gate_g  
-    4              0                   54      u_usb_cdc.rstn_sq_i_g_0           
-    7              1                   83      u_usb_cdc.bulk_out_ready_g        
-    0              2                   58      clk_2mhz_g                        
+    Buffer Number  IO Bank  Driven By  Fanout  Signal Name                            
+    -------------  -------  ---------  ------  -----------                            
+    5              2                   30      clk_0_c_g                              
+    3              3                   56      u_usb_cdc.u_sie.clk_gate_0_i_g         
+    2              1                   324     u_usb_cdc.rstn_i_g                     
+    1              0                   47      u_usb_cdc.u_ctrl_endp.clk_gate_g       
+    7              1                   84      u_usb_cdc.u_bulk_endp.out_ready_i_1_g  
+    4              0                   55      u_usb_cdc.rstn_sq_i_g_0                
+    0              2                   58      clk_2mhz_g                             
 
 
 Router Summary:
 ---------------
     Status:  Successful
-    Runtime: 15 seconds
+    Runtime: 16 seconds
 
 Routing Resource Utilization:
 -----------------------------
-              Local line of tile     8922 out of 146184      6.10327%
-                          Span 4     2099 out of  29696      7.06829%
-                         Span 12      311 out of   5632      5.52202%
+              Local line of tile     9123 out of 146184      6.24077%
+                          Span 4     2074 out of  29696      6.98411%
+                         Span 12      291 out of   5632      5.1669%
                   Global network        8 out of      8      100%
-      Vertical Inter-LUT Connect      304 out of   6720      4.52381%
+      Vertical Inter-LUT Connect      285 out of   6720      4.24107%
 

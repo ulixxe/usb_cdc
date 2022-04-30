@@ -152,12 +152,12 @@ endfunction
 
 task automatic raw_tx
   (
-   input integer         length,
-   input [`MAX_BITS-1:0] dp_data,
-   input [`MAX_BITS-1:0] dn_data,
-   input time            bit_time
+   input integer        length,
+   input [MAX_BITS-1:0] dp_data,
+   input [MAX_BITS-1:0] dn_data,
+   input time           bit_time
    );
-   integer               i;
+   integer              i;
    begin
       #bit_time;
       for (i = length-1; i >= 0; i = i-1) begin
@@ -172,13 +172,13 @@ endtask
 
 task automatic nrzi_tx
   (
-   input [8*`MAX_BITS-1:0] nrzi_data,
-   input time              bit_time
+   input [8*MAX_BITS-1:0] nrzi_data,
+   input time             bit_time
    );
-   integer                 i;
+   integer                i;
    begin
       #bit_time;
-      for (i = `MAX_BITS-1; i >= 0; i = i-1) begin
+      for (i = MAX_BITS-1; i >= 0; i = i-1) begin
          if (nrzi_data[8*i +:8] == "J" || nrzi_data[8*i +:8] == "j") begin
             dp_force = 1'b1;
             dn_force = 1'b0;
@@ -204,14 +204,14 @@ endtask
 
 task automatic usb_tx
   (
-   input [8*`MAX_BYTES-1:0] data,
-   input integer            bytes,
-   input integer            sync_length,
-   input time               bit_time
+   input [8*MAX_BYTES-1:0] data,
+   input integer           bytes,
+   input integer           sync_length,
+   input time              bit_time
    );
-   reg                      nrzi_bit;
-   integer                  bit_counter;
-   integer                  i,j;
+   reg                     nrzi_bit;
+   integer                 bit_counter;
+   integer                 i,j;
    begin
       #bit_time;
       if (!(dp_sense === 1 && dn_sense === 0)) begin
@@ -303,19 +303,19 @@ endtask
 
 task automatic data_tx
   (
-   input [3:0]              pid,
-   input [8*`MAX_BYTES-1:0] data,
-   input integer            bytes,
-   input integer            sync_length,
-   input time               bit_time
+   input [3:0]             pid,
+   input [8*MAX_BYTES-1:0] data,
+   input integer           bytes,
+   input integer           sync_length,
+   input time              bit_time
    );
-   reg [15:0]               crc;
+   reg [15:0]              crc;
    begin
       if (bytes > 0)
         crc = ~rev16(crc16(data, bytes));
       else
         crc = 16'h0000;
-      if (bytes == `MAX_BYTES)
+      if (bytes == MAX_BYTES)
         usb_tx ({~pid, pid, data, crc}, bytes+3, sync_length, bit_time);
       else begin
          data[8*bytes +:8] = {~pid, pid};
@@ -360,22 +360,22 @@ endtask
 
 task automatic test_data_out
   (
-   input [6:0]              address,
-   input [3:0]              endp,
-   input [8*`MAX_BYTES-1:0] data,
-   input integer            bytes,
-   input [3:0]              rx_pid,
-   input integer            wMaxPacketSize,
-   input time               timeout,
-   input time               wait_time, 
-   inout [15:0]             dataout_toggle
+   input [6:0]             address,
+   input [3:0]             endp,
+   input [8*MAX_BYTES-1:0] data,
+   input integer           bytes,
+   input [3:0]             rx_pid,
+   input integer           wMaxPacketSize,
+   input time              timeout,
+   input time              wait_time, 
+   inout [15:0]            dataout_toggle
    );
-   localparam               PACKET_TIMEOUT = 6; // TRSPIPD1 (USB2.0 Tab.7-14 pag.188)
-   reg                      zlp;
-   reg [3:0]                packet_pid;
-   time                     start_timeout;
-   integer                  packet_bytes;
-   integer                  i;
+   localparam              PACKET_TIMEOUT = 6; // TRSPIPD1 (USB2.0 Tab.7-14 pag.188)
+   reg                     zlp;
+   reg [3:0]               packet_pid;
+   time                    start_timeout;
+   integer                 packet_bytes;
+   integer                 i;
    begin : u_test_data_out_task
       start_timeout = $time;
       i = 0;
@@ -410,28 +410,32 @@ task automatic test_data_out
    end
 endtask
 
+localparam NO_ZLP = 0,
+           ZLP = 1;
+
 task automatic test_data_in
   (
-   input [6:0]              address,
-   input [3:0]              endp,
-   input [8*`MAX_BYTES-1:0] data,
-   input integer            bytes,
-   input [3:0]              rx_pid,
-   input integer            wMaxPacketSize,
-   input time               timeout,
-   input time               wait_time, 
-   inout [15:0]             datain_toggle
+   input [6:0]             address,
+   input [3:0]             endp,
+   input [8*MAX_BYTES-1:0] data,
+   input integer           bytes,
+   input [3:0]             rx_pid,
+   input integer           wMaxPacketSize,
+   input time              timeout,
+   input time              wait_time, 
+   inout [15:0]            datain_toggle,
+   input                   req_zlp
    );
-   localparam               PACKET_TIMEOUT = 6; // TRSPIPD1 (USB2.0 Tab.7-14 pag.188)
-   reg                      zlp;
-   reg [3:0]                packet_pid;
-   reg [6:0]                packet_addr;
-   reg [3:0]                packet_endp;
-   reg [10:0]               packet_frame;
-   reg [8*`MAX_BYTES-1:0]   packet_data;
-   time                     start_timeout;
-   integer                  packet_bytes;
-   integer                  i;
+   localparam              PACKET_TIMEOUT = 6; // TRSPIPD1 (USB2.0 Tab.7-14 pag.188)
+   reg                     zlp;
+   reg [3:0]               packet_pid;
+   reg [6:0]               packet_addr;
+   reg [3:0]               packet_endp;
+   reg [10:0]              packet_frame;
+   reg [8*MAX_BYTES-1:0]   packet_data;
+   time                    start_timeout;
+   integer                 packet_bytes;
+   integer                 i;
    begin : u_test_data_in_task
       start_timeout = $time;
       i = 0;
@@ -445,8 +449,8 @@ task automatic test_data_in
             `assert_error("test_data_in(): Device DATAx missing", packet_pid, datain_toggle[endp]? PID_DATA1: PID_DATA0)
             if (packet_bytes > 0) begin
                `assert_error("test_data_in(): Unexpected device data",
-                             packet_data >> 8*`max(0, `MAX_BYTES-packet_bytes),
-                             ((data << 8*(`MAX_BYTES-bytes+i)) >> 8*(`MAX_BYTES-bytes+i)) >> 8*(bytes-(i+packet_bytes)))
+                             packet_data >> 8*`max(0, MAX_BYTES-packet_bytes),
+                             ((data << 8*(MAX_BYTES-bytes+i)) >> 8*(MAX_BYTES-bytes+i)) >> 8*(bytes-(i+packet_bytes)))
             end else begin
                if (i != bytes) begin
                   `report_error("test_data_in(): Unexpected ZLP")
@@ -455,7 +459,7 @@ task automatic test_data_in
             handshake_tx(PID_ACK, 8, `BIT_TIME);
             datain_toggle[endp] = ~datain_toggle[endp];
             i = i + packet_bytes;
-            zlp = (i == bytes && packet_bytes == wMaxPacketSize) ? 1'b1 : 1'b0;
+            zlp = (req_zlp == ZLP && i == bytes && packet_bytes == wMaxPacketSize) ? 1'b1 : 1'b0;
             start_timeout = $time;
          end else if (packet_pid == PID_NAK) begin
             if ($time-start_timeout > timeout) begin
@@ -501,28 +505,31 @@ task automatic test_setup_transaction
    end
 endtask
 
+localparam NO_STALL = 0,
+           STALL = 1;
+
 task automatic test_setup_in
   (
-   input [6:0]              address,
-   input [7:0]              bmRequestType,
-   input [7:0]              bRequest,
-   input [15:0]             wValue,
-   input [15:0]             wIndex,
-   input [15:0]             wLength,
-   input [8*`MAX_BYTES-1:0] data,
-   input integer            bytes,
-   input                    device_stall
+   input [6:0]             address,
+   input [7:0]             bmRequestType,
+   input [7:0]             bRequest,
+   input [15:0]            wValue,
+   input [15:0]            wIndex,
+   input [15:0]            wLength,
+   input [8*MAX_BYTES-1:0] data,
+   input integer           bytes,
+   input                   device_stall
    );
-   localparam               PACKET_TIMEOUT = 6; // TRSPIPD1 (USB2.0 Tab.7-14 pag.188)
-   reg [3:0]                pid;
-   reg [15:0]               datain_toggle;
-   reg [15:0]               dataout_toggle;
-   reg [8*`MAX_BYTES-1:0]   device_data;
-   integer                  device_bytes;
+   localparam              PACKET_TIMEOUT = 6; // TRSPIPD1 (USB2.0 Tab.7-14 pag.188)
+   reg [3:0]               pid;
+   reg [15:0]              datain_toggle;
+   reg [15:0]              dataout_toggle;
+   reg [8*MAX_BYTES-1:0]   device_data;
+   integer                 device_bytes;
    begin : u_test_setup_in_task
       test_setup_transaction(address, bmRequestType, bRequest, wValue, wIndex, wLength, datain_toggle, dataout_toggle);
       test_data_in(address, ENDP_CTRL, data, bytes, device_stall ? PID_STALL : PID_ACK,
-                   CTRL_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle);
+                   CTRL_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle, NO_ZLP);
       if (~device_stall) begin
          token_tx(PID_OUT, address, ENDP_CTRL, 8, `BIT_TIME);
          zlp_tx(dataout_toggle[ENDP_CTRL]? PID_DATA1: PID_DATA0, 8, `BIT_TIME);
@@ -536,22 +543,22 @@ endtask
 
 task automatic test_setup_out
   (
-   input [6:0]              address,
-   input [7:0]              bmRequestType,
-   input [7:0]              bRequest,
-   input [15:0]             wValue,
-   input [15:0]             wIndex,
-   input [15:0]             wLength,
-   input [8*`MAX_BYTES-1:0] data,
-   input integer            bytes,
-   input                    device_stall
+   input [6:0]             address,
+   input [7:0]             bmRequestType,
+   input [7:0]             bRequest,
+   input [15:0]            wValue,
+   input [15:0]            wIndex,
+   input [15:0]            wLength,
+   input [8*MAX_BYTES-1:0] data,
+   input integer           bytes,
+   input                   device_stall
    );
-   localparam               PACKET_TIMEOUT = 6; // TRSPIPD1 (USB2.0 Tab.7-14 pag.188)
-   reg [3:0]                pid;
-   reg [15:0]               datain_toggle;
-   reg [15:0]               dataout_toggle;
-   reg [8*`MAX_BYTES-1:0]   device_data;
-   integer                  device_bytes;
+   localparam              PACKET_TIMEOUT = 6; // TRSPIPD1 (USB2.0 Tab.7-14 pag.188)
+   reg [3:0]               pid;
+   reg [15:0]              datain_toggle;
+   reg [15:0]              dataout_toggle;
+   reg [8*MAX_BYTES-1:0]   device_data;
+   integer                 device_bytes;
    begin : u_test_setup_out_task
       test_setup_transaction(address, bmRequestType, bRequest, wValue, wIndex, wLength, datain_toggle, dataout_toggle);
       if (bytes > 0)
@@ -582,11 +589,11 @@ task automatic test_set_address
    );
    begin
       test_setup_out(address, 8'h00, REQ_SET_ADDRESS, new_address, 16'h0000, 16'h0000,
-                     8'd0, 0, 0);
+                     8'd0, 0, NO_STALL);
       #(10*`BIT_TIME);
       address = new_address;
       test_setup_in(address, 8'h80, REQ_GET_CONFIGURATION, 16'h0000, 16'h0000, 16'h0001,
-                    8'd0, 1, 0);
+                    8'd0, 1, NO_STALL);
    end
 endtask
 
@@ -628,10 +635,10 @@ task automatic test_set_configuration
    );
    begin
       test_setup_out(address, 8'h00, REQ_SET_CONFIGURATION, 16'h0001, 16'h0000, 16'h0000,
-                     8'd0, 0, 0);
+                     8'd0, 0, NO_STALL);
       #(10*`BIT_TIME);
       test_setup_in(address, 8'h80, REQ_GET_CONFIGURATION, 16'h0000, 16'h0000, 16'h0001,
-                    8'd1, 1, 0);
+                    8'd1, 1, NO_STALL);
    end
 endtask
 
@@ -657,14 +664,26 @@ task automatic test_usb
 
       test = "GET_DESCRIPTOR Device";
       test_setup_in(address, 8'h80, REQ_GET_DESCRIPTOR, 16'h0100, 16'h0000, 16'h0040,
-                    DEV_DESCR, 'h12, 0);
+                    DEV_DESCR, 'h12, NO_STALL);
 
       test = "GET_DESCRIPTOR Device (partial)";
       test_setup_in(address, 8'h80, REQ_GET_DESCRIPTOR, 16'h0100, 16'h0000, 16'h0008,
-                    DEV_DESCR>>8*('h12-'h08), 'h08, 0);
+                    DEV_DESCR>>8*('h12-'h08), 'h08, NO_STALL);
+
+      test = "GET_STATUS Error in Default state";
+      test_setup_in(address, 8'h80, REQ_GET_STATUS, 16'h0000, 16'h0000, 16'h0002,
+                    {8'h00, 8'h00}, 'h02, STALL);
 
       test = "SET_ADDRESS";
       test_set_address('d2, address);
+
+      test = "GET_STATUS";
+      test_setup_in(address, 8'h80, REQ_GET_STATUS, 16'h0000, 16'h0000, 16'h0002,
+                    {8'h00, 8'h00}, 'h02, NO_STALL);
+
+      test = "CLEAR_FEATURE";
+      test_setup_out(address, 8'h02, REQ_CLEAR_FEATURE, 16'h0000, 16'h0000, 16'h0000,
+                     8'd0, 'd0, NO_STALL);
 
       test = "USB reset";
       test_usb_reset(address);
@@ -683,41 +702,41 @@ task automatic test_usb
 
       test = "GET_DESCRIPTOR Configuration";
       test_setup_in(address, 8'h80, REQ_GET_DESCRIPTOR, 16'h0200, 16'h0000, 16'h00FF,
-                    CONF_DESCR, 'h43, 0);
+                    CONF_DESCR, 'h43, NO_STALL);
 
       test = "GET_DESCRIPTOR String not supported";
       test_setup_in(address, 8'h80, REQ_GET_DESCRIPTOR, 16'h0300, 16'h0000, 16'h00FF,
-                    8'd0, 'h8, 1);
+                    8'd0, 'h8, STALL);
 
       test = "SET_CONFIGURATION";
       test_set_configuration(address);
 
       test = "GET_LINE_CODING";
       test_setup_in(address, 8'hA1, REQ_GET_LINE_CODING, 16'h0000, 16'h0000, 16'h0007,
-                    {7{8'd0}}, 7, 0);
+                    {7{8'd0}}, 7, NO_STALL);
 
       test = "SET_LINE_CODING";
       test_setup_out(address, 8'h21, REQ_SET_LINE_CODING, 16'h0000, 16'h0000, 16'h0007,
-                     {7{8'd0}}, 7, 0);
+                     {7{8'd0}}, 7, NO_STALL);
 
       test = "SET_CONTROL_LINE_STATE";
       test_setup_out(address, 8'h21, REQ_SET_CONTROL_LINE_STATE, 16'h0000, 16'h0000, 16'h0000,
-                     8'd0, 0, 0);
+                     8'd0, 0, NO_STALL);
 
       test = "SEND_BREAK";
       test_setup_out(address, 8'h21, REQ_SEND_BREAK, 16'h0000, 16'h0000, 16'h0000,
-                     8'd0, 0, 0);
+                     8'd0, 0, NO_STALL);
 
       test = "GET_INTERFACE";
       test_setup_in(address, 8'h81, REQ_GET_INTERFACE, 16'h0000, 16'h0001, 16'h0001,
-                    8'd0, 1, 0);
+                    8'd0, 1, NO_STALL);
 
       test = "SET_INTERFACE not supported";
       test_setup_out(address, 8'h01, REQ_SET_INTERFACE, 16'h0001, 16'h0001, 16'h0000,
-                     8'd0, 0, 1);
+                     8'd0, 0, STALL);
 
       test = "IN INT DATA";
       test_data_in(address, ENDP_INT, 8'd0, 1, PID_NAK,
-                   8, 0, 0, datain_toggle);
+                   8, 0, 0, datain_toggle, ZLP);
    end
 endtask

@@ -182,14 +182,13 @@ proc bulk_out {} {
                            {bulk_endp\.app_out_ready_i} \
                            {bulk_endp\.app_out_valid_o} \
                            {bulk_endp\.app_out_data_o} \
-                           {bulk_endp\.out_state_q} \
-                           {bulk_endp\.out_full_q} \
-                           {bulk_endp\.out_empty} \
+                           {out_fifo\.out_state_q} \
+                           {out_fifo\.out_full_q} \
+                           {out_fifo\.out_empty} \
                           ]
     addSignals $sigFilterList
     wavesFormat ../../common/gtkwave
 }
-
 
 proc bulk_in {} {
     gtkwave::/Edit/Insert_Comment "BULK_ENDP: IN"
@@ -198,12 +197,12 @@ proc bulk_in {} {
                            {bulk_endp\.app_in_ready_o} \
                            {bulk_endp\.app_in_valid_i} \
                            {bulk_endp\.app_in_data_i} \
-                           {bulk_endp\.in_state_q} \
-                           {bulk_endp\.in_full} \
+                           {in_fifo\.in_state_q} \
+                           {in_fifo\.in_full} \
                           ]
     addSignals $sigFilterList
     wavesFormat ../../common/gtkwave
-    setColor { {bulk_endp\.in_state_q} } Blue
+    setColor { {in_fifo\.in_state_q} } Blue
 }
 
 proc out {} {

@@ -78,10 +78,10 @@ localparam [7:0] NO_CMD = 8'd0,
                  RAM_READ_CMD = 8'd8;
 
 function automatic [31:0] crc32;
-   input [8*`MAX_BYTES-1:0] data;
-   input integer            bytes;
-   localparam [31:0]        POLY32 = 32'h04C11DB7;
-   integer                  i,j;
+   input [8*MAX_BYTES-1:0] data;
+   input integer           bytes;
+   localparam [31:0]       POLY32 = 32'h04C11DB7;
+   integer                 i,j;
    begin
       crc32 = 32'hFFFFFFFF;
       for (j = bytes-1; j >= 0; j = j-1) begin
@@ -160,12 +160,12 @@ task automatic test_demo_in
    reg [6:0]     packet_addr;
    reg [3:0]     packet_endp;
    reg [10:0]    packet_frame;
-   reg [8*`MAX_BYTES-1:0] packet_data;
-   reg [8*`MAX_BYTES-1:0] device_data;
-   time                   start_timeout;
-   integer                packet_bytes;
-   integer                device_bytes;
-   integer                i;
+   reg [8*MAX_BYTES-1:0] packet_data;
+   reg [8*MAX_BYTES-1:0] device_data;
+   time                  start_timeout;
+   integer               packet_bytes;
+   integer               device_bytes;
+   integer               i;
    begin : u_test_demo_in_task
       device_data = 'hX;
       device_bytes = 0;
@@ -181,7 +181,7 @@ task automatic test_demo_in
             `assert_error("test_demo_in(): Device DATAx missing", packet_pid, datain_toggle[endp]? PID_DATA1: PID_DATA0)
             if (packet_bytes > 0) begin
                device_data = device_data << 8*packet_bytes;
-               packet_data = packet_data >> 8*(`MAX_BYTES-packet_bytes);
+               packet_data = packet_data >> 8*(MAX_BYTES-packet_bytes);
                device_data = device_data | packet_data;
             end else begin
                if (i != bytes+4) begin
@@ -206,29 +206,29 @@ task automatic test_demo_in
          #(wait_time);
       end
       `assert_error("CRC32 error", ~rev32(crc32(device_data>>8*4, bytes)),
-              {device_data[7:0], device_data[15:8], device_data[23:16], device_data[31:24]})
+                    {device_data[7:0], device_data[15:8], device_data[23:16], device_data[31:24]})
    end
 endtask
 
 task automatic test_demo_out
   (
-   input [6:0]              address,
-   input [3:0]              endp,
-   input [8*`MAX_BYTES-1:0] data,
-   input integer            bytes,
-   input integer            in_wMaxPacketSize,
-   input integer            out_wMaxPacketSize,
-   input time               timeout,
-   input time               wait_time, 
-   inout [15:0]             datain_toggle,
-   inout [15:0]             dataout_toggle
+   input [6:0]             address,
+   input [3:0]             endp,
+   input [8*MAX_BYTES-1:0] data,
+   input integer           bytes,
+   input integer           in_wMaxPacketSize,
+   input integer           out_wMaxPacketSize,
+   input time              timeout,
+   input time              wait_time, 
+   inout [15:0]            datain_toggle,
+   inout [15:0]            dataout_toggle
    );
-   reg [31:0]               crc;
+   reg [31:0]              crc;
    begin : u_test_demo_out_task
       crc = ~rev32(crc32(data, bytes));
       test_data_out(address, endp, data, bytes, PID_ACK,
                     out_wMaxPacketSize, timeout, wait_time, dataout_toggle);
       test_data_in(address, endp, {crc[7:0], crc[15:8], crc[23:16], crc[31:24]}, 4, PID_ACK,
-                   in_wMaxPacketSize, timeout, wait_time, datain_toggle);
+                   in_wMaxPacketSize, timeout, wait_time, datain_toggle, ZLP);
    end
 endtask
