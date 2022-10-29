@@ -616,6 +616,8 @@ module app
                 .in_ready_i(flash_in_ready),
                 .clear_status_i(flash_clear_status),
                 .status_o(flash_status),
+                .erase_busy_o(),
+                .program_busy_o(),
                 .sck_o(sck_o),
                 .csn_o(csn_o),
                 .mosi_o(mosi_o),

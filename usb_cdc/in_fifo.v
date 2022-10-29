@@ -44,7 +44,7 @@ module in_fifo
     //   one clk_i period.
     input        in_data_ack_i,
     input        out_valid_i,
-    input        out_ready_i /* synthesis syn_direct_enable = 1 */
+    input        out_ready_i
     // When in_data_ack_i is high and out_ready_i is high, an ACK packet shall be received.
     );
 

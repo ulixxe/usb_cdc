@@ -6,7 +6,7 @@
 
 * Build Date:         Dec 10 2020 17:24:17
 
-* File Generated:     Aug 28 2022 15:41:07
+* File Generated:     Oct 29 2022 15:42:54
 
 * Purpose:            General info of design implementation
 
@@ -27,8 +27,8 @@ Device Info:
 
 Design statistics:
 ------------------
-    FFs:                  659
-    LUTs:                 2229
+    FFs:                  656
+    LUTs:                 2250
     RAMs:                 4
     IOBs:                 9
     GBs:                  7
@@ -37,12 +37,12 @@ Design statistics:
 
 Logic Resource Utilization:
 ---------------------------
-    Total Logic Cells: 2239/7680
-        Combinational Logic Cells: 1580     out of   7680      20.5729%
-        Sequential Logic Cells:    659      out of   7680      8.58073%
+    Total Logic Cells: 2261/7680
+        Combinational Logic Cells: 1605     out of   7680      20.8984%
+        Sequential Logic Cells:    656      out of   7680      8.54167%
         Logic Tiles:               368      out of   960       38.3333%
     Registers: 
-        Logic Registers:           659      out of   7680      8.58073%
+        Logic Registers:           656      out of   7680      8.54167%
         IO Registers:              0        out of   1280      0
     Block RAMs:                    4        out of   32        12.5%
     Warm Boots:                    0        out of   1         0%
@@ -89,7 +89,7 @@ Detailed Global Buffer Info:
     -------------  -------  ---------  ------  -----------                            
     5              2                   4       clk_c_g                                
     3              3                   56      u_usb_cdc.u_sie.clk_gate_0_i_g         
-    0              2                   324     u_usb_cdc.rstn_i_g                     
+    0              2                   321     u_usb_cdc.rstn_i_g                     
     1              0                   84      u_usb_cdc.u_bulk_endp.out_ready_i_1_g  
     2              1                   55      u_usb_cdc.rstn_sq_i_g_0                
     4              0                   259     u_app.rstn_sq_i_g_0                    
@@ -99,13 +99,13 @@ Detailed Global Buffer Info:
 Router Summary:
 ---------------
     Status:  Successful
-    Runtime: 21 seconds
+    Runtime: 20 seconds
 
 Routing Resource Utilization:
 -----------------------------
-              Local line of tile    16690 out of 146184      11.4171%
-                          Span 4     4359 out of  29696      14.6787%
-                         Span 12      661 out of   5632      11.7365%
+              Local line of tile    16643 out of 146184      11.385%
+                          Span 4     4332 out of  29696      14.5878%
+                         Span 12      642 out of   5632      11.3991%
                   Global network        8 out of      8      100%
-      Vertical Inter-LUT Connect      614 out of   6720      9.1369%
+      Vertical Inter-LUT Connect      626 out of   6720      9.31548%
 

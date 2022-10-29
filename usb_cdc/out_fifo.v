@@ -45,7 +45,7 @@ module out_fifo
     // When both out_err_i and out_ready_i are high, SIE shall abort the
     //   current packet reception and OUT FIFO shall manage the error
     //   condition.
-    input        out_ready_i /* synthesis syn_direct_enable = 1 */
+    input        out_ready_i
     // When both out_valid_i and out_ready_i are high, the out_data_i shall
     //   be consumed.
     // When out_valid_i and out_err_i are low and out_ready_i is high, the

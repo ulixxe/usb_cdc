@@ -214,8 +214,7 @@ module ctrl_endp
    localparam [2:0]        ST_IDLE = 3'd0,
                            ST_STALL = 3'd1,
                            ST_SETUP = 3'd2,
-                           ST_DATA = 3'd3,
-                           ST_STATUS = 3'd4;
+                           ST_DATA = 3'd3;
    localparam [1:0]        REC_DEVICE = 2'd0,
                            REC_INTERFACE = 2'd1,
                            REC_ENDPOINT = 2'd2;
@@ -270,7 +269,7 @@ module ctrl_endp
    reg                     in_req_q;
    reg                     usb_reset_q;
 
-   wire                    clk_gate /* synthesis syn_direct_enable = 1 */;
+   wire                    clk_gate;
    wire                    rstn;
 
    assign configured_o = (dev_state_qq == CONFIGURED_STATE) ? 1'b1 : 1'b0;
@@ -659,13 +658,41 @@ module ctrl_endp
                  if (byte_cnt_q == 'd8) begin
                     if (req_q == REQ_UNSUPPORTED)
                       state_d = ST_STALL;
-                    else if (in_dir_q == 1'b1)
-                      state_d = ST_DATA;
-                    else
-                      if (max_length_q == 'd0)
-                        state_d = ST_STATUS;
-                      else
-                        state_d = ST_DATA;
+                    else if (in_dir_q == 1'b1) begin
+                       state_d = ST_DATA;
+                    end else begin
+                       if (max_length_q == 'd0) begin // STATUS stage
+                          byte_cnt_d = byte_cnt_q;
+                          in_zlp = 1'b1;
+                          in_valid = 1'b1;
+                          if (in_data_ack_i) begin
+                             case (req_q)
+                               REQ_SET_ADDRESS : begin
+                                  addr_dd = addr_q;
+                                  if (addr_q == 7'd0)
+                                    dev_state_dd = DEFAULT_STATE;
+                                  else
+                                    dev_state_dd = ADDRESS_STATE;
+                               end
+                               REQ_CLEAR_FEATURE : begin
+                                  if (in_endp_q == 1'b1)
+                                    in_toggle_reset = 1'b1;
+                                  else
+                                    out_toggle_reset = 1'b1;
+                               end
+                               REQ_SET_CONFIGURATION : begin
+                                  dev_state_dd = dev_state_q;
+                                  in_toggle_reset = 1'b1;
+                                  out_toggle_reset = 1'b1;
+                               end
+                               default : begin
+                               end
+                             endcase
+                             state_d = ST_IDLE;
+                          end
+                       end else
+                         state_d = ST_DATA;
+                    end
                  end else
                    state_d = ST_STALL;
               end
@@ -680,8 +707,9 @@ module ctrl_endp
                         (byte_cnt_q == 'h12 && req_q == REQ_GET_DESCRIPTOR_DEVICE) ||
                         (byte_cnt_q == 'h43 && req_q == REQ_GET_DESCRIPTOR_CONFIGURATION)) begin
                        if (in_req_q == 1'b0) begin
-                          if (in_data_ack_i == 1'b1)
-                            state_d = ST_STATUS;
+                          if (~in_data_ack_i) begin // STATUS stage
+                             state_d = ST_IDLE;
+                          end
                        end else
                          state_d = ST_STALL;
                     end else begin
@@ -713,7 +741,7 @@ module ctrl_endp
                             in_data = 8'd0;
                             in_valid = 1'b1;
                          end
-                         default :begin
+                         default : begin
                             in_data = 8'd0;
                             in_valid = 1'b1;
                          end
@@ -721,49 +749,14 @@ module ctrl_endp
                     end
                  end
               end else begin
-                 if (in_req_q == 1'b1)
-                   state_d = ST_STALL;
-                 else if (out_valid_i == 1'b0)
-                   state_d = ST_STATUS;
-              end
-           end
-           ST_STATUS : begin
-              byte_cnt_d = byte_cnt_q;
-              if (in_dir_q == 1'b0) begin
                  in_zlp = 1'b1;
                  in_valid = 1'b1;
-                 if (in_data_ack_i) begin
-                    case (req_q)
-                      REQ_SET_ADDRESS : begin
-                         addr_dd = addr_q;
-                         if (addr_q == 7'd0)
-                           dev_state_dd = DEFAULT_STATE;
-                         else
-                           dev_state_dd = ADDRESS_STATE;
-                      end
-                      REQ_CLEAR_FEATURE : begin
-                         if (in_endp_q == 1'b1)
-                           in_toggle_reset = 1'b1;
-                         else
-                           out_toggle_reset = 1'b1;
-                      end
-                      REQ_SET_CONFIGURATION : begin
-                         dev_state_dd = dev_state_q;
-                         in_toggle_reset = 1'b1;
-                         out_toggle_reset = 1'b1;
-                      end
-                      default : begin
-                      end
-                    endcase
-                    state_d = ST_IDLE;
+                 if (in_req_q == 1'b1)
+                   state_d = ST_STALL;
+                 else if (out_valid_i == 1'b1) begin
                  end else begin
-                    state_d = ST_STALL;
-                 end
-              end else begin
-                 if (~in_data_ack_i & ~out_valid_i) begin
-                    state_d = ST_IDLE;
-                 end else if (out_valid_i) begin
-                    state_d = ST_STALL;
+                    if (in_data_ack_i) // STATUS stage
+                      state_d = ST_IDLE;
                  end
               end
            end

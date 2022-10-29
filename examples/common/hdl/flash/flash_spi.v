@@ -57,6 +57,8 @@ module flash_spi
     output [3:0]                                            status_o,
     // status_o shall report an error (4'h5, 4'h7 or 4'h8) or the end of a correct
     //   programming/read operation (4'hF), otherwise shall be 4'h0.
+    output                                                  erase_busy_o,
+    output                                                  program_busy_o,
 
     // ---- to/from serial bus ----------------------
     output                                                  sck_o,
@@ -187,6 +189,15 @@ module flash_spi
                      (state_q == ST_WR_DATA_ERROR) ? STATUS_errVERIFY :
                      (state_q == ST_WR_ADDR_ERROR) ? STATUS_errADDRESS :
                      STATUS_OK;
+   assign erase_busy_o = (state_q == ST_WR_ERASE_ENABLE || state_q == ST_WR_ERASE ||
+                          state_q == ST_WR_ERASE_STATUS || state_q == ST_WR_ERASE_RD_DATA_CMD ||
+                          state_q == ST_WR_ERASE_RD_DATA || state_q == ST_WR_ERASE_END) ?
+                         1'b1 : 1'b0;
+   assign program_busy_o = (state_q == ST_WR_DATA_ENABLE || state_q == ST_WR_DATA_CMD ||
+                            state_q == ST_WR_DATA || state_q == ST_WR_EOP ||
+                            state_q == ST_WR_DATA_STATUS || state_q == ST_WR_RD_DATA_CMD ||
+                            state_q == ST_WR_RD_DATA || state_q == ST_WR_DATA_CHECK) ?
+                           1'b1 : 1'b0;
 
    always @(/*AS*/byte_cnt_q or clear_status_i or crc16_q or en_i
             or en_q or end_block_addr_i or in_ready or last_byte_q

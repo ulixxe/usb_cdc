@@ -11,8 +11,12 @@ On macOS, the virtual COM gets a name like `/dev/cu.usbmodem14601`, whereas, on 
 The USB\_CDC idea was born from the awesome [Luke Valenty's TinyFPGA](https://github.com/tinyfpga/TinyFPGA-BX) board. TinyFPGA uses a ["bit-banged" USB port](https://github.com/tinyfpga/TinyFPGA-Bootloader) implemented in the FPGA fabric for communication with the host PC.
 David Williams, with his [TinyFPGA-BX USB serial module](https://github.com/davidthings/tinyfpga_bx_usbserial), changed Luke's code to allow USB communication for FPGA designs.
 David's code uses the same clock for both USB internal stuff and data interface with FPGA application designs.
-Instead, USB\_CDC aims to use a different asynchronous clock to allow a lower frequency clock for FPGA application designs.
-Furthermore, USB\_CDC was designed from scratch to keep FPGA resource utilization at the minimum and without the use of EBR memories.
+Instead, USB\_CDC aims to use a different asynchronous clock to allow a lower clock frequency for FPGA application designs.
+
+Furthermore, USB\_CDC was designed from scratch. This allowed to:
+
+* keep FPGA resource utilization at the minimum and without the use of EBR memories.
+* manage properly both IN and OUT data flows with USB ACK/NAK handshake without data loss.
 
 ## Block Diagram and Pinout
 

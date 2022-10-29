@@ -29,8 +29,10 @@ module loopback
    wire [7:0]       in_data;
    wire             in_valid;
    wire             out_ready;
+   wire [10:0]      frame;
+   wire             configured;
 
-   assign led = ~dp_pu;
+   assign led = (configured) ? frame[9] : &frame[4:3];
 
    // if FEEDBACK_PATH = SIMPLE:
    // clk_freq = (ref_freq * (DIVF + 1)) / (2**DIVQ * (DIVR + 1));
@@ -73,8 +75,8 @@ module loopback
              .BIT_SAMPLES(BIT_SAMPLES),
              .USE_APP_CLK(1),
              .APP_CLK_RATIO(BIT_SAMPLES*12/192))  // BIT_SAMPLES * 12MHz / 192MHz
-   u_usb_cdc (.frame_o(),
-              .configured_o(),
+   u_usb_cdc (.frame_o(frame),
+              .configured_o(configured),
               .app_clk_i(clk_pll),
               .clk_i(clk_div4),
               .rstn_i(lock),
