@@ -189,7 +189,8 @@ module app
    reg        rom_clke;
    reg        ram_clke;
    reg        ram_we;
-   reg        flash_en;
+   reg        flash_out_en;
+   reg        flash_in_en;
    reg        flash_in_ready;
    reg        flash_out_valid;
    reg        flash_clear_status;
@@ -228,7 +229,8 @@ module app
       rom_clke = 1'b0;
       ram_clke = 1'b0;
       ram_we = 1'b0;
-      flash_en = 1'b0;
+      flash_out_en = 1'b0;
+      flash_in_en = 1'b0;
       start_block_addr = {(ceil_log2(FLASH_SIZE)-ceil_log2(FLASH_BLOCK_SIZE)){1'b1}};
       end_block_addr = {(ceil_log2(FLASH_SIZE)-ceil_log2(FLASH_BLOCK_SIZE)){1'b1}};
       flash_in_ready = 1'b0;
@@ -384,7 +386,7 @@ module app
                 end
              end
              FLASH_READ_CMD: begin
-                flash_en = 1'b1;
+                flash_in_en = 1'b1;
                 out_ready = 1'b1;
                 if (out_valid_q == 1'b1) begin
                    state_d = READ_FLASH_STATE;
@@ -392,7 +394,7 @@ module app
                 end
              end
              FLASH_WRITE_CMD: begin
-                flash_en = 1'b1;
+                flash_out_en = 1'b1;
                 out_ready = 1'b1;
                 if (out_valid_q == 1'b1) begin
                    state_d = WRITE_FLASH_STATE;
@@ -524,7 +526,7 @@ module app
            end
         end
         READ_FLASH_STATE: begin
-           flash_en = 1'b1;
+           flash_in_en = 1'b1;
            start_block_addr = mem_addr_q[ceil_log2(FLASH_SIZE)-1:ceil_log2(FLASH_BLOCK_SIZE)];
            end_block_addr = {(ceil_log2(FLASH_SIZE)-ceil_log2(FLASH_BLOCK_SIZE)){1'b1}};
            flash_in_ready = in_ready;
@@ -544,7 +546,7 @@ module app
            end
         end
         WRITE_FLASH_STATE: begin
-           flash_en = 1'b1;
+           flash_out_en = 1'b1;
            start_block_addr = mem_addr_q[ceil_log2(FLASH_SIZE)-1:ceil_log2(FLASH_BLOCK_SIZE)];
            end_block_addr = {(ceil_log2(FLASH_SIZE)-ceil_log2(FLASH_BLOCK_SIZE)){1'b1}};
            out_ready = flash_out_ready;
@@ -604,7 +606,8 @@ module app
                .PAGE_PROG_US('d700))
    u_flash_spi (.clk_i(clk_i),
                 .rstn_i(rstn),
-                .en_i(flash_en),
+                .out_en_i(flash_out_en),
+                .in_en_i(flash_in_en),
                 .start_block_addr_i(start_block_addr),
                 .end_block_addr_i(end_block_addr),
                 .read_addr_offset_i(mem_addr_q[ceil_log2(FLASH_BLOCK_SIZE)-1:0]),

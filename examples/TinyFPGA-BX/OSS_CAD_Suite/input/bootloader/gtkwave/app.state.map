@@ -1,0 +1,14 @@
+# 
+## name ## app\.state_q
+## name ## app\.state_d
+## color ## Blue
+## data ## Decimal
+
+0  ST_IDLE
+1  ST_WR_LO_LENGTH
+2  ST_WR_HI_LENGTH
+3  ST_RD_LO_LENGTH
+4  ST_RD_HI_LENGTH
+5  ST_WR_DATA
+6  ST_RD_DATA
+7  ST_BOOT

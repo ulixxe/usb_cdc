@@ -12,6 +12,9 @@ To run them, inside `examples/<board name>/OSS_CAD_Suite` run `make sim PROJ=<ex
 
 The GTKWave console makes available a few commands (such as `top`, `out`, `phy_rx`, etc.) to show various waveforms inside the design.
 
+## `bootloader`
+The `bootloader` example implements an equivalent of the original TinyFPGA bootloader. It is fully compatible with the `tinyprog` programmer.
+
 ## `demo`
 Purpose of `demo` example is to test reliability and speed of USB CDC data transmission.
 These tests are executed with python script `examples/<board name>/python/demo/run.py`.

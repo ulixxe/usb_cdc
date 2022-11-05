@@ -15,6 +15,7 @@ run = $(if $(RUN_ONCE),$(1),until $$($(1)) ; do true ; done)
 include $(IN_DIR)/hdl_files.mk
 
 all: $(OUT_DIR)/$(PROJ).rpt $(OUT_DIR)/$(PROJ).bin
+fw: $(OUT_DIR)/fw_$(PROJ).bin
 
 $(OUT_DIR):
 	mkdir -p $@
@@ -30,6 +31,12 @@ $(OUT_DIR)/%.rpt: $(OUT_DIR)/%.asc
 
 $(OUT_DIR)/%.bin: $(OUT_DIR)/%.asc
 	icepack $< $@
+
+$(OUT_DIR)/fw_%.bin: $(OUT_DIR)/%.bin
+	cp $< $(OUT_DIR)/$*_0.bin 
+	cp $< $(OUT_DIR)/$*_1.bin 
+	icemulti -v -o $@ -a15 -p0 $(OUT_DIR)/$*_0.bin $(OUT_DIR)/$*_1.bin
+	rm $(OUT_DIR)/$*_0.bin $(OUT_DIR)/$*_1.bin
 
 prog: $(OUT_DIR)/$(PROJ).bin
 	tinyprog -p $<
