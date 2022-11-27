@@ -18,6 +18,11 @@ Furthermore, USB\_CDC was designed from scratch. This allowed to:
 * keep FPGA resource utilization at the minimum and without the use of EBR memories.
 * manage properly both IN and OUT data flows with USB ACK/NAK handshake without data loss.
 
+## Applications
+* USB communication interface for microcontrollers and soft cores. USB\_CDC takes little gate resources and no memories, leaving them for the CPU. See `soc` example.
+* Bootloaders. See the `bootloader` example for completely replacing the original TinyFPGA bootloader with one fully compatible with the `tinyprog` programmer.
+* Etc, it is up to your imagination.
+
 ## Block Diagram and Pinout
 
 ![](readme_files/usb_cdc.png)

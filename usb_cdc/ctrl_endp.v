@@ -4,16 +4,16 @@
 // CTRL_ENDP module shall implement IN/OUT Control Endpoint.
 // CTRL_ENDP shall manage control transfers:
 //   - Provide device information.
-//   - Keep device status (Default, Address and Configured).
+//   - Keep device states (Default, Address and Configured).
 //   - Keep and provide to SIE the device address.
 //   - Respond to standard device requests:
-//       - CLEAR_FEATURE
-//       - GET_CONFIGURATION
-//       - GET_DESCRIPTOR (DEVICE and CONFIGURATION)
-//       - GET_INTERFACE
-//       - GET_STATUS
-//       - SET_ADDRESS
-//       - SET_CONFIGURATION
+//       - GET_STATUS (00h)
+//       - CLEAR_FEATURE (01h)
+//       - SET_ADDRESS (05h)
+//       - GET_DESCRIPTOR (DEVICE and CONFIGURATION) (06h)
+//       - GET_CONFIGURATION (08h)
+//       - SET_CONFIGURATION (09h)
+//       - GET_INTERFACE (0Ah)
 //   - Respond to Abstract Control Model (ACM) subclass requests:
 //       - SET_LINE_CODING (20h)
 //       - GET_LINE_CODING (21h)
@@ -44,6 +44,7 @@ module ctrl_endp
     input        usb_reset_i,
     // While usb_reset_i is high, the module shall be reset.
     output       usb_en_o,
+    // While device is in POWERED_STATE and usb_reset_i is low, usb_en_o shall be low.
     output [6:0] addr_o,
     // addr_o shall be the device address.
     // addr_o shall be updated at the end of SET_ADDRESS control transfer.
@@ -211,10 +212,10 @@ module ctrl_endp
                                          8'h09 // bLength
                                          }; // Standard Configuration Descriptor, USB2.0 9.6.3, page 264-266, Table 9-10
 
-   localparam [2:0]        ST_IDLE = 3'd0,
-                           ST_STALL = 3'd1,
-                           ST_SETUP = 3'd2,
-                           ST_DATA = 3'd3;
+   localparam [1:0]        ST_IDLE = 2'd0,
+                           ST_STALL = 2'd1,
+                           ST_SETUP = 2'd2,
+                           ST_DATA = 2'd3;
    localparam [1:0]        REC_DEVICE = 2'd0,
                            REC_INTERFACE = 2'd1,
                            REC_ENDPOINT = 2'd2;
@@ -250,7 +251,7 @@ module ctrl_endp
 
    localparam              BC_WIDTH = ceil_log2(`max('h43,'h12));
 
-   reg [2:0]               state_q, state_d;
+   reg [1:0]               state_q, state_d;
    reg [BC_WIDTH-1:0]      byte_cnt_q, byte_cnt_d;
    reg [BC_WIDTH-1:0]      max_length_q, max_length_d;
    reg                     in_dir_q, in_dir_d;
@@ -661,11 +662,12 @@ module ctrl_endp
                     else if (in_dir_q == 1'b1) begin
                        state_d = ST_DATA;
                     end else begin
-                       if (max_length_q == 'd0) begin // STATUS stage
+                       if (max_length_q == 'd0) begin // No-data Control STATUS stage
                           byte_cnt_d = byte_cnt_q;
                           in_zlp = 1'b1;
                           in_valid = 1'b1;
                           if (in_data_ack_i) begin
+                             state_d = ST_IDLE;
                              case (req_q)
                                REQ_SET_ADDRESS : begin
                                   addr_dd = addr_q;
@@ -688,7 +690,6 @@ module ctrl_endp
                                default : begin
                                end
                              endcase
-                             state_d = ST_IDLE;
                           end
                        end else
                          state_d = ST_DATA;
@@ -707,7 +708,7 @@ module ctrl_endp
                         (byte_cnt_q == 'h12 && req_q == REQ_GET_DESCRIPTOR_DEVICE) ||
                         (byte_cnt_q == 'h43 && req_q == REQ_GET_DESCRIPTOR_CONFIGURATION)) begin
                        if (in_req_q == 1'b0) begin
-                          if (~in_data_ack_i) begin // STATUS stage
+                          if (~in_data_ack_i) begin // Control Read STATUS stage
                              state_d = ST_IDLE;
                           end
                        end else
@@ -755,7 +756,7 @@ module ctrl_endp
                    state_d = ST_STALL;
                  else if (out_valid_i == 1'b1) begin
                  end else begin
-                    if (in_data_ack_i) // STATUS stage
+                    if (in_data_ack_i) // Control Write STATUS stage
                       state_d = ST_IDLE;
                  end
               end

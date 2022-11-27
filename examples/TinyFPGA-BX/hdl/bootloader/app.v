@@ -1,17 +1,5 @@
-// APP module shall implement an example of application module for USB_CDC.
-// APP shall:
-//   - Loopback data from out_data_i to in_data_o and at the same time
-//       write it on RAM.
-//   - Source random data and calculated CRC32 checksum to in_data_o.
-//   - Sink data from out_data_i and source calculated CRC32 checksum
-//       to in_data_o.
-//   - Source ROM data to in_data_o.
-//   - Source RAM data to in_data_o.
-//   - Source FLASH memory data to in_data_o.
-//   - Sink data from out_data_i to program FLASH memory and source
-//       calculated CRC32 checksum to in_data_o.
-//   - Wait a programmable number of clk_i periods before sink/source each
-//       8bit data.
+// APP module shall implement an example of bootloader.
+// APP shall provide access to tinyprog to the FLASH.
 
 `define max(a,b)((a) > (b) ? (a) : (b))
 

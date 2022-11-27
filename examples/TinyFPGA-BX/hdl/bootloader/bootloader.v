@@ -9,7 +9,7 @@ module bootloader
    output sck,
    output ss,
    output sdo,
-   input sdi
+   input  sdi
    );
 
    localparam BIT_SAMPLES = 'd4;

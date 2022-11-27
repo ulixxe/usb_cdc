@@ -463,15 +463,19 @@ task automatic test_data_in
             start_timeout = $time;
          end else if (packet_pid == PID_NAK) begin
             if ($time-start_timeout > timeout) begin
-               `assert_error("test_data_in(): Device handshake PID error", packet_pid, rx_pid)
+               `assert_error("test_data_in(): Device PID error", packet_pid, rx_pid)
                disable u_test_data_in_task;
             end
             #(wait_time);
          end else begin
             // device STALL
-            `assert_error("test_data_in(): Device handshake PID error", packet_pid, rx_pid)
+            `assert_error("test_data_in(): Device PID error", packet_pid, rx_pid)
             disable u_test_data_in_task;
          end
+      end
+      if (rx_pid != PID_ACK && (packet_pid == PID_DATA0 || packet_pid == PID_DATA1)) begin
+         `assert_error("test_data_in(): Device PID error", packet_pid, rx_pid)
+         disable u_test_data_in_task;
       end
    end
 endtask
