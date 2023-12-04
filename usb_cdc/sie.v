@@ -14,11 +14,13 @@
 //   - USB Reset detection.
 //   - Serial-Parallel/Parallel-Serial conversion.
 
+`define max(a,b) ((a) > (b) ? (a) : (b))
+
 module sie
-  #(parameter CTRL_MAXPACKETSIZE = 'd8,
-    parameter IN_BULK_MAXPACKETSIZE = 'd8,
-    parameter ENDP_CTRL = 4'd0,
-    parameter ENDP_BULK = 4'd1,
+  #(parameter IN_CTRL_MAXPACKETSIZE = 'd8,
+    parameter IN_BULK_MAXPACKETSIZE = 'd8,  // 8, 16, 32, 64
+    parameter IN_INT_MAXPACKETSIZE = 'd8,  // <= 64
+    parameter IN_ISO_MAXPACKETSIZE = 'd8,  // <= 1023
     parameter BIT_SAMPLES = 'd4)
    (
     // ---- to/from USB_CDC module ------------------------------------
@@ -37,6 +39,24 @@ module sie
     // clk_i clock shall have a frequency of 12MHz*BIT_SAMPLES.
     input         rstn_i,
     // While rstn_i is low (active low), the module shall be reset.
+    input [15:1]  in_bulk_endps_i,
+    // While in_bulk_endps_i[i] is high, endp=i shall be enabled as IN bulk endpoint.
+    //   endp=0 is reserved for IN control endpoint.
+    input [15:1]  out_bulk_endps_i,
+    // While out_bulk_endps_i[i] is high, endp=i shall be enabled as OUT bulk endpoint
+    //   endp=0 is reserved for OUT control endpoint.
+    input [15:1]  in_int_endps_i,
+    // While in_int_endps_i[i] is high, endp=i shall be enabled as IN interrupt endpoint.
+    //   endp=0 is reserved for IN control endpoint.
+    input [15:1]  out_int_endps_i,
+    // While out_int_endps_i[i] is high, endp=i shall be enabled as OUT interrupt endpoint
+    //   endp=0 is reserved for OUT control endpoint.
+    input [15:1]  in_iso_endps_i,
+    // While in_iso_endps_i[i] is high, endp=i shall be enabled as IN isochronous endpoint.
+    //   endp=0 is reserved for IN control endpoint.
+    input [15:1]  out_iso_endps_i,
+    // While out_iso_endps_i[i] is high, endp=i shall be enabled as OUT isochronous endpoint
+    //   endp=0 is reserved for OUT control endpoint.
 
     // ---- to/from OUT Endpoints ------------------------------------
     output [7:0]  out_data_o,
@@ -174,6 +194,7 @@ module sie
    endfunction
 
    localparam [15:0] RESI16 = 16'h800D; // = rev16(~16'h4FFE)
+   localparam [3:0]  ENDP_CTRL = 'd0;
    localparam [3:0]  PHY_IDLE = 4'd0,
                      PHY_RX_PID = 4'd1,
                      PHY_RX_ADDR = 4'd2,
@@ -196,8 +217,9 @@ module sie
                      PID_ACK = 4'b0010,
                      PID_NAK = 4'b1010,
                      PID_STALL = 4'b1110;
-   localparam        IN_WIDTH = (IN_BULK_MAXPACKETSIZE > CTRL_MAXPACKETSIZE) ?
-                     ceil_log2(IN_BULK_MAXPACKETSIZE+1) : ceil_log2(CTRL_MAXPACKETSIZE+1);
+   localparam        IN_WIDTH = ceil_log2(1+`max(IN_CTRL_MAXPACKETSIZE,
+                                                 `max(IN_BULK_MAXPACKETSIZE,
+                                                      `max(IN_INT_MAXPACKETSIZE, IN_ISO_MAXPACKETSIZE))));
 
    reg [3:0]         phy_state_q, phy_state_d;
    reg [3:0]         pid_q, pid_d;
@@ -206,8 +228,8 @@ module sie
    reg [10:0]        frame_q, frame_d;
    reg [15:0]        data_q, data_d;
    reg [15:0]        crc16_q, crc16_d;
-   reg [15:0]        datain_toggle_q, datain_toggle_d;
-   reg [15:0]        dataout_toggle_q, dataout_toggle_d;
+   reg [15:0]        in_toggle_q, in_toggle_d;
+   reg [15:0]        out_toggle_q, out_toggle_d;
    reg [IN_WIDTH-1:0] in_byte_q, in_byte_d;
    reg                out_valid;
    reg                out_err;
@@ -231,6 +253,14 @@ module sie
    wire                               rx_ready;
    wire                               tx_ready;
    wire                               delay_end;
+   wire [15:0]                        in_toggle_endps;
+   wire [15:0]                        out_toggle_endps;
+   wire [15:0]                        in_valid_endps;
+   wire [15:0]                        out_valid_endps;
+   wire [15:0]                        in_bulk_endps;
+   wire [15:0]                        in_int_endps;
+   wire [15:0]                        in_iso_endps;
+   wire [15:0]                        out_iso_endps;
 
    assign usb_reset_o = usb_reset;
    assign endp_o = endp_q;
@@ -273,6 +303,14 @@ module sie
    end
 
    assign clk_gate = rx_ready | tx_ready;
+   assign in_toggle_endps = {in_bulk_endps_i|in_int_endps_i, 1'b1};
+   assign out_toggle_endps = {out_bulk_endps_i|out_int_endps_i, 1'b1};
+   assign in_valid_endps = {in_bulk_endps_i|in_int_endps_i|in_iso_endps_i, 1'b1};
+   assign out_valid_endps = {out_bulk_endps_i|out_int_endps_i|out_iso_endps_i, 1'b1};
+   assign in_bulk_endps = {in_bulk_endps_i, 1'b0};
+   assign in_int_endps = {in_int_endps_i, 1'b0};
+   assign in_iso_endps = {in_iso_endps_i, 1'b0};
+   assign out_iso_endps = {out_iso_endps_i, 1'b0};
 
    always @(posedge clk_i or negedge rstn) begin
       if (~rstn) begin
@@ -283,8 +321,8 @@ module sie
          frame_q <= 11'd0;
          data_q <= 16'd0;
          crc16_q <= 16'd0;
-         datain_toggle_q <= 16'd0;
-         dataout_toggle_q <= 16'd0;
+         in_toggle_q <= 16'd0;
+         out_toggle_q <= 16'd0;
          in_byte_q <= 'd0;
       end else begin
          if (clk_gate) begin
@@ -295,23 +333,22 @@ module sie
             frame_q <= frame_d;
             data_q <= data_d;
             crc16_q <= crc16_d;
-            datain_toggle_q <= 16'd0;
-            datain_toggle_q[ENDP_CTRL] <= datain_toggle_d[ENDP_CTRL];
-            datain_toggle_q[ENDP_BULK] <= datain_toggle_d[ENDP_BULK];
-            dataout_toggle_q <= 16'd0;
-            dataout_toggle_q[ENDP_CTRL] <= dataout_toggle_d[ENDP_CTRL];
-            dataout_toggle_q[ENDP_BULK] <= dataout_toggle_d[ENDP_BULK];
+            in_toggle_q <= in_toggle_d & in_toggle_endps;
+            out_toggle_q <= out_toggle_d & out_toggle_endps;
             in_byte_q <= in_byte_d;
          end
       end
    end
 
-   always @(/*AS*/addr_i or addr_q or crc16_q or data_q
-            or datain_toggle_q or dataout_toggle_q or endp_q
-            or frame_q or in_byte_q or in_data_i or in_nak_i
-            or in_toggle_reset_i or in_valid_i or in_zlp_i
-            or out_nak_i or out_toggle_reset_i or phy_state_q or pid_q
-            or rx_data or rx_err or rx_valid or stall_i) begin
+   always @(/*AS*/addr_i or addr_q or crc16_q or data_q or endp_q
+            or frame_q or in_bulk_endps or in_byte_q or in_data_i
+            or in_int_endps or in_iso_endps or in_nak_i
+            or in_toggle_endps or in_toggle_q or in_toggle_reset_i
+            or in_valid_endps or in_valid_i or in_zlp_i
+            or out_iso_endps or out_nak_i or out_toggle_endps
+            or out_toggle_q or out_toggle_reset_i or out_valid_endps
+            or phy_state_q or pid_q or rx_data or rx_err or rx_valid
+            or stall_i) begin
       phy_state_d = phy_state_q;
       pid_d = pid_q;
       addr_d = addr_q;
@@ -319,8 +356,8 @@ module sie
       frame_d = frame_q;
       data_d = {8'd0, rx_data};
       crc16_d = crc16_q;
-      datain_toggle_d = datain_toggle_q;
-      dataout_toggle_d = dataout_toggle_q;
+      in_toggle_d = in_toggle_q;
+      out_toggle_d = out_toggle_q;
       in_byte_d = in_byte_q;
       out_valid = 1'b0;
       out_err = 1'b0;
@@ -332,9 +369,9 @@ module sie
       in_req = 1'b0;
 
       if (in_toggle_reset_i == 1'b1)
-        datain_toggle_d[ENDP_BULK] = 1'b0;
+        in_toggle_d[15:1] = 15'b0;
       if (out_toggle_reset_i == 1'b1)
-        dataout_toggle_d[ENDP_BULK] = 1'b0;
+        out_toggle_d[15:1] = 15'b0;
 
       if (rx_err == 1'b1) begin
          phy_state_d = PHY_IDLE;
@@ -366,7 +403,8 @@ module sie
                    2'b11 : begin // Data
                       if (rx_valid == 1'b1) begin
                          if ((data_q[3:2] == PID_DATA0[3:2] || data_q[3:2] == PID_DATA1[3:2]) &&
-                             (pid_q == PID_SETUP || pid_q == PID_OUT) && addr_q == addr_i) begin
+                             (pid_q == PID_SETUP || pid_q == PID_OUT) &&
+                             addr_q == addr_i && out_valid_endps[endp_q] == 1'b1) begin
                             phy_state_d = PHY_RX_DATA0;
                          end else begin
                             phy_state_d = PHY_RX_WAIT_EOP;
@@ -378,8 +416,9 @@ module sie
                    2'b10 : begin // Handshake
                       if (rx_valid == 1'b0) begin
                          phy_state_d = PHY_IDLE;
-                         if (data_q[3:2] == PID_ACK[3:2] && addr_q == addr_i) begin // ACK
-                            datain_toggle_d[endp_q] = ~datain_toggle_q[endp_q];
+                         if (data_q[3:2] == PID_ACK[3:2] && addr_q == addr_i &&
+                             in_toggle_endps[endp_q] == 1'b1) begin // ACK
+                            in_toggle_d[endp_q] = ~in_toggle_q[endp_q];
                             out_eop = 1'b1;
                             in_data_ack = 1'b1;
                          end
@@ -411,6 +450,7 @@ module sie
               data_d[15:8] = data_q[7:0];
            end
            PHY_RX_ENDP : begin
+              addr_d[0] = ~addr_i[0];  // to invalid addr_q in case of token error
               if (rx_valid == 1'b0) begin
                  phy_state_d = PHY_IDLE;
                  if (crc5({data_q[2:0], data_q[15:8]}) == rev5(~data_q[7:3])) begin
@@ -423,8 +463,8 @@ module sie
                           if (pid_q == PID_IN) begin
                              phy_state_d = PHY_TX_DATA_PID;
                           end else if (pid_q == PID_SETUP) begin
-                             datain_toggle_d[ENDP_CTRL] = 1'b1;
-                             dataout_toggle_d[ENDP_CTRL] = 1'b0;
+                             in_toggle_d[ENDP_CTRL] = 1'b1;
+                             out_toggle_d[ENDP_CTRL] = 1'b0;
                              out_eop = 1'b1; // will be delayed for ctrl_enpd to capture new endp_q
                           end
                        end
@@ -448,18 +488,19 @@ module sie
                  out_valid = 1'b1;
               end else begin
                  if (crc16(data_q[7:0], crc16_q) == RESI16) begin
-                    if (dataout_toggle_q[endp_q] == pid_q[3] &&
-                        (endp_q == ENDP_CTRL || endp_q == ENDP_BULK)) begin
-                       dataout_toggle_d[endp_q] = ~dataout_toggle_q[endp_q];
+                    if ((out_toggle_q[endp_q] == pid_q[3] && out_toggle_endps[endp_q] == 1'b1) ||
+                        out_iso_endps[endp_q] == 1'b1) begin
+                       out_toggle_d[endp_q] = ~out_toggle_q[endp_q];
                        out_eop = 1'b1;
                     end else begin
                        out_err = 1'b1;
                     end
-                    phy_state_d = PHY_TX_HANDSHAKE_PID;
+                    if (out_toggle_endps[endp_q] == 1'b1)
+                      phy_state_d = PHY_TX_HANDSHAKE_PID;
                     if (stall_i == 1'b1) begin
                        pid_d = PID_STALL;
                     end else if (out_nak_i == 1'b1) begin
-                       dataout_toggle_d[endp_q] = dataout_toggle_q[endp_q];
+                       out_toggle_d[endp_q] = out_toggle_q[endp_q];
                        pid_d = PID_NAK;
                     end else begin
                        pid_d = PID_ACK;
@@ -478,20 +519,26 @@ module sie
               tx_valid = 1'b1;
            end
            PHY_TX_DATA_PID : begin
-              if (stall_i == 1'b1) begin
+              tx_valid = 1'b1;
+              in_req = 1'b1;
+              if (in_valid_endps[endp_q] == 1'b0) begin // USB2.0 8.3.2 pag.197)
+                 tx_valid = 1'b0;
+                 in_req = 1'b0;
+              end else if (stall_i == 1'b1) begin
                  pid_d = PID_STALL;
                  tx_data = {~PID_STALL, PID_STALL};
                  phy_state_d = PHY_IDLE;
-              end else if ((endp_q != ENDP_CTRL && endp_q != ENDP_BULK) ||
-                           (in_nak_i == 1'b1) ||
+              end else if ((in_nak_i == 1'b1) ||
                            (in_valid_i == 1'b0 &&
-                            ((endp_q == ENDP_BULK && in_byte_q != IN_BULK_MAXPACKETSIZE[IN_WIDTH-1:0]) ||
-                             (endp_q == ENDP_CTRL && in_byte_q != CTRL_MAXPACKETSIZE[IN_WIDTH-1:0])))) begin
+                            ((endp_q == ENDP_CTRL && in_byte_q != IN_CTRL_MAXPACKETSIZE[IN_WIDTH-1:0]) ||
+                             (in_bulk_endps[endp_q] == 1'b1 && in_byte_q != IN_BULK_MAXPACKETSIZE[IN_WIDTH-1:0]) ||
+                             (in_int_endps[endp_q] == 1'b1 && in_byte_q != IN_INT_MAXPACKETSIZE[IN_WIDTH-1:0]) ||
+                             (in_iso_endps[endp_q] == 1'b1 && in_byte_q != IN_ISO_MAXPACKETSIZE[IN_WIDTH-1:0])))) begin
                  pid_d = PID_NAK;
                  tx_data = {~PID_NAK, PID_NAK};
                  phy_state_d = PHY_IDLE;
               end else begin
-                 if (datain_toggle_q[endp_q] == 1'b0) begin
+                 if (in_toggle_q[endp_q] == 1'b0) begin
                     pid_d = PID_DATA0;
                     tx_data = {~PID_DATA0, PID_DATA0};
                  end else begin
@@ -508,14 +555,14 @@ module sie
               data_d[7:0] = in_data_i;
               crc16_d = 16'hFFFF;
               in_byte_d = 'd0;
-              tx_valid = 1'b1;
-              in_req = 1'b1;
            end
            PHY_TX_DATA : begin
               tx_data = data_q[7:0];
               if (in_valid_i == 1'b0 ||
-                  (endp_q == ENDP_BULK && in_byte_q == IN_BULK_MAXPACKETSIZE[IN_WIDTH-1:0]-1) ||
-                  (endp_q == ENDP_CTRL && in_byte_q == CTRL_MAXPACKETSIZE[IN_WIDTH-1:0]-1)) begin
+                  (endp_q == ENDP_CTRL && in_byte_q == IN_CTRL_MAXPACKETSIZE[IN_WIDTH-1:0]-1) ||
+                  (in_bulk_endps[endp_q] == 1'b1 && in_byte_q == IN_BULK_MAXPACKETSIZE[IN_WIDTH-1:0]-1) ||
+                  (in_int_endps[endp_q] == 1'b1 && in_byte_q == IN_INT_MAXPACKETSIZE[IN_WIDTH-1:0]-1) ||
+                  (in_iso_endps[endp_q] == 1'b1 && in_byte_q == IN_ISO_MAXPACKETSIZE[IN_WIDTH-1:0]-1)) begin
                  phy_state_d = PHY_TX_CRC16_0;
               end else begin
                  in_ready = 1'b1;
@@ -535,6 +582,10 @@ module sie
               tx_data = rev8(~crc16_q[7:0]);
               phy_state_d = PHY_IDLE;
               tx_valid = 1'b1;
+              if (in_iso_endps[endp_q] == 1'b1) begin
+                 out_eop = 1'b1;
+                 in_data_ack = 1'b1;
+              end
            end
            default : begin
               phy_state_d = PHY_IDLE;

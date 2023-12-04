@@ -2,17 +2,19 @@ import tinyfpga
 import binascii
 import time
 import os
+import random
 
 #tinyfpga.boot()
 
 ser = tinyfpga.open()
 
-length = 1024
 i = 10000
 while i > 0:
-    print(f"{str(i).rjust(6)} ", end = "\r")
+    length = random.randint(900, 1024)
+    print(f"{str(i).rjust(6)}: {str(length).rjust(6)} ", end = "\r")
     wr_data = os.urandom(length)
     ser.write(wr_data)
+    time.sleep(0.01)
     rd_data = ser.read(length)
     if (rd_data != wr_data):
         print(f"\033[91m")

@@ -6,7 +6,7 @@
 
 * Build Date:         Dec 10 2020 17:24:17
 
-* File Generated:     Oct 29 2022 15:52:01
+* File Generated:     Dec 10 2023 15:50:05
 
 * Purpose:            General info of design implementation
 
@@ -17,7 +17,7 @@
 Synthesis/Placement Summary:
 ----------------------------
     Status:  Successful
-    Runtime: 1 seconds
+    Runtime: 2 seconds
 
 Device Info:
 ------------
@@ -27,8 +27,8 @@ Device Info:
 
 Design statistics:
 ------------------
-    FFs:                  406
-    LUTs:                 1184
+    FFs:                  407
+    LUTs:                 1164
     RAMs:                 0
     IOBs:                 5
     GBs:                  7
@@ -37,12 +37,12 @@ Design statistics:
 
 Logic Resource Utilization:
 ---------------------------
-    Total Logic Cells: 1185/7680
-        Combinational Logic Cells: 779      out of   7680      10.1432%
-        Sequential Logic Cells:    406      out of   7680      5.28646%
-        Logic Tiles:               225      out of   960       23.4375%
+    Total Logic Cells: 1167/7680
+        Combinational Logic Cells: 760      out of   7680      9.89583%
+        Sequential Logic Cells:    407      out of   7680      5.29948%
+        Logic Tiles:               229      out of   960       23.8542%
     Registers: 
-        Logic Registers:           406      out of   7680      5.28646%
+        Logic Registers:           407      out of   7680      5.29948%
         IO Registers:              0        out of   1280      0
     Block RAMs:                    0        out of   32        0%
     Warm Boots:                    0        out of   1         0%
@@ -81,15 +81,15 @@ Detailed I/O Info:
 
 Detailed Global Buffer Info:
 ----------------------------
-    Buffer Number  IO Bank  Driven By  Fanout  Signal Name                            
-    -------------  -------  ---------  ------  -----------                            
-    3              3                   56      u_usb_cdc.u_sie.N_95_g                 
-    1              0                   37      u_usb_cdc.u_sie.u_phy_rx.clk_gate_g    
-    2              1                   333     u_usb_cdc.rstn_i_g                     
-    7              1                   20      u_usb_cdc.u_ctrl_endp.N_90_g           
-    5              2                   85      u_usb_cdc.u_bulk_endp.out_ready_i_1_g  
-    4              0                   55      u_usb_cdc.rstn_sq_i_g_0                
-    0              2                   388     clk_div4_g                             
+    Buffer Number  IO Bank  Driven By  Fanout  Signal Name                                            
+    -------------  -------  ---------  ------  -----------                                            
+    3              3                   58      u_usb_cdc.u_sie.clk_gate_0_i_g                         
+    1              0                   37      u_usb_cdc.u_sie.clk_gate_g                             
+    2              1                   334     u_usb_cdc.rstn_i_g                                     
+    7              1                   26      u_usb_cdc.u_ctrl_endp.clk_gate_0_0_g                   
+    5              2                   84      u_usb_cdc.u_bulk_endps_0__u_bulk_endp.out_ready_i_1_g  
+    4              0                   55      u_usb_cdc.rstn_sq_i_g_0                                
+    0              2                   389     clk_div4_g                                             
 
 
 Router Summary:
@@ -99,9 +99,9 @@ Router Summary:
 
 Routing Resource Utilization:
 -----------------------------
-              Local line of tile     8614 out of 146184      5.89257%
-                          Span 4     2100 out of  29696      7.07166%
-                         Span 12      273 out of   5632      4.8473%
+              Local line of tile     8464 out of 146184      5.78996%
+                          Span 4     2035 out of  29696      6.85277%
+                         Span 12      286 out of   5632      5.07812%
                   Global network        8 out of      8      100%
-      Vertical Inter-LUT Connect      295 out of   6720      4.38988%
+      Vertical Inter-LUT Connect      289 out of   6720      4.3006%
 

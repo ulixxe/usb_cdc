@@ -56,12 +56,18 @@ $(OUT_DIR)/%.fst: $(OUT_DIR)/%.vvp
 sim: $(OUT_DIR)/$(PROJ).fst
 
 $(OUT_DIR)/%.xml: $(HDL_FILES) $(TB_HDL_FILES) | $(OUT_DIR) $(OUT_DIR)/cells_sim.v
-	verilator -xml-only --bbox-unsup --bbox-sys -Wno-lint -Wno-TIMESCALEMOD -Wno-STMTDLY -Wno-INFINITELOOP -DBLACKBOX -DNO_ICE40_DEFAULT_ASSIGNMENTS --top tb_$(PROJ) $(INC_DIRS) -v $(OUT_DIR)/cells_sim.v $^ --xml-output $@
+	verilator --no-timing -xml-only --bbox-unsup --bbox-sys -Wno-lint -Wno-MULTIDRIVEN -Wno-TIMESCALEMOD -Wno-STMTDLY -Wno-INFINITELOOP -DBLACKBOX -DNO_ICE40_DEFAULT_ASSIGNMENTS --top tb_$(PROJ) $(INC_DIRS) -v $(OUT_DIR)/cells_sim.v $^ --xml-output $@
 
 $(OUT_DIR)/%.stems: $(OUT_DIR)/%.xml
 	xml2stems $< $@
 
 wave: $(OUT_DIR)/$(PROJ).stems $(OUT_DIR)/$(PROJ).fst
+	gtkwave --autosavename --saveonexit --tcl_init=../../common/gtkwave/procs.tcl --wish --stems $^ --rcvar 'do_initial_zoom_fit yes' --rcvar 'splash_disable yes'
+
+$(OUT_DIR)/%.fst: $(OUT_DIR)/tb.dump
+	vcd2fst $<  $@
+
+fst: $(OUT_DIR)/$(PROJ).stems $(OUT_DIR)/tb.fst
 	gtkwave --autosavename --saveonexit --tcl_init=../../common/gtkwave/procs.tcl --wish --stems $^ --rcvar 'do_initial_zoom_fit yes' --rcvar 'splash_disable yes'
 
 clean:

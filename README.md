@@ -2,6 +2,8 @@
 
 USB\_CDC is a Verilog implementation of the Full Speed (12Mbit/s) USB communications device class (or USB CDC class). It implements the Abstract Control Model (ACM) subclass.
 
+USB\_CDC can be configured through CHANNELS parameter to implement from 1 to a maximum of 7 CDC channels.
+
 Windows 10 provides a built-in driver (Usbser.sys) for USB CDC devices.
 A USB\_CDC device is automatically recognized by Windows 10 as a virtual COM port, and a serial port terminal application such as [CoolTerm](https://freeware.the-meiers.org/) can be used to communicate with it.
 
@@ -35,14 +37,14 @@ Furthermore, USB\_CDC was designed from scratch. This allowed to:
 * `rstn_i`: asynchronous reset, active low
 
 ### FIFO out (from the USB host)
-* `out_data_o`: data byte
-* `out_valid_o`: valid control signal
-* `out_ready_i`: ready control signal
+* `out_data_o`: data (1 byte if CHANNELS=1, n bytes if CHANNELS=n)
+* `out_valid_o`: valid control signal (1 bit if CHANNEL=1, n bits if CHANNELS=n)
+* `out_ready_i`: ready control signal (1 bit if CHANNEL=1, n bits if CHANNELS=n)
 
 ### FIFO in (to the USB host)
-* `in_data_i`: data byte
-* `in_valid_i`: valid control signal
-* `in_ready_o`: ready control signal
+* `in_data_i`: data (1 byte if CHANNELS=1, n bytes if CHANNELS=n)
+* `in_valid_i`: valid control signal (1 bit if CHANNEL=1, n bits if CHANNELS=n)
+* `in_ready_o`: ready control signal (1 bit if CHANNEL=1, n bits if CHANNELS=n)
 
 ### USB I/O buffers
 * `dp_rx_i`: D+ input bit stream
@@ -79,6 +81,9 @@ By default, they are not defined (VENDORID=0x0000 and PRODUCTID=0x0000).
 
 ### IN\_BULK\_MAXPACKETSIZE and OUT\_BULK\_MAXPACKETSIZE
 IN\_BULK\_MAXPACKETSIZE and OUT\_BULK\_MAXPACKETSIZE define maximum bulk data payload sizes for IN and OUT bulk transactions. The allowable full-speed values are only 8, 16, 32, and 64 bytes. The default value for both is 8.
+
+### CHANNELS
+CHANNELS defines how many CDC channels to implement. It is possible to implement from a minimum of 1 (default) to a maximum of 7 channels.
 
 ### BIT\_SAMPLES
 BIT\_SAMPLES defines the number of samples taken on USB dp/dn lines for each bit. Full Speed USB has a bit rate of 12MHz, so the `clk` clock has to be BIT\_SAMPLES times faster. For example, the default value of 4 needs a `clk` frequency of 48MHz (see the picture below).

@@ -26,11 +26,10 @@
 module ctrl_endp
   #(parameter VENDORID = 16'h0000,
     parameter PRODUCTID = 16'h0000,
+    parameter CHANNELS = 'd1,
     parameter CTRL_MAXPACKETSIZE = 'd8,
     parameter IN_BULK_MAXPACKETSIZE = 'd8,
-    parameter OUT_BULK_MAXPACKETSIZE = 'd8,
-    parameter ENDP_BULK = 4'd1,
-    parameter ENDP_INT = 4'd2)
+    parameter OUT_BULK_MAXPACKETSIZE = 'd8)
    (
     // ---- to/from USB_CDC module ---------------------------------
     input        clk_i,
@@ -103,153 +102,233 @@ module ctrl_endp
       end
    endfunction
 
+   localparam SDL = 'h0A; // STRING_DESCR_xx Length
+   function [8*SDL-1:0] string_descr;
+      input [7:0] i;
+      begin
+         // String Descriptor (in reverse order)
+         string_descr = {8'h00, "1"+i,
+                         8'h00, "C",
+                         8'h00, "D",
+                         8'h00, "C",
+                         8'h03, // bDescriptorType (STRING)
+                         SDL[7:0] // bLength
+                         }; // UNICODE String Descriptor, USB2.0 9.6.7, page 273-274, Table 9-16
+      end
+   endfunction
+
+   function [8*SDL*CHANNELS-1:0] string_descrs;
+      input dummy;
+      integer i;
+      begin
+         for (i = 0; i < CHANNELS; i = i+1) begin
+            string_descrs[i*8*SDL +:8*SDL] = string_descr(i[7:0]);
+         end
+      end
+   endfunction
+
+   localparam [8*SDL*CHANNELS-1:0] STRING_DESCRS = string_descrs(0);
+
+   // String Descriptor Zero (in reverse order)
+   localparam [8*'h4-1:0]          STRING_DESCR_00 = {8'h04, // wLANGID[1] (US English)
+                                                      8'h09, // wLANGID[0]
+                                                      8'h03, // bDescriptorType (STRING)
+                                                      8'h04 // bLength
+                                                      }; // String Descriptor Zero, USB2.0 9.6.7, page 273-274, Table 9-15
+
    // Device Descriptor (in reverse order)
-   localparam [8*'h12-1:0] DEV_DESCR = {8'h01, // bNumConfigurations
-                                        8'h00, // iSerialNumber (no string)
-                                        8'h00, // iProduct (no string)
-                                        8'h00, // iManufacturer (no string)
-                                        8'h01, // bcdDevice[1] (1.00)
-                                        8'h00, // bcdDevice[0]
-                                        PRODUCTID[15:8], // idProduct[1]
-                                        PRODUCTID[7:0], // idProduct[0]
-                                        VENDORID[15:8], // idVendor[1]
-                                        VENDORID[7:0], // idVendor[0]
-                                        CTRL_MAXPACKETSIZE[7:0], // bMaxPacketSize0
-                                        8'h00, // bDeviceProtocol (specified at interface level)
-                                        8'h00, // bDeviceSubClass (specified at interface level)
-                                        8'h02, // bDeviceClass (Communications Device Class)
-                                        8'h02, // bcdUSB[1] (2.00)
-                                        8'h00, // bcdUSB[0]
-                                        8'h01, // bDescriptorType (DEVICE)
-                                        8'h12 // bLength
-                                        }; // Standard Device Descriptor, USB2.0 9.6.1, page 261-263, Table 9-8
+   localparam [8*'h12-1:0]         DEV_DESCR = {8'h01, // bNumConfigurations
+                                                8'h00, // iSerialNumber (no string)
+                                                8'h00, // iProduct (no string)
+                                                8'h00, // iManufacturer (no string)
+                                                8'h01, // bcdDevice[1] (1.00)
+                                                8'h00, // bcdDevice[0]
+                                                PRODUCTID[15:8], // idProduct[1]
+                                                PRODUCTID[7:0], // idProduct[0]
+                                                VENDORID[15:8], // idVendor[1]
+                                                VENDORID[7:0], // idVendor[0]
+                                                CTRL_MAXPACKETSIZE[7:0], // bMaxPacketSize0
+                                                (CHANNELS>1) ? {
+                                                                8'h01, // bDeviceProtocol (Interface Association Descriptor)
+                                                                8'h02, // bDeviceSubClass (Common Class)
+                                                                8'hEF // bDeviceClass (Miscellaneous Device Class)
+                                                                } : {
+                                                                     8'h00, // bDeviceProtocol (specified at interface level)
+                                                                     8'h00, // bDeviceSubClass (specified at interface level)
+                                                                     8'h02 // bDeviceClass (Communications Device Class)
+                                                                     },
+                                                8'h02, // bcdUSB[1] (2.00)
+                                                8'h00, // bcdUSB[0]
+                                                8'h01, // bDescriptorType (DEVICE)
+                                                8'h12 // bLength
+                                                }; // Standard Device Descriptor, USB2.0 9.6.1, page 261-263, Table 9-8
+
+   function [8*'h3A-1:0] cdc_descr;
+      input [7:0] i;
+      begin
+         // CDC Interfaces Descriptor (in reverse order)
+         cdc_descr = {8'h00, // bInterval
+                      8'h00, // wMaxPacketSize[1]
+                      IN_BULK_MAXPACKETSIZE[7:0], // wMaxPacketSize[0]
+                      8'h02, // bmAttributes (bulk)
+                      8'h80+8'd2*i+8'd1, // bEndpointAddress (1 IN)
+                      8'h05, // bDescriptorType (ENDPOINT)
+                      8'h07, // bLength
+                      // Standard Endpoint Descriptor, USB2.0 9.6.6, page 269-271, Table 9-13
+
+                      8'h00, // bInterval
+                      8'h00, // wMaxPacketSize[1]
+                      OUT_BULK_MAXPACKETSIZE[7:0], // wMaxPacketSize[0]
+                      8'h02, // bmAttributes (bulk)
+                      8'h00+8'd2*i+8'd1, // bEndpointAddress (1 OUT)
+                      8'h05, // bDescriptorType (ENDPOINT)
+                      8'h07, // bLength
+                      // Standard Endpoint Descriptor, USB2.0 9.6.6, page 269-271, Table 9-13
+
+                      (CHANNELS>1) ? i+8'd1 : 8'h00, // iInterface (string / no string)
+                      8'h00, // bInterfaceProtocol
+                      8'h00, // bInterfaceSubClass
+                      8'h0A, // bInterfaceClass (CDC-Data)
+                      8'h02, // bNumEndpoints
+                      8'h00, // bAlternateSetting
+                      8'd2*i+8'd1, // bInterfaceNumber
+                      8'h04, // bDescriptorType (INTERFACE)
+                      8'h09, // bLength
+                      // Standard Interface Descriptor, USB2.0 9.6.5, page 267-269, Table 9-12
+
+                      8'hFF, // bInterval (255 ms)
+                      8'h00, // wMaxPacketSize[1]
+                      8'h08, // wMaxPacketSize[0]
+                      8'h03, // bmAttributes (interrupt)
+                      8'h80+8'd2*i+8'd2, // bEndpointAddress (2 IN)
+                      8'h05, // bDescriptorType (ENDPOINT)
+                      8'h07, // bLength
+                      // Standard Endpoint Descriptor, USB2.0 9.6.6, page 269-271, Table 9-13
+
+                      8'd2*i+8'd1, // bSlaveInterface0
+                      8'd2*i, // bMasterInterface
+                      8'h06, // bDescriptorSubtype (Union Functional)
+                      8'h24, // bDescriptorType (CS_INTERFACE)
+                      8'h05, // bFunctionLength
+                      // Union Functional Descriptor, CDC1.1 5.2.3.8, Table 33
+
+                      8'h00, // bmCapabilities (none)
+                      8'h02, // bDescriptorSubtype (Abstract Control Management Functional)
+                      8'h24, // bDescriptorType (CS_INTERFACE)
+                      8'h04, // bFunctionLength
+                      // Abstract Control Management Functional Descriptor, CDC1.1 5.2.3.3, Table 28
+
+                      8'h01, // bDataInterface
+                      8'h00, // bmCapabilities (no call mgmnt)
+                      8'h01, // bDescriptorSubtype (Call Management Functional)
+                      8'h24, // bDescriptorType (CS_INTERFACE)
+                      8'h05, // bFunctionLength
+                      // Call Management Functional Descriptor, CDC1.1 5.2.3.2, Table 27
+
+                      8'h01, // bcdCDC[1] (1.1)
+                      8'h10, // bcdCDC[0]
+                      8'h00, // bDescriptorSubtype (Header Functional)
+                      8'h24, // bDescriptorType (CS_INTERFACE)
+                      8'h05, // bFunctionLength
+                      // Header Functional Descriptor, CDC1.1 5.2.3.1, Table 26
+
+                      8'h00, // iInterface (no string)
+                      8'h01, // bInterfaceProtocol (AT Commands in ITU V.25ter)
+                      8'h02, // bInterfaceSubClass (Abstract Control Model)
+                      8'h02, // bInterfaceClass (Communications Device Class)
+                      8'h01, // bNumEndpoints
+                      8'h00, // bAlternateSetting
+                      8'd2*i, // bInterfaceNumber
+                      8'h04, // bDescriptorType (INTERFACE)
+                      8'h09 // bLength
+                      }; // Standard Interface Descriptor, USB2.0 9.6.5, page 267-269, Table 9-12
+      end
+   endfunction
+
+   function [8*'h08-1:0] ia_descr;
+      input [7:0] i;
+      begin
+         // Interfaces Association Descriptor (in reverse order)
+         ia_descr = {8'h00, // iFunction (no string)
+                     8'h01, // bFunctionProtocol (AT Commands in ITU V.25ter)
+                     8'h02, // bFunctionSubClass (Abstract Control Model)
+                     8'h02, // bFunctionClass (Communications Device Class)
+                     8'h02, // bInterfaceCount
+                     8'd2*i, // bFirstInterface
+                     8'h0B, // bDescriptorType (INTERFACE ASSOCIATION)
+                     8'h08 // bLength
+                     }; // Interface Association Descriptor, USB2.0 ECN 9.X.Y, page 4-5, Table 9-Z
+      end
+   endfunction
+
+   localparam CDL = (CHANNELS>1) ? ('h3A+'h08)*CHANNELS+'h09 : 'h3A+'h09; // CONF_DESCR Length
+   function [8*CDL-1:0] conf_descr;
+      input dummy;
+      integer i;
+      begin
+         conf_descr[0 +:8*'h09] = {8'h32, // bMaxPower (100mA)
+                                   8'h80, // bmAttributes (bus powered, no remote wakeup)
+                                   8'h00, // iConfiguration (no string)
+                                   8'h01, // bConfigurationValue
+                                   8'd2*CHANNELS[7:0], // bNumInterfaces
+                                   CDL[15:8], // wTotalLength[1]
+                                   CDL[7:0], // wTotalLength[0]
+                                   8'h02, // bDescriptorType (CONFIGURATION)
+                                   8'h09 // bLength
+                                   }; // Standard Configuration Descriptor, USB2.0 9.6.3, page 264-266, Table 9-10
+
+         if (CHANNELS>1) begin
+            for (i = 0; i < CHANNELS; i = i+1) begin
+               conf_descr[i*8*('h3A+'h08)+8*'h09 +:8*('h3A+'h08)] = {cdc_descr(i[7:0]), ia_descr(i[7:0])};
+            end
+         end else begin
+            conf_descr[8*'h09 +:8*'h3A] = cdc_descr(8'd0);
+         end
+      end
+   endfunction
 
    // Configuration Descriptor (in reverse order)
-   localparam [8*'h43-1:0] CONF_DESCR = {8'h00, // bInterval
-                                         8'h00, // wMaxPacketSize[1]
-                                         IN_BULK_MAXPACKETSIZE[7:0], // wMaxPacketSize[0]
-                                         8'h02, // bmAttributes (bulk)
-                                         {4'h8, ENDP_BULK}, // bEndpointAddress (1 IN)
-                                         8'h05, // bDescriptorType (ENDPOINT)
-                                         8'h07, // bLength
-                                         // Standard Endpoint Descriptor, USB2.0 9.6.6, page 269-271, Table 9-13
+   localparam [8*CDL-1:0] CONF_DESCR = conf_descr(0);
 
-                                         8'h00, // bInterval
-                                         8'h00, // wMaxPacketSize[1]
-                                         OUT_BULK_MAXPACKETSIZE[7:0], // wMaxPacketSize[0]
-                                         8'h02, // bmAttributes (bulk)
-                                         {4'h0, ENDP_BULK}, // bEndpointAddress (1 OUT)
-                                         8'h05, // bDescriptorType (ENDPOINT)
-                                         8'h07, // bLength
-                                         // Standard Endpoint Descriptor, USB2.0 9.6.6, page 269-271, Table 9-13
-
-                                         8'h00, // iInterface (no string)
-                                         8'h00, // bInterfaceProtocol
-                                         8'h00, // bInterfaceSubClass
-                                         8'h0A, // bInterfaceClass (CDC-Data)
-                                         8'h02, // bNumEndpoints
-                                         8'h00, // bAlternateSetting
-                                         8'h01, // bInterfaceNumber
-                                         8'h04, // bDescriptorType (INTERFACE)
-                                         8'h09, // bLength
-                                         // Standard Interface Descriptor, USB2.0 9.6.5, page 267-269, Table 9-12
-
-                                         8'hFF, // bInterval (255 ms)
-                                         8'h00, // wMaxPacketSize[1]
-                                         8'h08, // wMaxPacketSize[0]
-                                         8'h03, // bmAttributes (interrupt)
-                                         {4'h8, ENDP_INT}, // bEndpointAddress (2 IN)
-                                         8'h05, // bDescriptorType (ENDPOINT)
-                                         8'h07, // bLength
-                                         // Standard Endpoint Descriptor, USB2.0 9.6.6, page 269-271, Table 9-13
-
-                                         8'h01, // bSlaveInterface0
-                                         8'h00, // bMasterInterface
-                                         8'h06, // bDescriptorSubtype (Union Functional)
-                                         8'h24, // bDescriptorType (CS_INTERFACE)
-                                         8'h05, // bFunctionLength
-                                         // Union Functional Descriptor, CDC1.1 5.2.3.8, Table 33
-
-                                         8'h00, // bmCapabilities (none)
-                                         8'h02, // bDescriptorSubtype (Abstract Control Management Functional)
-                                         8'h24, // bDescriptorType (CS_INTERFACE)
-                                         8'h04, // bFunctionLength
-                                         // Abstract Control Management Functional Descriptor, CDC1.1 5.2.3.3, Table 28
-
-                                         8'h01, // bDataInterface
-                                         8'h00, // bmCapabilities (no call mgmnt)
-                                         8'h01, // bDescriptorSubtype (Call Management Functional)
-                                         8'h24, // bDescriptorType (CS_INTERFACE)
-                                         8'h05, // bFunctionLength
-                                         // Call Management Functional Descriptor, CDC1.1 5.2.3.2, Table 27
-
-                                         8'h01, // bcdCDC[1] (1.1)
-                                         8'h10, // bcdCDC[0]
-                                         8'h00, // bDescriptorSubtype (Header Functional)
-                                         8'h24, // bDescriptorType (CS_INTERFACE)
-                                         8'h05, // bFunctionLength
-                                         // Header Functional Descriptor, CDC1.1 5.2.3.1, Table 26
-
-                                         8'h00, // iInterface (no string)
-                                         8'h01, // bInterfaceProtocol (AT Commands in ITU V.25ter)
-                                         8'h02, // bInterfaceSubClass (Abstract Control Model)
-                                         8'h02, // bInterfaceClass (Communications Device Class)
-                                         8'h01, // bNumEndpoints
-                                         8'h00, // bAlternateSetting
-                                         8'h00, // bInterfaceNumber
-                                         8'h04, // bDescriptorType (INTERFACE)
-                                         8'h09, // bLength
-                                         // Standard Interface Descriptor, USB2.0 9.6.5, page 267-269, Table 9-12
-
-                                         8'h32, // bMaxPower (100mA)
-                                         8'h80, // bmAttributes (bus powered, no remote wakeup)
-                                         8'h00, // iConfiguration (no string)
-                                         8'h01, // bConfigurationValue
-                                         8'h02, // bNumInterfaces
-                                         8'h00, // wTotalLength[1]
-                                         8'h43, // wTotalLength[0]
-                                         8'h02, // bDescriptorType (CONFIGURATION)
-                                         8'h09 // bLength
-                                         }; // Standard Configuration Descriptor, USB2.0 9.6.3, page 264-266, Table 9-10
-
-   localparam [1:0]        ST_IDLE = 2'd0,
-                           ST_STALL = 2'd1,
-                           ST_SETUP = 2'd2,
-                           ST_DATA = 2'd3;
-   localparam [1:0]        REC_DEVICE = 2'd0,
-                           REC_INTERFACE = 2'd1,
-                           REC_ENDPOINT = 2'd2;
+   localparam [1:0]       ST_IDLE = 2'd0,
+                          ST_STALL = 2'd1,
+                          ST_SETUP = 2'd2,
+                          ST_DATA = 2'd3;
+   localparam [1:0]       REC_DEVICE = 2'd0,
+                          REC_INTERFACE = 2'd1,
+                          REC_ENDPOINT = 2'd2;
    // Supported Standard Requests
-   localparam [7:0]        STD_REQ_GET_STATUS = 'd0,
-                           STD_REQ_CLEAR_FEATURE = 'd1,
-                           STD_REQ_SET_ADDRESS = 'd5,
-                           STD_REQ_GET_DESCRIPTOR = 'd6,
-                           STD_REQ_GET_CONFIGURATION = 'd8,
-                           STD_REQ_SET_CONFIGURATION = 'd9,
-                           STD_REQ_GET_INTERFACE = 'd10;
+   localparam [7:0]       STD_REQ_GET_STATUS = 'd0,
+                          STD_REQ_CLEAR_FEATURE = 'd1,
+                          STD_REQ_SET_ADDRESS = 'd5,
+                          STD_REQ_GET_DESCRIPTOR = 'd6,
+                          STD_REQ_GET_CONFIGURATION = 'd8,
+                          STD_REQ_SET_CONFIGURATION = 'd9,
+                          STD_REQ_GET_INTERFACE = 'd10;
    // Supported Class Requests
-   localparam [7:0]        CLASS_REQ_SET_LINE_CODING = 'h20,
-                           CLASS_REQ_GET_LINE_CODING = 'h21,
-                           CLASS_REQ_SET_CONTROL_LINE_STATE = 'h22,
-                           CLASS_REQ_SEND_BREAK = 'h23;
-   localparam [3:0]        REQ_NONE = 4'd0,
-                           REQ_CLEAR_FEATURE = 4'd1,
-                           REQ_GET_CONFIGURATION = 4'd2,
-                           REQ_GET_DESCRIPTOR = 4'd3,
-                           REQ_GET_DESCRIPTOR_DEVICE = 4'd4,
-                           REQ_GET_DESCRIPTOR_CONFIGURATION = 4'd5,
-                           REQ_GET_INTERFACE = 4'd6,
-                           REQ_GET_STATUS = 4'd7,
-                           REQ_SET_ADDRESS = 4'd8,
-                           REQ_SET_CONFIGURATION = 4'd9,
-                           REQ_DUMMY = 4'd10,
-                           REQ_UNSUPPORTED = 4'd11;
-   localparam [1:0]        POWERED_STATE = 2'd0,
-                           DEFAULT_STATE = 2'd1,
-                           ADDRESS_STATE = 2'd2,
-                           CONFIGURED_STATE = 2'd3;
+   localparam [7:0]       ACM_REQ_SET_LINE_CODING = 'h20,
+                          ACM_REQ_GET_LINE_CODING = 'h21,
+                          ACM_REQ_SET_CONTROL_LINE_STATE = 'h22,
+                          ACM_REQ_SEND_BREAK = 'h23;
+   localparam [3:0]       REQ_NONE = 4'd0,
+                          REQ_CLEAR_FEATURE = 4'd1,
+                          REQ_GET_CONFIGURATION = 4'd2,
+                          REQ_GET_DESCRIPTOR = 4'd3,
+                          REQ_GET_DESCRIPTOR_DEVICE = 4'd4,
+                          REQ_GET_DESCRIPTOR_CONFIGURATION = 4'd5,
+                          REQ_GET_DESCRIPTOR_STRING = 4'd6,
+                          REQ_GET_INTERFACE = 4'd7,
+                          REQ_GET_STATUS = 4'd8,
+                          REQ_SET_ADDRESS = 4'd9,
+                          REQ_SET_CONFIGURATION = 4'd10,
+                          REQ_DUMMY = 4'd11,
+                          REQ_UNSUPPORTED = 4'd12;
+   localparam [1:0]       POWERED_STATE = 2'd0,
+                          DEFAULT_STATE = 2'd1,
+                          ADDRESS_STATE = 2'd2,
+                          CONFIGURED_STATE = 2'd3;
 
-   localparam              BC_WIDTH = ceil_log2(`max('h43,'h12));
+   localparam             BC_WIDTH = ceil_log2(1+`max('h12, `max(CDL, (CHANNELS>1) ? SDL : 0)));
 
    reg [1:0]               state_q, state_d;
    reg [BC_WIDTH-1:0]      byte_cnt_q, byte_cnt_d;
@@ -258,6 +337,7 @@ module ctrl_endp
    reg                     class_q, class_d;
    reg [1:0]               rec_q, rec_d;
    reg [3:0]               req_q, req_d;
+   reg [7:0]               string_index_q, string_index_d;
    reg [1:0]               dev_state_q, dev_state_d;
    reg [1:0]               dev_state_qq, dev_state_dd;
    reg [6:0]               addr_q, addr_d;
@@ -314,6 +394,7 @@ module ctrl_endp
          class_q <= 1'b0;
          rec_q <= REC_DEVICE;
          req_q <= REQ_NONE;
+         string_index_q <= 'd0;
          dev_state_q <= DEFAULT_STATE;
          addr_q <= 7'd0;
          addr_qq <= 7'd0;
@@ -327,6 +408,7 @@ module ctrl_endp
             class_q <= class_d;
             rec_q <= rec_d;
             req_q <= req_d;
+            string_index_q <= (CHANNELS>1) ? string_index_d : 8'd0;
             dev_state_q <= dev_state_d;
             addr_q <= addr_d;
             addr_qq <= addr_dd;
@@ -335,11 +417,13 @@ module ctrl_endp
       end
    end
 
+   integer i;
+
    always @(/*AS*/addr_q or addr_qq or byte_cnt_q or class_q
             or dev_state_q or dev_state_qq or in_data_ack_i
             or in_dir_q or in_endp_q or in_req_q or max_length_q
             or out_data_i or out_err_i or out_valid_i or rec_q
-            or req_q or setup_i or state_q) begin
+            or req_q or setup_i or state_q or string_index_q) begin
       state_d = state_q;
       byte_cnt_d = 'd0;
       max_length_d = max_length_q;
@@ -347,6 +431,7 @@ module ctrl_endp
       class_d = class_q;
       rec_d = rec_q;
       req_d = req_q;
+      string_index_d = string_index_q;
       dev_state_d = dev_state_q;
       dev_state_dd = dev_state_qq;
       addr_d = addr_q;
@@ -418,10 +503,10 @@ module ctrl_endp
                             endcase
                          end else begin
                             if (dev_state_qq == CONFIGURED_STATE &&
-                                ((out_data_i == CLASS_REQ_SET_LINE_CODING) ||
-                                 (out_data_i == CLASS_REQ_GET_LINE_CODING) ||
-                                 (out_data_i == CLASS_REQ_SET_CONTROL_LINE_STATE) ||
-                                 (out_data_i == CLASS_REQ_SEND_BREAK)))
+                                ((out_data_i == ACM_REQ_SET_LINE_CODING) ||
+                                 (out_data_i == ACM_REQ_GET_LINE_CODING) ||
+                                 (out_data_i == ACM_REQ_SET_CONTROL_LINE_STATE) ||
+                                 (out_data_i == ACM_REQ_SEND_BREAK)))
                               req_d = REQ_DUMMY;
                          end
                       end
@@ -437,7 +522,9 @@ module ctrl_endp
                              req_d = REQ_UNSUPPORTED;
                         end
                         REQ_GET_DESCRIPTOR : begin
-                           if (|out_data_i == 1'b1)
+                           if (CHANNELS > 1 && out_data_i <= CHANNELS)
+                             string_index_d = out_data_i;
+                           else if (|out_data_i == 1'b1)
                              req_d = REQ_UNSUPPORTED;
                         end
                         REQ_GET_INTERFACE : begin
@@ -477,10 +564,12 @@ module ctrl_endp
                              req_d = REQ_UNSUPPORTED;
                         end
                         REQ_GET_DESCRIPTOR : begin
-                           if (out_data_i == 8'd1)
+                           if (out_data_i == 8'd1 && |string_index_q == 1'b0)
                              req_d = REQ_GET_DESCRIPTOR_DEVICE;
-                           else if (out_data_i == 8'd2)
+                           else if (out_data_i == 8'd2 && |string_index_q == 1'b0)
                              req_d = REQ_GET_DESCRIPTOR_CONFIGURATION;
+                           else if (CHANNELS > 1 && out_data_i == 8'd3)
+                             req_d = REQ_GET_DESCRIPTOR_STRING;
                            else
                              req_d = REQ_UNSUPPORTED;
                         end
@@ -522,6 +611,8 @@ module ctrl_endp
                            if (|out_data_i == 1'b1)
                              req_d = REQ_UNSUPPORTED;
                         end
+                        REQ_GET_DESCRIPTOR_STRING : begin
+                        end
                         REQ_GET_INTERFACE : begin
                            if (!(out_data_i == 8'd0 || out_data_i == 8'd1))
                              req_d = REQ_UNSUPPORTED;
@@ -561,6 +652,8 @@ module ctrl_endp
                            if (|out_data_i == 1'b1)
                              req_d = REQ_UNSUPPORTED;
                         end
+                        REQ_GET_DESCRIPTOR_STRING : begin
+                        end
                         REQ_GET_INTERFACE : begin
                            if (|out_data_i == 1'b1)
                              req_d = REQ_UNSUPPORTED;
@@ -592,7 +685,7 @@ module ctrl_endp
                            if (out_data_i != 8'd1)
                              req_d = REQ_UNSUPPORTED;
                         end
-                        REQ_GET_DESCRIPTOR_DEVICE, REQ_GET_DESCRIPTOR_CONFIGURATION : begin
+                        REQ_GET_DESCRIPTOR_DEVICE, REQ_GET_DESCRIPTOR_CONFIGURATION, REQ_GET_DESCRIPTOR_STRING : begin
                            if (BC_WIDTH < 8 && |out_data_i[7:`min(BC_WIDTH, 7)] == 1'b1)
                              max_length_d = {BC_WIDTH{1'b1}};
                         end
@@ -628,7 +721,7 @@ module ctrl_endp
                            if (|out_data_i == 1'b1)
                              req_d = REQ_UNSUPPORTED;
                         end
-                        REQ_GET_DESCRIPTOR_DEVICE, REQ_GET_DESCRIPTOR_CONFIGURATION : begin
+                        REQ_GET_DESCRIPTOR_DEVICE, REQ_GET_DESCRIPTOR_CONFIGURATION, REQ_GET_DESCRIPTOR_STRING : begin
                            if (BC_WIDTH < 16 && |out_data_i[7:`min(`max(BC_WIDTH-8, 0), 7)] == 1'b1)
                              max_length_d = {BC_WIDTH{1'b1}};
                         end
@@ -706,7 +799,9 @@ module ctrl_endp
                  end else begin
                     if (byte_cnt_q == max_length_q ||
                         (byte_cnt_q == 'h12 && req_q == REQ_GET_DESCRIPTOR_DEVICE) ||
-                        (byte_cnt_q == 'h43 && req_q == REQ_GET_DESCRIPTOR_CONFIGURATION)) begin
+                        (byte_cnt_q == CDL[BC_WIDTH-1:0] && req_q == REQ_GET_DESCRIPTOR_CONFIGURATION) ||
+                        (byte_cnt_q == 'h04 && req_q == REQ_GET_DESCRIPTOR_STRING && CHANNELS > 1 && string_index_q == 'h00) ||
+                        (byte_cnt_q == SDL[BC_WIDTH-1:0] && req_q == REQ_GET_DESCRIPTOR_STRING && CHANNELS > 1 && string_index_q != 'h00 && string_index_q <= CHANNELS)) begin
                        if (in_req_q == 1'b0) begin
                           if (~in_data_ack_i) begin // Control Read STATUS stage
                              state_d = ST_IDLE;
@@ -733,6 +828,23 @@ module ctrl_endp
                          REQ_GET_DESCRIPTOR_CONFIGURATION : begin
                             in_data = CONF_DESCR[8*byte_cnt_q +:8];
                             in_valid = 1'b1;
+                         end
+                         REQ_GET_DESCRIPTOR_STRING : begin
+                            if(CHANNELS > 1 ) begin
+                               case (string_index_q)
+                                 'h00 : begin
+                                    in_data = STRING_DESCR_00[8*byte_cnt_q +:8];
+                                    in_valid = 1'b1;
+                                 end
+                                 default : begin
+                                    for (i = 0; i < CHANNELS; i = i + 1) begin
+                                       if (string_index_q == (8'd1+i[7:0]))
+                                         in_data = STRING_DESCRS[i*8*SDL+8*byte_cnt_q +:8];
+                                    end
+                                    in_valid = 1'b1;
+                                 end
+                               endcase
+                            end
                          end
                          REQ_GET_INTERFACE : begin
                             in_data = 8'd0;

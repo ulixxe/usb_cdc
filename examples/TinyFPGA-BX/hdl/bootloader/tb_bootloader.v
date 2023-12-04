@@ -47,14 +47,14 @@ module tb_bootloader ( );
    wire usb_pu;
 
    bootloader u_bootloader (.clk(clk),
-                .led(led),
-                .usb_p(usb_p),
-                .usb_n(usb_n),
-                .usb_pu(usb_pu),
-                .sck(sck),
-                .ss(csn),
-                .sdo(mosi),
-                .sdi(miso));
+                            .led(led),
+                            .usb_p(usb_p),
+                            .usb_n(usb_n),
+                            .usb_pu(usb_pu),
+                            .sck(sck),
+                            .ss(csn),
+                            .sdo(mosi),
+                            .sdi(miso));
 
    localparam MEM_PATH = "../../common/hdl/flash/";
 
@@ -142,14 +142,18 @@ module tb_bootloader ( );
                    3, PID_ACK, IN_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle, ZLP);
 
       test = "READ @addr=0";
+      for (i = 0; i<8; i = i+1)
+        data[8*(8-i-1) +:8] = flash_init_data[24'd0+i];
       test_read('d0,
-                {8'h31, 8'hF2, 8'h38, 8'h61, 8'hE1, 8'h81, 8'h19, 8'hCA},
+                data,
                 8, address, IN_BULK_MAXPACKETSIZE, OUT_BULK_MAXPACKETSIZE,
                 100000/83*`BIT_TIME, datain_toggle, dataout_toggle);
 
       test = "READ @addr=1000";
+      for (i = 0; i<8; i = i+1)
+        data[8*(8-i-1) +:8] = flash_init_data[24'd1000+i];
       test_read('d1000,
-                {8'h68, 8'hFA, 8'h45, 8'hE3, 8'hCD, 8'h72, 8'h10, 8'h30},
+                data,
                 8, address, IN_BULK_MAXPACKETSIZE, OUT_BULK_MAXPACKETSIZE,
                 100000/83*`BIT_TIME, datain_toggle, dataout_toggle);
 
