@@ -31,11 +31,14 @@ module app
    );
 
    function integer ceil_log2;
-      input integer arg;
+      input [31:0] arg;
+      integer      i;
       begin
          ceil_log2 = 0;
-         while ((2 ** ceil_log2) < arg)
-           ceil_log2 = ceil_log2 + 1;
+         for (i = 0; i < 32; i = i + 1) begin
+            if (arg > (1 << i))
+              ceil_log2 = ceil_log2 + 1;
+         end
       end
    endfunction
 
@@ -67,6 +70,7 @@ module app
    reg [15:0]       wr_length_q, wr_length_d;
    reg [15:0]       rd_length_q, rd_length_d;
    reg [TIMER_MSB:0] timer_q, timer_d;
+   reg               boot_q, boot_d;
    reg [2:0]         heartbeat_sq;
 
    always @(posedge clk_i or negedge rstn) begin
@@ -75,12 +79,14 @@ module app
          wr_length_q <= 'd0;
          rd_length_q <= 'd0;
          timer_q <= 'd0;
+         boot_q <= 1'b0;
          heartbeat_sq <= 3'd0;
       end else begin
          state_q <= state_d;
          wr_length_q <= wr_length_d;
          rd_length_q <= rd_length_d;
          timer_q <= timer_d;
+         boot_q <= boot_d;
          heartbeat_sq <= {heartbeat_i, heartbeat_sq[2:1]};
       end
    end
@@ -90,7 +96,6 @@ module app
    reg        rd_ready;
    reg        in_valid;
    reg        out_ready;
-   reg        boot;
 
    wire       wr_ready;
    wire [7:0] rd_data;
@@ -99,7 +104,7 @@ module app
    assign in_data_o = rd_data;
    assign in_valid_o = in_valid;
    assign out_ready_o = out_ready;
-   assign boot_o = boot;
+   assign boot_o = boot_q;
 
    always @(/*AS*/heartbeat_sq or in_ready_i or out_data_i
             or out_valid_i or rd_length_q or rd_valid or state_q
@@ -111,12 +116,12 @@ module app
         timer_d = 'd0;
       else
         timer_d = timer_q + 1;
+      boot_d = 1'b0;
       en = 1'b0;
       wr_valid = 1'b0;
       rd_ready = 1'b0;
       in_valid = 1'b0;
       out_ready = 1'b0;
-      boot = 1'b0;
 
       if (timer_q[TIMER_MSB])
         state_d = ST_BOOT;
@@ -185,7 +190,7 @@ module app
            end
         end
         ST_BOOT : begin
-           boot = 1'b1;
+           boot_d = 1'b1;
         end
         default : begin
            state_d = ST_IDLE;

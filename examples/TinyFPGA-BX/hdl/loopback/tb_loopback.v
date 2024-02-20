@@ -132,14 +132,38 @@ module tb_loopback ( );
       test_data_out(address, ENDP_BULK,
                     {8'h41, 8'h42, 8'h43, 8'h44, 8'h45, 8'h46, 8'h47, 8'h48,
                      8'h51, 8'h52, 8'h53, 8'h54, 8'h55, 8'h56, 8'h57, 8'h58,
-                     8'h61, 8'h62, 8'h63},
-                    19, PID_NAK, OUT_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, dataout_toggle);
+                     8'h61, 8'h62, 8'h63, 8'h64, 8'h65},
+                    21, PID_NAK, OUT_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, dataout_toggle);
 
       test = "IN BULK DATA with ZLP";
       test_data_in(address, ENDP_BULK,
                    {8'h41, 8'h42, 8'h43, 8'h44, 8'h45, 8'h46, 8'h47, 8'h48,
                     8'h51, 8'h52, 8'h53, 8'h54, 8'h55, 8'h56, 8'h57, 8'h58},
                    16, PID_ACK, IN_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle, ZLP);
+
+      test = "OUT BULK DATA (1/3)";
+      test_data_out(address, ENDP_BULK,
+                    {8'h71, 8'h72},
+                    2, PID_ACK, OUT_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, dataout_toggle);
+
+      test = "CLEAR_FEATURE on OUT endpoint 1 (reset data toggle)";
+      test_setup_out(address, 8'h02, STD_REQ_CLEAR_FEATURE, 16'h0000, 16'h0001, 16'h0000,
+                     8'd0, 'd0, PID_ACK);
+
+      test = "OUT BULK DATA (2/3) skipped due to data toggle mismatch";
+      test_data_out(address, ENDP_BULK,
+                    {8'h73, 8'h74},
+                    2, PID_ACK, OUT_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, dataout_toggle);
+
+      test = "OUT BULK DATA (3/3)";
+      test_data_out(address, ENDP_BULK,
+                    {8'h75, 8'h76},
+                    2, PID_ACK, OUT_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, dataout_toggle);
+
+      test = "IN BULK DATA";
+      test_data_in(address, ENDP_BULK,
+                   {8'h71, 8'h72, 8'h75, 8'h76},
+                   4, PID_ACK, IN_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle, ZLP);
 
       test = "Test END";
       #(100*`BIT_TIME);

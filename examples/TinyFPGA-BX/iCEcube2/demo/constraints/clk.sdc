@@ -8,8 +8,8 @@ create_clock -name {clk} -period [expr 1000 / 16.0] [get_ports {clk}]
 create_clock -name {clk_usb} -period $CLK_PERIOD [get_nets {clk_pll}]
 
 # Somehow "create_generated_clock" confuses SynplifyPro and induces it to mess with global buffers.
-#create_generated_clock -name {clk_app} -source [get_ports {clk}] [get_nets {clk_2mhz}] -divide_by 8
-create_clock -name {clk_app} -period [expr 1000 / 2.0] [get_nets {clk_2mhz}]
+#create_generated_clock -name {clk_app} -source [get_ports {clk}] [get_nets {clk_div8}] -divide_by 8
+create_clock -name {clk_app} -period [expr 1000 / 2.0] [get_nets {clk_div8}]
 
 set_clock_groups -asynchronous -group {clk} -group {clk_app} -group {clk_usb}
 

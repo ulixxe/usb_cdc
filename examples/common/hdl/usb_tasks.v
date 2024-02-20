@@ -5,23 +5,20 @@
 `include "usb_rx_tasks.v"
 
 
-localparam [7:0] REQ_GET_STATUS = 'd0,
-                 REQ_CLEAR_FEATURE = 'd1,
-                 REQ_RESERVED1 = 'd2,
-                 REQ_SET_FEATURE = 'd3,
-                 REQ_RESERVED2 = 'd4,
-                 REQ_SET_ADDRESS = 'd5,
-                 REQ_GET_DESCRIPTOR = 'd6,
-                 REQ_SET_DESCRIPTOR = 'd7,
-                 REQ_GET_CONFIGURATION = 'd8,
-                 REQ_SET_CONFIGURATION = 'd9,
-                 REQ_GET_INTERFACE = 'd10,
-                 REQ_SET_INTERFACE = 'd11,
-                 REQ_SYNCH_FRAME = 'd12,
-                 REQ_SET_LINE_CODING = 'h20,
-                 REQ_GET_LINE_CODING = 'h21,
-                 REQ_SET_CONTROL_LINE_STATE = 'h22,
-                 REQ_SEND_BREAK = 'h23;
+// Supported Standard Requests
+localparam [7:0] STD_REQ_GET_STATUS = 'd0,
+                 STD_REQ_CLEAR_FEATURE = 'd1,
+                 STD_REQ_SET_ADDRESS = 'd5,
+                 STD_REQ_GET_DESCRIPTOR = 'd6,
+                 STD_REQ_GET_CONFIGURATION = 'd8,
+                 STD_REQ_SET_CONFIGURATION = 'd9,
+                 STD_REQ_GET_INTERFACE = 'd10,
+                 STD_REQ_SET_INTERFACE = 'd11;
+// Supported ACM Class Requests
+localparam [7:0] ACM_REQ_SET_LINE_CODING = 'h20,
+                 ACM_REQ_GET_LINE_CODING = 'h21,
+                 ACM_REQ_SET_CONTROL_LINE_STATE = 'h22,
+                 ACM_REQ_SEND_BREAK = 'h23;
 
 localparam       CTRL_MAXPACKETSIZE = 'd8;
 localparam [3:0] ENDP_CTRL = 'd0;
@@ -400,9 +397,6 @@ task automatic test_setup_transaction
    end
 endtask
 
-localparam NO_STALL = 0,
-           STALL = 1;
-
 task automatic test_setup_in
   (
    input [6:0]             address,
@@ -413,7 +407,8 @@ task automatic test_setup_in
    input [15:0]            wLength,
    input [8*MAX_BYTES-1:0] data,
    input integer           bytes,
-   input                   device_stall
+   input [3:0]             function_pid,
+   input                   req_zlp
    );
    localparam              PACKET_TIMEOUT = 6; // TRSPIPD1 (USB2.0 Tab.7-14 pag.188)
    reg [3:0]               pid;
@@ -423,9 +418,9 @@ task automatic test_setup_in
    integer                 device_bytes;
    begin : u_test_setup_in_task
       test_setup_transaction(address, bmRequestType, bRequest, wValue, wIndex, wLength, datain_toggle, dataout_toggle);
-      test_data_in(address, ENDP_CTRL, data, bytes, device_stall ? PID_STALL : PID_ACK,
-                   CTRL_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, datain_toggle, NO_ZLP);
-      if (~device_stall) begin
+      test_data_in(address, ENDP_CTRL, data, bytes, function_pid,
+                   CTRL_MAXPACKETSIZE, 400000/83*`BIT_TIME, 0, datain_toggle, req_zlp);
+      if (function_pid == PID_ACK) begin
          token_tx(PID_OUT, address, ENDP_CTRL, 8, `BIT_TIME);
          zlp_tx(dataout_toggle[ENDP_CTRL]? PID_DATA1: PID_DATA0, 8, `BIT_TIME);
          // device ACK
@@ -446,7 +441,7 @@ task automatic test_setup_out
    input [15:0]            wLength,
    input [8*MAX_BYTES-1:0] data,
    input integer           bytes,
-   input                   device_stall
+   input [3:0]             function_pid
    );
    localparam              PACKET_TIMEOUT = 6; // TRSPIPD1 (USB2.0 Tab.7-14 pag.188)
    reg [3:0]               pid;
@@ -457,22 +452,22 @@ task automatic test_setup_out
    begin : u_test_setup_out_task
       test_setup_transaction(address, bmRequestType, bRequest, wValue, wIndex, wLength, datain_toggle, dataout_toggle);
       if (bytes > 0)
-        test_data_out(address, ENDP_CTRL, data, bytes, PID_ACK,
+        test_data_out(address, ENDP_CTRL, data, bytes, function_pid,
                       CTRL_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, dataout_toggle);
       token_tx(PID_IN, address, ENDP_CTRL, 8, `BIT_TIME);
-      if (device_stall) begin
-         // device STALL
-         handshake_rx(pid, `BIT_TIME, PACKET_TIMEOUT);
-         #(1*`BIT_TIME);
-         `assert_error("test_setup_out(): Device STALL missing", pid, PID_STALL)
-         disable u_test_setup_out_task;
-      end else begin
+      if (function_pid == PID_ACK) begin
          // device DATA1
          data_rx(pid, device_data, device_bytes, `BIT_TIME, PACKET_TIMEOUT);
          #(1*`BIT_TIME);
          `assert_error("test_setup_out(): Device DATAx missing", pid, datain_toggle[ENDP_CTRL]? PID_DATA1: PID_DATA0)
          `assert_error("test_setup_out(): Unexpected device data", device_bytes, 'd0)
          handshake_tx(PID_ACK, 8, `BIT_TIME);
+      end else begin
+         // device STALL/NAK
+         handshake_rx(pid, `BIT_TIME, PACKET_TIMEOUT);
+         #(1*`BIT_TIME);
+         `assert_error("test_setup_out(): Device PID error", pid, function_pid)
+         disable u_test_setup_out_task;
       end
    end
 endtask
@@ -483,12 +478,12 @@ task automatic test_set_address
    inout [6:0] address
    );
    begin
-      test_setup_out(address, 8'h00, REQ_SET_ADDRESS, new_address, 16'h0000, 16'h0000,
-                     8'd0, 0, NO_STALL);
+      test_setup_out(address, 8'h00, STD_REQ_SET_ADDRESS, new_address, 16'h0000, 16'h0000,
+                     8'd0, 0, PID_ACK);
       #(10*`BIT_TIME);
       address = new_address;
-      test_setup_in(address, 8'h80, REQ_GET_CONFIGURATION, 16'h0000, 16'h0000, 16'h0001,
-                    8'd0, 1, NO_STALL);
+      test_setup_in(address, 8'h80, STD_REQ_GET_CONFIGURATION, 16'h0000, 16'h0000, 16'h0001,
+                    8'd0, 1, PID_ACK, NO_ZLP);
    end
 endtask
 
@@ -529,11 +524,11 @@ task automatic test_set_configuration
    inout [6:0] address
    );
    begin
-      test_setup_out(address, 8'h00, REQ_SET_CONFIGURATION, 16'h0001, 16'h0000, 16'h0000,
-                     8'd0, 0, NO_STALL);
+      test_setup_out(address, 8'h00, STD_REQ_SET_CONFIGURATION, 16'h0001, 16'h0000, 16'h0000,
+                     8'd0, 0, PID_ACK);
       #(10*`BIT_TIME);
-      test_setup_in(address, 8'h80, REQ_GET_CONFIGURATION, 16'h0000, 16'h0000, 16'h0001,
-                    8'd1, 1, NO_STALL);
+      test_setup_in(address, 8'h80, STD_REQ_GET_CONFIGURATION, 16'h0000, 16'h0000, 16'h0001,
+                    8'd1, 1, PID_ACK, NO_ZLP);
    end
 endtask
 

@@ -43,7 +43,7 @@ def open():
 	if (portValue != None):
 		ser = serial.Serial()
 		ser.port = portValue
-		ser.timeout = 1			#non-block read
+		ser.timeout = 2		#non-block read
 		ser.writeTimeout = 2	#timeout for write
 		ser.open()
 		return ser

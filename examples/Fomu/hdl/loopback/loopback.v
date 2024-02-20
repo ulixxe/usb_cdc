@@ -94,7 +94,7 @@ module loopback
              .OUT_BULK_MAXPACKETSIZE('d8),
              .BIT_SAMPLES('d4),
              .USE_APP_CLK(1),
-             .APP_CLK_RATIO(48/12))  // 48MHz / 12MHz
+             .APP_CLK_FREQ(12))  // 12MHz
    u_usb_cdc (.frame_o(),
               .configured_o(),
               .app_clk_i(clk_12mhz),

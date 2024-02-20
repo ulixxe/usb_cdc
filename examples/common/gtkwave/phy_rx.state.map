@@ -1,0 +1,11 @@
+# 
+## name ## phy_rx\.state_q
+## name ## phy_rx\.state_d
+## color ## Blue
+## data ## Decimal
+
+0 ST_RESET
+1 ST_DETACHED
+2 ST_ATTACHED
+3 ST_ENABLED
+4 ST_DETACH

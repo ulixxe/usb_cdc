@@ -14,11 +14,14 @@ module rom
     );
 
    function integer ceil_log2;
-      input integer         arg;
+      input [31:0] arg;
+      integer      i;
       begin
          ceil_log2 = 0;
-         while ((2 ** ceil_log2) < arg)
-           ceil_log2 = ceil_log2 + 1;
+         for (i = 0; i < 32; i = i + 1) begin
+            if (arg > (1 << i))
+              ceil_log2 = ceil_log2 + 1;
+         end
       end
    endfunction
 

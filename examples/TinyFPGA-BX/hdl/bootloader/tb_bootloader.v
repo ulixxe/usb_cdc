@@ -25,7 +25,7 @@ module tb_bootloader ( );
    localparam             VENDORID = 16'h1D50;
    localparam             PRODUCTID = 16'h6130;
 
-`include "usb_tasks.v"
+`include "usb_test_1ch.v"
 `include "bootloader_tasks.v"
 
    `progress_bar(37)

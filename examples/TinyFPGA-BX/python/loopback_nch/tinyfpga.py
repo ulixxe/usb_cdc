@@ -42,8 +42,8 @@ def open():
 		for port in port_list:
 			ser = serial.Serial()
 			ser.port = port
-			ser.timeout = 1			#non-block read
-			ser.writeTimeout = 2	#timeout for write
+			ser.timeout = 1		#non-block read
+			ser.write_timeout = 10	#timeout for write
 			ser.open()
 			ser_list.append(ser)
 		return ser_list

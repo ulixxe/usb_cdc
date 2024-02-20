@@ -12,6 +12,7 @@ module bootloader
    input  sdi
    );
 
+   localparam CHANNELS = 'd1;
    localparam BIT_SAMPLES = 'd4;
    localparam [6:0] DIVF = 12*BIT_SAMPLES-1;
 
@@ -79,11 +80,12 @@ module bootloader
 
    usb_cdc #(.VENDORID(16'h1D50),
              .PRODUCTID(16'h6130),
+             .CHANNELS(CHANNELS),
              .IN_BULK_MAXPACKETSIZE('d8),
              .OUT_BULK_MAXPACKETSIZE('d8),
              .BIT_SAMPLES(BIT_SAMPLES),
              .USE_APP_CLK(1),
-             .APP_CLK_RATIO(BIT_SAMPLES*12/16))  // BIT_SAMPLES * 12MHz / 16MHz
+             .APP_CLK_FREQ(16))  // 16MHz
    u_usb_cdc (.frame_o(frame),
               .configured_o(configured),
               .app_clk_i(clk),

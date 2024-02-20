@@ -96,9 +96,10 @@ proc wavesFormat {mapdir} {
 proc phy_rx {} {
     gtkwave::/Edit/Insert_Comment "PHY_RX"
     set sigFilterList [list \
-                           {phy_rx\.nrzi\[} \
-                           {phy_rx\.rx_state_q} \
-                           {phy_rx\.clk_gate$} \
+                           {phy_rx\.nrzi\[.*\]$} \
+                           {phy_rx\.state_q\[.*\]$} \
+                           {phy_rx\.rx_state_q\[.*\]$} \
+                           {phy_rx\.clk_gate_i$} \
                            {phy_rx\.rx_en_i$} \
                            {phy_rx\.rx_err_o$} \
                            {phy_rx\.rx_ready_o$} \
@@ -114,11 +115,11 @@ proc phy_rx {} {
 proc phy_tx {} {
     gtkwave::/Edit/Insert_Comment "PHY_TX"
     set sigFilterList [list \
-                           {phy_tx\.tx_state_q} \
-                           {phy_tx\.clk_gate} \
-                           {phy_tx\.tx_ready_o} \
-                           {phy_tx\.tx_valid_i} \
-                           {phy_tx\.tx_data_i} \
+                           {phy_tx\.tx_state_q\[.*\]$} \
+                           {phy_tx\.clk_gate_i$} \
+                           {phy_tx\.tx_ready_o$} \
+                           {phy_tx\.tx_valid_i$} \
+                           {phy_tx\.tx_data_i\[.*\]$} \
                           ]
     addSignals $sigFilterList
     wavesFormat ../../common/gtkwave
@@ -127,64 +128,73 @@ proc phy_tx {} {
 proc sie {} {
     gtkwave::/Edit/Insert_Comment "SIE"
     set sigFilterList [list \
-                           {sie\.frame_q} \
-                           {sie\.pid_q} \
-                           {sie\.addr_q} \
-                           {sie\.endp_q} \
-                           {sie\.phy_state_q} \
-                           {sie\.stall_i} \
-                           {sie\.setup_o} \
+                           {sie\.frame_q\[.*\]$} \
+                           {sie\.pid_q\[.*\]$} \
+                           {sie\.addr_q\[.*\]$} \
+                           {sie\.endp_q\[.*\]$} \
+                           {sie\.phy_state_q\[.*\]$} \
+                           {sie\.stall_i$} \
+                           {sie\.setup_o$} \
                           ]
     addSignals $sigFilterList
     wavesFormat ../../common/gtkwave
+    setData { {sie\.frame_q\[.*\]$} } Decimal
+    setData { {sie\.addr_q\[.*\]$} } Decimal
 }
 
 proc sie_out {} {
     gtkwave::/Edit/Insert_Comment "SIE: OUT"
     set sigFilterList [list \
-                           {sie\.out_err_o} \
-                           {sie\.out_ready_o} \
-                           {sie\.out_valid_o} \
-                           {sie\.out_data_o} \
+                           {sie\.out_err_o$} \
+                           {sie\.out_ready_o$} \
+                           {sie\.out_valid_o$} \
+                           {sie\.out_data_o\[.*\]$} \
                           ]
     addSignals $sigFilterList
     wavesFormat ../../common/gtkwave
+    setColor { {sie\.out_ready_o} } Red
 }
 
 proc sie_in {} {
     gtkwave::/Edit/Insert_Comment "SIE: IN"
     set sigFilterList [list \
-                           {sie\.in_req_o} \
-                           {sie\.in_ready_o} \
-                           {sie\.in_valid_i} \
-                           {sie\.in_zlp_i} \
-                           {sie\.in_data_i} \
+                           {sie\.in_req_o$} \
+                           {sie\.in_data_ack_o$} \
+                           {sie\.in_ready_o$} \
+                           {sie\.in_valid_i$} \
+                           {sie\.in_zlp_i$} \
+                           {sie\.in_data_i\[.*\]$} \
                           ]
     addSignals $sigFilterList
     wavesFormat ../../common/gtkwave
+    setColor { {sie\.in_ready_o} } Red
 }
 
 proc ctrl {} {
     gtkwave::/Edit/Insert_Comment "CTRL_ENDP"
     set sigFilterList [list \
-                           {ctrl_endp\.dev_state_qq} \
-                           {ctrl_endp\.addr_o} \
-                           {ctrl_endp\.stall_o} \
+                           {ctrl_endp\.req_q\[.*\]$} \
+                           {ctrl_endp\.dev_state_qq\[.*\]$} \
+                           {ctrl_endp\.state_q\[.*\]$} \
+                           {ctrl_endp\.byte_cnt_q\[.*\]$} \
+                           {ctrl_endp\.addr_o\[.*\]$} \
+                           {ctrl_endp\.stall_o$} \
                           ]
     addSignals $sigFilterList
     wavesFormat ../../common/gtkwave
+    setData { {ctrl_endp\.byte_cnt_} } Decimal
 }
 
 proc bulk_out {} {
     gtkwave::/Edit/Insert_Comment "BULK_ENDP: OUT"
     set sigFilterList [list \
-                           {bulk_endp\.app_clk_i} \
-                           {bulk_endp\.app_out_ready_i} \
-                           {bulk_endp\.app_out_valid_o} \
-                           {bulk_endp\.app_out_data_o} \
-                           {out_fifo\.out_state_q} \
-                           {out_fifo\.out_full_q} \
-                           {out_fifo\.out_empty} \
+                           {bulk_endp\.app_clk_i$} \
+                           {bulk_endp\.app_out_ready_i$} \
+                           {bulk_endp\.app_out_valid_o$} \
+                           {bulk_endp\.app_out_data_o\[.*\]$} \
+                           {out_fifo\.out_state_q\[.*\]$} \
+                           {out_fifo\.out_full_q$} \
+                           {out_fifo\.out_empty$} \
                           ]
     addSignals $sigFilterList
     wavesFormat ../../common/gtkwave
@@ -193,12 +203,12 @@ proc bulk_out {} {
 proc bulk_in {} {
     gtkwave::/Edit/Insert_Comment "BULK_ENDP: IN"
     set sigFilterList [list \
-                           {bulk_endp\.app_clk_i} \
-                           {bulk_endp\.app_in_ready_o} \
-                           {bulk_endp\.app_in_valid_i} \
-                           {bulk_endp\.app_in_data_i} \
-                           {in_fifo\.in_state_q} \
-                           {in_fifo\.in_full} \
+                           {bulk_endp\.app_clk_i$} \
+                           {bulk_endp\.app_in_ready_o$} \
+                           {bulk_endp\.app_in_valid_i$} \
+                           {bulk_endp\.app_in_data_i\[.*\]$} \
+                           {in_fifo\.in_state_q$} \
+                           {in_fifo\.in_full$} \
                           ]
     addSignals $sigFilterList
     wavesFormat ../../common/gtkwave

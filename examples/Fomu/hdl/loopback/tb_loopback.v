@@ -25,9 +25,9 @@ module tb_loopback ( );
    localparam VENDORID = 16'h1209;
    localparam PRODUCTID = 16'h5BF0;
 
-`include "usb_tasks.v"
+`include "usb_test_1ch.v"
 
-   `progress_bar(36)
+   `progress_bar(37)
 
    reg clk;
 
@@ -133,8 +133,8 @@ module tb_loopback ( );
       test_data_out(address, ENDP_BULK,
                     {8'h41, 8'h42, 8'h43, 8'h44, 8'h45, 8'h46, 8'h47, 8'h48,
                      8'h51, 8'h52, 8'h53, 8'h54, 8'h55, 8'h56, 8'h57, 8'h58,
-                     8'h61, 8'h62, 8'h63},
-                    19, PID_NAK, OUT_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, dataout_toggle);
+                     8'h61, 8'h62, 8'h63, 8'h64, 8'h65},
+                    21, PID_NAK, OUT_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, dataout_toggle);
 
       test = "IN BULK DATA with ZLP";
       test_data_in(address, ENDP_BULK,

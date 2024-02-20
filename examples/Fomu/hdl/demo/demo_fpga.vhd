@@ -68,7 +68,7 @@ architecture fpga of demo is
       OUT_BULK_MAXPACKETSIZE : integer                       := 8;
       BIT_SAMPLES            : integer                       := 4;
       USE_APP_CLK            : integer                       := 0;
-      APP_CLK_RATIO          : integer                       := 4);
+      APP_CLK_FREQ           : integer                       := 12);
     port (
       app_clk_i    : in  std_logic;
       clk_i        : in  std_logic;
@@ -200,7 +200,7 @@ begin
       OUT_BULK_MAXPACKETSIZE => 8,
       BIT_SAMPLES            => 4,
       USE_APP_CLK            => 1,
-      APP_CLK_RATIO          => 48/12)  -- 48MHz / 12MHz
+      APP_CLK_FREQ           => 12)  -- 12MHz
     port map (
       app_clk_i    => clk_12mhz,
       clk_i        => clk,

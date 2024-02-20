@@ -13,9 +13,11 @@ tinyfpga.lfsr_read(ser)
 
 #data = b'\x00\x01\x02\x03'
 #tinyfpga.outdata(data, ser)
-tinyfpga.outdata(os.urandom(100000), ser)
-
-tinyfpga.indata(100000, ser)
+for i in range(0, 20):
+    tinyfpga.wait(i, ser)
+    print(f"wait = {i}")
+    tinyfpga.outdata(os.urandom(100000), ser)
+    tinyfpga.indata(100000, ser)
 
 #ser.write(bytearray([0x31]*10))
 #print(ser.read(10))

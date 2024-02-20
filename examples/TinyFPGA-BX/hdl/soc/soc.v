@@ -114,7 +114,7 @@ module soc
              .OUT_BULK_MAXPACKETSIZE('d8),
              .BIT_SAMPLES(BIT_SAMPLES),
              .USE_APP_CLK(1),
-             .APP_CLK_RATIO(BIT_SAMPLES*12/2))  // BIT_SAMPLES * 12MHz / 2MHz
+             .APP_CLK_FREQ(2))  // 2MHz
    u_usb_cdc (.frame_o(),
               .configured_o(),
               .app_clk_i(clk_2mhz),

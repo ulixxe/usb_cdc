@@ -19,10 +19,10 @@ architecture fpga of demo is
   constant BIT_SAMPLES : integer                := 4;
   constant DIVF        : bit_vector(6 downto 0) := to_bitvector(std_logic_vector(to_unsigned(12*BIT_SAMPLES-1, 7)));
   signal clk_pll       : std_logic;
-  signal clk_1mhz      : std_logic;
-  signal clk_2mhz      : std_logic;
-  signal clk_4mhz      : std_logic;
-  signal clk_8mhz      : std_logic;
+  signal clk_div16     : std_logic;
+  signal clk_div8      : std_logic;
+  signal clk_div4      : std_logic;
+  signal clk_div2      : std_logic;
   signal lock          : std_logic;
   signal usb_pu_int    : std_logic;
   signal dp_pu         : std_logic;
@@ -72,7 +72,7 @@ architecture fpga of demo is
       OUT_BULK_MAXPACKETSIZE : integer                       := 8;
       BIT_SAMPLES            : integer                       := 4;
       USE_APP_CLK            : integer                       := 0;
-      APP_CLK_RATIO          : integer                       := 4);
+      APP_CLK_FREQ           : integer                       := 12);
     port (
       app_clk_i    : in  std_logic;
       clk_i        : in  std_logic;
@@ -179,14 +179,14 @@ begin
     port map (
       clk_i       => clk,
       rstn_i      => lock,
-      clk_div16_o => clk_1mhz,
-      clk_div8_o  => clk_2mhz,
-      clk_div4_o  => clk_4mhz,
-      clk_div2_o  => clk_8mhz);
+      clk_div16_o => clk_div16,
+      clk_div8_o  => clk_div8,
+      clk_div4_o  => clk_div4,
+      clk_div2_o  => clk_div2);
 
   u_app : component app
     port map (
-      clk_i       => clk_2mhz,
+      clk_i       => clk_div8,
       rstn_i      => lock,
       out_data_i  => out_data,
       out_valid_i => out_valid,
@@ -207,9 +207,9 @@ begin
       OUT_BULK_MAXPACKETSIZE => 8,
       BIT_SAMPLES            => BIT_SAMPLES,
       USE_APP_CLK            => 1,
-      APP_CLK_RATIO          => BIT_SAMPLES*12/2)  -- BIT_SAMPLES * 12MHz / 2MHz
+      APP_CLK_FREQ           => 2)  -- 2MHz
     port map (
-      app_clk_i    => clk_2mhz,
+      app_clk_i    => clk_div8,
       clk_i        => clk_pll,
       rstn_i       => lock,
       out_ready_i  => out_ready,

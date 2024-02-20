@@ -86,26 +86,22 @@ IN\_BULK\_MAXPACKETSIZE and OUT\_BULK\_MAXPACKETSIZE define maximum bulk data pa
 CHANNELS defines how many CDC channels to implement. It is possible to implement from a minimum of 1 (default) to a maximum of 7 channels.
 
 ### BIT\_SAMPLES
-BIT\_SAMPLES defines the number of samples taken on USB dp/dn lines for each bit. Full Speed USB has a bit rate of 12MHz, so the `clk` clock has to be BIT\_SAMPLES times faster. For example, the default value of 4 needs a `clk` frequency of 48MHz (see the picture below).
+BIT\_SAMPLES defines the number of samples taken on USB dp/dn lines for each bit. Full Speed USB has a bit rate of 12MHz, so the `clk` clock has to be BIT\_SAMPLES times faster. For example, the default value of 4 needs a `clk` frequency of 48MHz (see the picture below). BIT\_SAMPLES has to be &ge; 4.
 
 ![](readme_files/bit_samples.png)
 
-### USE\_APP\_CLK and APP\_CLK\_RATIO
+### USE\_APP\_CLK and APP\_CLK\_FREQ
 
 USE\_APP\_CLK parameter configures if the FPGA application uses the same USB_CDC internal stuff clock (USE\_APP\_CLK = 0) or a different asynchronous one (USE\_APP\_CLK = 1). If  USE\_APP\_CLK = 0 then `app_clk` input is not used and can be connected to a constant value such as `1'b0`.
 
-When USE\_APP\_CLK = 1, APP\_CLK\_RATIO parameter defines the ratio between `clk` and `app_clk` frequencies:
-
-* APP\_CLK\_RATIO = freq(`clk`) / freq(`app_clk`)
+When USE\_APP\_CLK = 1, APP\_CLK\_FREQ parameter defines the `app_clk` frequency in MHz.
 
 
-To improve data throughput for lower `app_clk` frequencies, APP\_CLK\_RATIO parameter selects one of three different approaches to synchronize data that cross the two clock domains:
+To improve data throughput for lower `app_clk` frequencies, APP\_CLK\_FREQ parameter selects one of two different approaches to synchronize data that cross the two clock domains:
 
-* APP\_CLK\_RATIO &ge; 8. FPGA application can exchange data at every `app_clk` cycle.
+* APP\_CLK\_FREQ &le; 12. FPGA application can exchange data at every 1 or 2 `app_clk` cycles.
 
-* 8 > APP\_CLK\_RATIO &ge; 4. FPGA application can exchange data at every 2 `app_clk` cycles.
-
-* APP\_CLK\_RATIO < 4. FPGA application can exchange data at an average of 2\*2.5 `app_clk` cycles + 2\*2.5 `clk` cycles.
+* APP\_CLK\_FREQ > 12. FPGA application can exchange data at an average of 2\*2.5 `app_clk` cycles + 2\*2.5 `clk` cycles.
 
 
 Overall, the USB Full-speed protocol caps data throughput to 1.5MB/s.
@@ -114,20 +110,20 @@ So, with freq(`clk`) &ge; 48MHz, data throughput is 1.5MB/s if freq(`app_clk`) >
 
 ## Examples
 A few examples with complete implementation on both Fomu and TinyFPGA-BX are present in the `examples` directory. In addition, simulation testbenches are provided for each one.
- 
+
 ## Logic Resource Utilization
 
-The USB\_CDC code alone (with IN/OUT data in simple loopback configuration and all verilog parameters to default but USE\_APP\_CLK = 1) shows the following logic resource utilization from iCEcube2:
+The USB\_CDC code alone (with IN/OUT data in simple loopback configuration and all verilog parameters to default) shows the following logic resource utilization from iCEcube2:
 
 ```
 Logic Resource Utilization:
 ---------------------------
-    Total Logic Cells: 1151/7680
-        Combinational Logic Cells: 745      out of   7680      9.70052%
-        Sequential Logic Cells:    406      out of   7680      5.28646%
-        Logic Tiles:               213      out of   960       22.1875%
+    Total Logic Cells: 1158/7680
+        Combinational Logic Cells: 734      out of   7680      9.55729%
+        Sequential Logic Cells:    424      out of   7680      5.52083%
+        Logic Tiles:               212      out of   960       22.0833%
     Registers: 
-        Logic Registers:           406      out of   7680      5.28646%
+        Logic Registers:           424      out of   7680      5.52083%
         IO Registers:              0        out of   1280      0
     Block RAMs:                    0        out of   32        0%
     Warm Boots:                    0        out of   1         0%
@@ -135,7 +131,7 @@ Logic Resource Utilization:
         Input Pins:                1        out of   63        1.5873%
         Output Pins:               2        out of   63        3.1746%
         InOut Pins:                2        out of   63        3.1746%
-    Global Buffers:                7        out of   8         87.5%
+    Global Buffers:                4        out of   8         50%
     PLLs:                          1        out of   1         100%
 ```
 
@@ -144,9 +140,8 @@ The clock timing summary is:
 ```
                    1::Clock Frequency Summary
  =====================================================================
-Number of clocks: 2
-Clock: clk_app           | Frequency: 207.26 MHz  | Target: 12.00 MHz  | 
-Clock: clk_usb           | Frequency: 109.31 MHz  | Target: 48.01 MHz  | 
+Number of clocks: 1
+Clock: clk_usb           | Frequency: 76.60 MHz  | Target: 48.01 MHz  |
 ```
 
 ## Directory Structure

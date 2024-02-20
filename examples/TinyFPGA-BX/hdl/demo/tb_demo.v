@@ -25,7 +25,7 @@ module tb_demo ( );
    localparam             VENDORID = 16'h1D50;
    localparam             PRODUCTID = 16'h6130;
 
-`include "usb_tasks.v"
+`include "usb_test_1ch.v"
 `include "demo_tasks.v"
 
    `progress_bar(316)
@@ -164,8 +164,8 @@ module tb_demo ( );
       test_data_out(address, ENDP_BULK,
                     {8'h41, 8'h42, 8'h43, 8'h44, 8'h45, 8'h46, 8'h47, 8'h48,
                      8'h51, 8'h52, 8'h53, 8'h54, 8'h55, 8'h56, 8'h57, 8'h58,
-                     8'h61, 8'h62},
-                    18, PID_NAK, OUT_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, dataout_toggle);
+                     8'h61, 8'h62, 8'h63, 8'h64, 8'h65, 8'h66},
+                    22, PID_NAK, OUT_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, dataout_toggle);
 
       test = "IN BULK DATA with ZLP";
       test_data_in(address, ENDP_BULK,
@@ -262,6 +262,8 @@ module tb_demo ( );
                      8'h89, 8'h8A},
                     10, IN_BULK_MAXPACKETSIZE, OUT_BULK_MAXPACKETSIZE,
                     100000000/83*`BIT_TIME, 1000000/83*`BIT_TIME, datain_toggle, dataout_toggle);
+
+      #(1000000/83*`BIT_TIME);
 
       test = "ADDR CMD";
       test_demo_cmd3(address, ENDP_BULK, ADDR_CMD, 24'h04FFFD,

@@ -21,8 +21,8 @@ localparam [8*'h12-1:0] DEV_DESCR = { // Standard Device Descriptor, USB2.0 9.6.
                                       VENDORID[15:8], // idVendor[1]
                                       PRODUCTID[7:0], // idProduct[0]
                                       PRODUCTID[15:8], // idProduct[1]
-                                      8'h00, // bcdDevice[0]
-                                      8'h01, // bcdDevice[1] (1.00)
+                                      8'h10, // bcdDevice[0]
+                                      8'h01, // bcdDevice[1] (1.10)
                                       8'h00, // iManufacturer (no string)
                                       8'h00, // iProduct (no string)
                                       8'h00, // iSerialNumber (no string)
@@ -59,7 +59,7 @@ localparam [8*CDL-1:0] CONF_DESCR = { // Standard Configuration Descriptor, USB2
                                       8'h02, // bInterfaceClass (Communications Device Class)
                                       8'h02, // bInterfaceSubClass (Abstract Control Model)
                                       8'h01, // bInterfaceProtocol (AT Commands in ITU V.25ter)
-                                      8'h00, // iInterface (no string)
+                                      8'd0+8'd1, // iInterface (string)
 
                                       // Header Functional Descriptor, CDC1.1 5.2.3.1, Table 26
                                       8'h05, // bFunctionLength
@@ -106,7 +106,7 @@ localparam [8*CDL-1:0] CONF_DESCR = { // Standard Configuration Descriptor, USB2
                                       8'h0A, // bInterfaceClass (data)
                                       8'h00, // bInterfaceSubClass
                                       8'h00, // bInterfaceProtocol
-                                      8'd0+8'd1, // iInterface (string)
+                                      8'h00, // iInterface (no string)
 
                                       // Standard Endpoint Descriptor, USB2.0 9.6.6, page 269-271, Table 9-13
                                       8'h07, // bLength
@@ -145,7 +145,7 @@ localparam [8*CDL-1:0] CONF_DESCR = { // Standard Configuration Descriptor, USB2
                                       8'h02, // bInterfaceClass (Communications Device Class)
                                       8'h02, // bInterfaceSubClass (Abstract Control Model)
                                       8'h01, // bInterfaceProtocol (AT Commands in ITU V.25ter)
-                                      8'h00, // iInterface (no string)
+                                      8'd1+8'd1, // iInterface (string)
 
                                       // Header Functional Descriptor, CDC1.1 5.2.3.1, Table 26
                                       8'h05, // bFunctionLength
@@ -192,7 +192,7 @@ localparam [8*CDL-1:0] CONF_DESCR = { // Standard Configuration Descriptor, USB2
                                       8'h0A, // bInterfaceClass (data)
                                       8'h00, // bInterfaceSubClass
                                       8'h00, // bInterfaceProtocol
-                                      8'd1+8'd1, // iInterface (string)
+                                      8'h00, // iInterface (no string)
 
                                       // Standard Endpoint Descriptor, USB2.0 9.6.6, page 269-271, Table 9-13
                                       8'h07, // bLength
@@ -231,6 +231,15 @@ localparam [8*SDL-1:0]  STRING_DESCR_01 = {
                                            "C", 8'h00,
                                            "1", 8'h00
                                            };
+localparam [8*SDL-1:0]  STRING_DESCR_02 = {
+                                           // UNICODE String Descriptor, USB2.0 9.6.7, page 273-274, Table 9-16
+                                           SDL[7:0], // bLength
+                                           8'h03, // bDescriptorType (STRING)
+                                           "C", 8'h00,
+                                           "D", 8'h00,
+                                           "C", 8'h00,
+                                           "2", 8'h00
+                                           };
 
 
 task automatic test_usb
@@ -254,27 +263,51 @@ task automatic test_usb
       test_sof_crc_error(11'h113);
 
       test = "GET_DESCRIPTOR Device";
-      test_setup_in(address, 8'h80, REQ_GET_DESCRIPTOR, 16'h0100, 16'h0000, 16'h0040,
-                    DEV_DESCR, 'h12, NO_STALL);
+      test_setup_in(address, 8'h80, STD_REQ_GET_DESCRIPTOR, 16'h0100, 16'h0000, 16'h0040,
+                    DEV_DESCR, 'h12, PID_ACK, NO_ZLP);
 
       test = "GET_DESCRIPTOR Device (partial)";
-      test_setup_in(address, 8'h80, REQ_GET_DESCRIPTOR, 16'h0100, 16'h0000, 16'h0008,
-                    DEV_DESCR>>8*('h12-'h08), 'h08, NO_STALL);
+      test_setup_in(address, 8'h80, STD_REQ_GET_DESCRIPTOR, 16'h0100, 16'h0000, 16'h0008,
+                    DEV_DESCR>>8*('h12-'h08), 'h08, PID_ACK, NO_ZLP);
 
       test = "GET_STATUS Error in Default state";
-      test_setup_in(address, 8'h80, REQ_GET_STATUS, 16'h0000, 16'h0000, 16'h0002,
-                    {8'h00, 8'h00}, 'h02, STALL);
+      test_setup_in(address, 8'h80, STD_REQ_GET_STATUS, 16'h0000, 16'h0000, 16'h0002,
+                    {8'h00, 8'h00}, 'h02, PID_STALL, NO_ZLP);
 
       test = "SET_ADDRESS";
       test_set_address('d2, address);
 
-      test = "GET_STATUS";
-      test_setup_in(address, 8'h80, REQ_GET_STATUS, 16'h0000, 16'h0000, 16'h0002,
-                    {8'h00, 8'h00}, 'h02, NO_STALL);
+      test = "GET_STATUS on device";
+      test_setup_in(address, 8'h80, STD_REQ_GET_STATUS, 16'h0000, 16'h0000, 16'h0002,
+                    {8'h00, 8'h00}, 'h02, PID_ACK, NO_ZLP);
 
-      test = "CLEAR_FEATURE";
-      test_setup_out(address, 8'h02, REQ_CLEAR_FEATURE, 16'h0000, 16'h0000, 16'h0000,
-                     8'd0, 'd0, NO_STALL);
+      test = "GET_STATUS on inteface 3";
+      test_setup_in(address, 8'h81, STD_REQ_GET_STATUS, 16'h0000, 16'h0003, 16'h0002,
+                    {8'h00, 8'h00}, 'h02, PID_ACK, NO_ZLP);
+
+      test = "GET_STATUS stall on not-existent inteface";
+      test_setup_in(address, 8'h81, STD_REQ_GET_STATUS, 16'h0000, 16'h0004, 16'h0002,
+                    {8'h00, 8'h00}, 'h02, PID_STALL, NO_ZLP);
+
+      test = "GET_STATUS on OUT endpoint 3";
+      test_setup_in(address, 8'h82, STD_REQ_GET_STATUS, 16'h0000, 16'h0003, 16'h0002,
+                    {8'h00, 8'h00}, 'h02, PID_ACK, NO_ZLP);
+
+      test = "GET_STATUS stall on not-existent endpoint";
+      test_setup_in(address, 8'h82, STD_REQ_GET_STATUS, 16'h0000, 16'h0085, 16'h0002,
+                    {8'h00, 8'h00}, 'h02, PID_STALL, NO_ZLP);
+
+      test = "CLEAR_FEATURE on OUT endpoint 0";
+      test_setup_out(address, 8'h02, STD_REQ_CLEAR_FEATURE, 16'h0000, 16'h0000, 16'h0000,
+                     8'd0, 'd0, PID_ACK);
+
+      test = "CLEAR_FEATURE on IN endpoint 3";
+      test_setup_out(address, 8'h02, STD_REQ_CLEAR_FEATURE, 16'h0000, 16'h0083, 16'h0000,
+                     8'd0, 'd0, PID_ACK);
+
+      test = "CLEAR_FEATURE stall on not-existent endpoint";
+      test_setup_out(address, 8'h02, STD_REQ_CLEAR_FEATURE, 16'h0000, 16'h0004, 16'h0000,
+                     8'd0, 'd0, PID_STALL);
 
       test = "USB reset";
       test_usb_reset(address);
@@ -292,43 +325,47 @@ task automatic test_usb
       test_set_address('d3, address);
 
       test = "GET_DESCRIPTOR Configuration";
-      test_setup_in(address, 8'h80, REQ_GET_DESCRIPTOR, 16'h0200, 16'h0000, 16'h00FF,
-                    CONF_DESCR, CDL, NO_STALL);
+      test_setup_in(address, 8'h80, STD_REQ_GET_DESCRIPTOR, 16'h0200, 16'h0000, 16'h00FF,
+                    CONF_DESCR, CDL, PID_ACK, NO_ZLP);
 
       test = "GET_DESCRIPTOR String Zero";
-      test_setup_in(address, 8'h80, REQ_GET_DESCRIPTOR, 16'h0300, 16'h0000, 16'h00FF,
-                    STRING_DESCR_00, 'h4, PID_ACK);
+      test_setup_in(address, 8'h80, STD_REQ_GET_DESCRIPTOR, 16'h0300, 16'h0000, 16'h00FF,
+                    STRING_DESCR_00, 'h4, PID_ACK, NO_ZLP);
 
       test = "GET_DESCRIPTOR String 01";
-      test_setup_in(address, 8'h80, REQ_GET_DESCRIPTOR, 16'h0301, 16'h0000, 16'h00FF,
-                    STRING_DESCR_01, SDL, PID_ACK);
+      test_setup_in(address, 8'h80, STD_REQ_GET_DESCRIPTOR, 16'h0301, 16'h0000, 16'h00FF,
+                    STRING_DESCR_01, SDL, PID_ACK, NO_ZLP);
+
+      test = "GET_DESCRIPTOR String 02";
+      test_setup_in(address, 8'h80, STD_REQ_GET_DESCRIPTOR, 16'h0302, 16'h0000, 16'h00FF,
+                    STRING_DESCR_02, SDL, PID_ACK, NO_ZLP);
 
       test = "SET_CONFIGURATION";
       test_set_configuration(address);
 
       test = "GET_LINE_CODING";
-      test_setup_in(address, 8'hA1, REQ_GET_LINE_CODING, 16'h0000, 16'h0000, 16'h0007,
-                    {7{8'd0}}, 7, NO_STALL);
+      test_setup_in(address, 8'hA1, ACM_REQ_GET_LINE_CODING, 16'h0000, 16'h0000, 16'h0007,
+                    {7{8'd0}}, 7, PID_ACK, NO_ZLP);
 
       test = "SET_LINE_CODING";
-      test_setup_out(address, 8'h21, REQ_SET_LINE_CODING, 16'h0000, 16'h0000, 16'h0007,
-                     {7{8'd0}}, 7, NO_STALL);
+      test_setup_out(address, 8'h21, ACM_REQ_SET_LINE_CODING, 16'h0000, 16'h0000, 16'h0007,
+                     {7{8'd0}}, 7, PID_ACK);
 
       test = "SET_CONTROL_LINE_STATE";
-      test_setup_out(address, 8'h21, REQ_SET_CONTROL_LINE_STATE, 16'h0000, 16'h0000, 16'h0000,
-                     8'd0, 0, NO_STALL);
+      test_setup_out(address, 8'h21, ACM_REQ_SET_CONTROL_LINE_STATE, 16'h0000, 16'h0000, 16'h0000,
+                     8'd0, 0, PID_ACK);
 
       test = "SEND_BREAK";
-      test_setup_out(address, 8'h21, REQ_SEND_BREAK, 16'h0000, 16'h0000, 16'h0000,
-                     8'd0, 0, NO_STALL);
+      test_setup_out(address, 8'h21, ACM_REQ_SEND_BREAK, 16'h0000, 16'h0000, 16'h0000,
+                     8'd0, 0, PID_ACK);
 
       test = "GET_INTERFACE";
-      test_setup_in(address, 8'h81, REQ_GET_INTERFACE, 16'h0000, 16'h0001, 16'h0001,
-                    8'd0, 1, NO_STALL);
+      test_setup_in(address, 8'h81, STD_REQ_GET_INTERFACE, 16'h0000, 16'h0001, 16'h0001,
+                    8'd0, 1, PID_ACK, NO_ZLP);
 
       test = "SET_INTERFACE not supported";
-      test_setup_out(address, 8'h01, REQ_SET_INTERFACE, 16'h0001, 16'h0001, 16'h0000,
-                     8'd0, 0, STALL);
+      test_setup_out(address, 8'h01, STD_REQ_SET_INTERFACE, 16'h0001, 16'h0001, 16'h0000,
+                     8'd0, 0, PID_STALL);
 
       test = "IN INT DATA";
       test_data_in(address, ENDP_INT1, 8'd0, 1, PID_NAK,

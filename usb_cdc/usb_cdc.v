@@ -13,7 +13,7 @@ module usb_cdc
     parameter OUT_BULK_MAXPACKETSIZE = 'd8,
     parameter BIT_SAMPLES = 'd4,
     parameter USE_APP_CLK = 0,
-    parameter APP_CLK_RATIO = 'd4)
+    parameter APP_CLK_FREQ = 12) // app_clk frequency in MHz
    (
     input                   clk_i,
     // clk_i clock shall have a frequency of 12MHz*BIT_SAMPLES
@@ -49,10 +49,20 @@ module usb_cdc
     input                   dn_rx_i
     );
 
-   localparam    CTRL_MAXPACKETSIZE = 'd8;
-   localparam [3:0] ENDP_CTRL = 'd0;
+   function integer ceil_log2;
+      input [31:0] arg;
+      integer      i;
+      begin
+         ceil_log2 = 0;
+         for (i = 0; i < 32; i = i + 1) begin
+            if (arg > (1 << i))
+              ceil_log2 = ceil_log2 + 1;
+         end
+      end
+   endfunction
 
    reg [1:0]        rstn_sq;
+
    wire             rstn;
 
    assign rstn = rstn_sq[0];
@@ -65,17 +75,31 @@ module usb_cdc
       end
    end
 
-   wire [3:0] endp;
-   wire       in_zlp, ctrl_in_zlp;
-   wire       stall, ctrl_stall;
+   reg [ceil_log2(BIT_SAMPLES)-1:0] clk_cnt_q;
 
-   assign in_zlp = (endp == ENDP_CTRL) ? ctrl_in_zlp : 1'b0;
-   assign stall = (endp == ENDP_CTRL) ? ctrl_stall : 1'b0;
+   wire                             clk_gate;
 
-   reg [7:0] in_data;
-   reg       in_valid, out_nak;
+   assign clk_gate = ({1'b0, clk_cnt_q} == BIT_SAMPLES-1) ? 1'b1 : 1'b0;
 
-   wire [7:0] ctrl_in_data;
+   always @(posedge clk_i or negedge rstn) begin
+      if (~rstn) begin
+         clk_cnt_q <= 'd0;
+      end else begin
+         if ({1'b0, clk_cnt_q} == BIT_SAMPLES-1)
+           clk_cnt_q <= 'd0;
+         else
+           clk_cnt_q <= clk_cnt_q + 1;
+      end
+   end
+
+   localparam    CTRL_MAXPACKETSIZE = 'd8;
+   localparam [3:0] ENDP_CTRL = 'd0;
+
+   reg [7:0]        sie2i_in_data;
+   reg              sie2i_in_valid, sie2i_out_nak;
+
+   wire [3:0]       endp;
+   wire [7:0]       ctrl_in_data;
    wire [8*CHANNELS-1:0] bulk_in_data;
    wire                  ctrl_in_valid;
    wire [CHANNELS-1:0]   bulk_in_valid;
@@ -85,96 +109,89 @@ module usb_cdc
             or ctrl_in_data or ctrl_in_valid or endp) begin : u_mux
       integer j;
 
-      in_data = ctrl_in_data;
-      in_valid = (endp == ENDP_CTRL) ? ctrl_in_valid : 1'b0;
-      out_nak = 1'b0;
+      sie2i_in_data = ctrl_in_data;
+      sie2i_in_valid = (endp == ENDP_CTRL) ? ctrl_in_valid : 1'b0;
+      sie2i_out_nak = 1'b0;
       for (j = 0; j < CHANNELS; j = j+1) begin
-         if (endp == 2*j[3:0]+1) begin
-            in_data = bulk_in_data[8*j +:8];
-            in_valid = bulk_in_valid[j];
-            out_nak = bulk_out_nak[j];
+         if (endp == 2*j[2:0]+1) begin
+            sie2i_in_data = bulk_in_data[8*j +:8];
+            sie2i_in_valid = bulk_in_valid[j];
+            sie2i_out_nak = bulk_out_nak[j];
          end
       end
    end
 
-   wire [6:0]       addr;
-   wire [7:0]       out_data;
-   wire             out_valid;
-   wire             in_req;
-   wire             out_err;
-   wire             setup;
-   wire             in_toggle_reset;
-   wire             out_toggle_reset;
-   wire             usb_reset;
-   wire             in_ready;
-   wire             in_data_ack;
-   wire             out_ready;
-   wire             usb_en;
+   wire [6:0] addr;
+   wire [7:0] sie_out_data;
+   wire       sie_out_valid;
+   wire       sie_in_req;
+   wire       sie_out_err;
+   wire       setup;
+   wire [15:0] in_bulk_endps;
+   wire [15:0] out_bulk_endps;
+   wire [15:0] in_int_endps;
+   wire [15:0] out_int_endps;
+   wire [15:0] in_toggle_reset;
+   wire [15:0] out_toggle_reset;
+   wire        bus_reset;
+   wire        sie_in_ready;
+   wire        sie_in_data_ack;
+   wire        sie_out_ready;
+   wire        usb_en;
+   wire        sie2i_in_zlp, ctrl_in_zlp;
+   wire        sie2i_in_nak;
+   wire        sie2i_stall, ctrl_stall;
 
-   function [15:1] endps;
-      input integer     instances;
-      input integer     start;
-      input integer     step;
-      integer           i;
-      begin
-         endps = 15'b0;
-         for (i = 0; i < instances; i = i+1) begin
-            endps[step*i+start] = 1'b1;
-         end
-      end
-   endfunction
-
-   wire [15:0]      in_int_endps;
-   wire             in_nak;
-
-   assign in_int_endps = {endps(CHANNELS, 2, 2), 1'b0};
-   assign in_nak = in_int_endps[endp];
+   assign sie2i_in_zlp = (endp == ENDP_CTRL) ? ctrl_in_zlp : 1'b0;
+   assign sie2i_in_nak = in_int_endps[endp];
+   assign sie2i_stall = (endp == ENDP_CTRL) ? ctrl_stall : 1'b0;
 
    sie #(.IN_CTRL_MAXPACKETSIZE(CTRL_MAXPACKETSIZE),
          .IN_BULK_MAXPACKETSIZE(IN_BULK_MAXPACKETSIZE),
          .BIT_SAMPLES(BIT_SAMPLES))
-   u_sie (.usb_reset_o(usb_reset),
+   u_sie (.bus_reset_o(bus_reset),
           .dp_pu_o(dp_pu_o),
           .tx_en_o(tx_en_o),
           .dp_tx_o(dp_tx_o),
           .dn_tx_o(dn_tx_o),
           .endp_o(endp),
           .frame_o(frame_o),
-          .out_data_o(out_data),
-          .out_valid_o(out_valid),
-          .out_err_o(out_err),
-          .in_req_o(in_req),
+          .out_data_o(sie_out_data),
+          .out_valid_o(sie_out_valid),
+          .out_err_o(sie_out_err),
+          .in_req_o(sie_in_req),
           .setup_o(setup),
-          .out_ready_o(out_ready),
-          .in_ready_o(in_ready),
-          .in_data_ack_o(in_data_ack),
-          .in_bulk_endps_i(endps(CHANNELS, 1, 2)),
-          .out_bulk_endps_i(endps(CHANNELS, 1, 2)),
-          .in_int_endps_i(endps(CHANNELS, 2, 2)),
-          .out_int_endps_i(15'b0),
-          .in_iso_endps_i(15'b0),
-          .out_iso_endps_i(15'b0),
+          .out_ready_o(sie_out_ready),
+          .in_ready_o(sie_in_ready),
+          .in_data_ack_o(sie_in_data_ack),
+          .in_bulk_endps_i(in_bulk_endps),
+          .out_bulk_endps_i(out_bulk_endps),
+          .in_int_endps_i(in_int_endps),
+          .out_int_endps_i(out_int_endps),
+          .in_iso_endps_i(16'b0),
+          .out_iso_endps_i(16'b0),
           .clk_i(clk_i),
           .rstn_i(rstn),
+          .clk_gate_i(clk_gate),
           .usb_en_i(usb_en),
           .usb_detach_i(1'b0),
           .dp_rx_i(dp_rx_i),
           .dn_rx_i(dn_rx_i),
           .addr_i(addr),
-          .in_valid_i(in_valid),
-          .in_data_i(in_data),
-          .in_zlp_i(in_zlp),
-          .out_nak_i(out_nak),
-          .in_nak_i(in_nak),
-          .stall_i(stall),
+          .in_valid_i(sie2i_in_valid),
+          .in_data_i(sie2i_in_data),
+          .in_zlp_i(sie2i_in_zlp),
+          .out_nak_i(sie2i_out_nak),
+          .in_nak_i(sie2i_in_nak),
+          .stall_i(sie2i_stall),
           .in_toggle_reset_i(in_toggle_reset),
           .out_toggle_reset_i(out_toggle_reset));
 
-   wire ctrl_in_req, ctrl_out_ready, ctrl_in_ready;
+   wire ctrl2i_in_req, ctrl2i_out_ready, ctrl2i_in_ready;
 
-   assign ctrl_in_req = (endp == ENDP_CTRL) ? in_req : 1'b0;
-   assign ctrl_out_ready = (endp == ENDP_CTRL) ? out_ready : 1'b0;
-   assign ctrl_in_ready = (endp == ENDP_CTRL) ? in_ready : 1'b0;
+   assign ctrl2i_in_req = (endp == ENDP_CTRL) ? sie_in_req : 1'b0;
+   assign ctrl2i_out_ready = (endp == ENDP_CTRL) ? sie_out_ready : 1'b0;
+   assign ctrl2i_in_ready = (endp == ENDP_CTRL) ? sie_in_ready : 1'b0;
 
    ctrl_endp #(.VENDORID(VENDORID),
                .PRODUCTID(PRODUCTID),
@@ -189,35 +206,39 @@ module usb_cdc
                 .in_zlp_o(ctrl_in_zlp),
                 .in_valid_o(ctrl_in_valid),
                 .stall_o(ctrl_stall),
+                .in_bulk_endps_o(in_bulk_endps),
+                .out_bulk_endps_o(out_bulk_endps),
+                .in_int_endps_o(in_int_endps),
+                .out_int_endps_o(out_int_endps),
                 .in_toggle_reset_o(in_toggle_reset),
                 .out_toggle_reset_o(out_toggle_reset),
                 .clk_i(clk_i),
                 .rstn_i(rstn),
-                .usb_reset_i(usb_reset),
-                .out_data_i(out_data),
-                .out_valid_i(out_valid),
-                .out_err_i(out_err),
-                .in_req_i(ctrl_in_req),
+                .clk_gate_i(clk_gate),
+                .bus_reset_i(bus_reset),
+                .out_data_i(sie_out_data),
+                .out_valid_i(sie_out_valid),
+                .out_err_i(sie_out_err),
+                .in_req_i(ctrl2i_in_req),
                 .setup_i(setup),
-                .in_data_ack_i(in_data_ack),
-                .out_ready_i(ctrl_out_ready),
-                .in_ready_i(ctrl_in_ready));
+                .in_data_ack_i(sie_in_data_ack),
+                .out_ready_i(ctrl2i_out_ready),
+                .in_ready_i(ctrl2i_in_ready));
 
    genvar i;
 
    generate
       for (i = 0; i < CHANNELS; i = i+1) begin : u_bulk_endps
-         wire bulk_in_req, bulk_out_ready, bulk_in_ready;
+         wire bulk2i_in_req, bulk2i_out_ready, bulk2i_in_ready;
 
-         assign bulk_in_req = (endp == 2*i+1) ? in_req : 1'b0;
-         assign bulk_out_ready = (endp == 2*i+1) ? out_ready : 1'b0;
-         assign bulk_in_ready = (endp == 2*i+1) ? in_ready : 1'b0;
+         assign bulk2i_in_req = (endp == 2*i+1) ? sie_in_req : 1'b0;
+         assign bulk2i_out_ready = (endp == 2*i+1) ? sie_out_ready : 1'b0;
+         assign bulk2i_in_ready = (endp == 2*i+1) ? sie_in_ready : 1'b0;
 
          bulk_endp #(.IN_BULK_MAXPACKETSIZE(IN_BULK_MAXPACKETSIZE),
                      .OUT_BULK_MAXPACKETSIZE(OUT_BULK_MAXPACKETSIZE),
-                     .BIT_SAMPLES(BIT_SAMPLES),
                      .USE_APP_CLK(USE_APP_CLK),
-                     .APP_CLK_RATIO(APP_CLK_RATIO))
+                     .APP_CLK_FREQ(APP_CLK_FREQ))
          u_bulk_endp (.in_data_o(bulk_in_data[8*i +:8]),
                       .in_valid_o(bulk_in_valid[i]),
                       .app_in_ready_o(in_ready_o[i]),
@@ -227,16 +248,17 @@ module usb_cdc
                       .clk_i(clk_i),
                       .app_clk_i(app_clk_i),
                       .rstn_i(rstn),
-                      .usb_reset_i(usb_reset),
-                      .out_data_i(out_data),
-                      .out_valid_i(out_valid),
-                      .out_err_i(out_err),
-                      .in_req_i(bulk_in_req),
-                      .in_data_ack_i(in_data_ack),
+                      .clk_gate_i(clk_gate),
+                      .bus_reset_i(bus_reset),
+                      .out_data_i(sie_out_data),
+                      .out_valid_i(sie_out_valid),
+                      .out_err_i(sie_out_err),
+                      .in_req_i(bulk2i_in_req),
+                      .in_data_ack_i(sie_in_data_ack),
                       .app_in_data_i(in_data_i[8*i +:8]),
                       .app_in_valid_i(in_valid_i[i]),
-                      .out_ready_i(bulk_out_ready),
-                      .in_ready_i(bulk_in_ready),
+                      .out_ready_i(bulk2i_out_ready),
+                      .in_ready_i(bulk2i_in_ready),
                       .app_out_ready_i(out_ready_i[i]));
       end
    endgenerate

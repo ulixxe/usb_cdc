@@ -7,72 +7,69 @@ Info: max_span_hack is enabled: estimate is conservative.
 Report for critical path:
 -------------------------
 
-        lc40_9_30_2 (LogicCell40) [clk] -> lcout: 0.896 ns
-     0.896 ns net_35653 (u_usb_cdc.u_sie.clk_gate_SB_LUT4_O_I2[0])
-        odrv_9_30_35653_39477 (Odrv4) I -> O: 0.548 ns
-        t3238 (LocalMux) I -> O: 0.486 ns
-        inmux_10_28_43596_43607 (InMux) I -> O: 0.382 ns
-        lc40_10_28_1 (LogicCell40) in1 -> lcout: 0.589 ns
-     2.901 ns net_39450 (u_usb_cdc.u_ctrl_endp.in_endp_q_SB_DFFER_Q_E_SB_LUT4_O_I3[1])
-        odrv_10_28_39450_42306 (Odrv12) I -> O: 0.796 ns
-        t3645 (LocalMux) I -> O: 0.486 ns
-        inmux_10_21_42731_42775 (InMux) I -> O: 0.382 ns
-        lc40_10_21_6 (LogicCell40) in0 -> lcout: 0.662 ns
-     5.227 ns net_38594 (u_usb_cdc.u_bulk_endp.u_in_fifo.in_valid_q_SB_LUT4_I3_O_SB_LUT4_O_1_I3[3])
-        t3361 (LocalMux) I -> O: 0.486 ns
-        inmux_10_21_42728_42763 (InMux) I -> O: 0.382 ns
-        lc40_10_21_4 (LogicCell40) in0 -> lcout: 0.662 ns
-     6.757 ns net_38592 (u_usb_cdc.u_ctrl_endp.state_q_SB_DFFR_Q_D_SB_LUT4_O_I3_SB_LUT4_O_I1_SB_LUT4_O_I1[0])
-        odrv_10_21_38592_41815 (Odrv12) I -> O: 0.796 ns
-        t3363 (LocalMux) I -> O: 0.486 ns
-        inmux_10_25_43214_43231 (InMux) I -> O: 0.382 ns
-        lc40_10_25_0 (LogicCell40) in0 -> lcout: 0.662 ns
-     9.083 ns net_39080 (u_usb_cdc.u_sie.out_eop_q_SB_LUT4_I3_O_SB_LUT4_O_I3_SB_LUT4_I2_O[3])
-        t3416 (LocalMux) I -> O: 0.486 ns
-        inmux_10_26_43321_43373 (InMux) I -> O: 0.382 ns
-        lc40_10_26_3 (LogicCell40) in1 -> lcout: 0.589 ns
-    10.540 ns net_39206 (u_usb_cdc.u_sie.clk_gate_SB_LUT4_O_I2_SB_LUT4_I3_O[0])
-        odrv_10_26_39206_38988 (Odrv4) I -> O: 0.548 ns
-        t3620 (Span4Mux_h4) I -> O: 0.465 ns
-        t3619 (Span4Mux_v4) I -> O: 0.548 ns
-        t3618 (LocalMux) I -> O: 0.486 ns
-        inmux_13_21_54958_54985 (InMux) I -> O: 0.382 ns
-        lc40_13_21_2 (LogicCell40) in3 -> lcout: 0.465 ns
-    13.435 ns net_50821 (u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_DFFER_Q_E_SB_LUT4_O_I1[3])
-        t4476 (LocalMux) I -> O: 0.486 ns
-        inmux_12_20_50763_50771 (InMux) I -> O: 0.382 ns
-        lc40_12_20_0 (LogicCell40) in1 -> lcout: 0.589 ns
-    14.892 ns net_46619 (u_usb_cdc.u_ctrl_endp.class_q_SB_LUT4_I1_I2[2])
-        odrv_12_20_46619_50831 (Odrv4) I -> O: 0.548 ns
-        t4241 (Span4Mux_v4) I -> O: 0.548 ns
-        t4240 (LocalMux) I -> O: 0.486 ns
-        inmux_12_23_51109_51164 (InMux) I -> O: 0.382 ns
-        lc40_12_23_4 (LogicCell40) in1 -> lcout: 0.589 ns
-    17.445 ns net_46992 (u_usb_cdc.u_ctrl_endp.req_q_SB_DFFR_Q_3_D_SB_LUT4_O_I3_SB_LUT4_O_I1_SB_LUT4_I2_O[0])
-        t4317 (LocalMux) I -> O: 0.486 ns
-        inmux_12_23_51118_51169 (InMux) I -> O: 0.382 ns
-        lc40_12_23_5 (LogicCell40) in0 -> lcout: 0.662 ns
-    18.975 ns net_46993 (u_usb_cdc.u_ctrl_endp.dev_state_q_SB_DFFES_Q_E)
-        odrv_12_23_46993_51202 (Odrv4) I -> O: 0.548 ns
-        t4319 (LocalMux) I -> O: 0.486 ns
-        inmux_12_23_51108_51185 (CEMux) I -> O: 0.889 ns
-    20.898 ns net_51185 (u_usb_cdc.u_ctrl_endp.dev_state_q_SB_DFFES_Q_E)
-        lc40_12_23_7 (LogicCell40) ce [setup]: 0.000 ns
-    20.898 ns net_46995 (u_usb_cdc.u_ctrl_endp.dev_state_q[1])
+        lc40_7_27_0 (LogicCell40) [clk] -> lcout: 0.896 ns
+     0.896 ns net_27768 (u_usb_cdc.u_ctrl_endp.byte_cnt_q[0])
+        odrv_7_27_27768_31980 (Odrv4) I -> O: 0.548 ns
+        t3740 (Span4Mux_v4) I -> O: 0.548 ns
+        t3739 (LocalMux) I -> O: 0.486 ns
+        inmux_10_30_43837_43859 (InMux) I -> O: 0.382 ns
+        lc40_10_30_2 (LogicCell40) in1 -> lcout: 0.589 ns
+     3.449 ns net_39697 (u_usb_cdc.u_sie.in_req_q_SB_LUT4_I3_2_O_SB_LUT4_O_1_I0_SB_LUT4_O_I0_SB_LUT4_O_1_I0[0])
+        t4753 (LocalMux) I -> O: 0.486 ns
+        inmux_9_30_39762_39787 (InMux) I -> O: 0.382 ns
+        lc40_9_30_3 (LogicCell40) in0 -> lcout: 0.662 ns
+     4.979 ns net_35654 (u_usb_cdc.u_sie.in_req_q_SB_LUT4_I3_2_O_SB_LUT4_O_1_I0_SB_LUT4_O_I0[0])
+        t4276 (LocalMux) I -> O: 0.486 ns
+        inmux_9_29_39616_39673 (InMux) I -> O: 0.382 ns
+        lc40_9_29_4 (LogicCell40) in3 -> lcout: 0.465 ns
+     6.312 ns net_35553 (u_usb_cdc.u_sie.in_req_q_SB_LUT4_I3_2_O_SB_LUT4_O_1_I0[0])
+        odrv_9_29_35553_35408 (Odrv4) I -> O: 0.548 ns
+        t4273 (Span4Mux_v4) I -> O: 0.548 ns
+        t4272 (Span4Mux_h4) I -> O: 0.465 ns
+        t4271 (LocalMux) I -> O: 0.486 ns
+        inmux_9_21_38637_38699 (InMux) I -> O: 0.382 ns
+        lc40_9_21_6 (LogicCell40) in1 -> lcout: 0.589 ns
+     9.331 ns net_34739 (u_usb_cdc.u_sie.in_req_q_SB_LUT4_I3_2_O[0])
+        t4012 (LocalMux) I -> O: 0.486 ns
+        inmux_10_22_42859_42906 (InMux) I -> O: 0.382 ns
+        t858 (CascadeMux) I -> O: 0.000 ns
+        lc40_10_22_7 (LogicCell40) in2 -> lcout: 0.558 ns
+    10.757 ns net_38718 (u_usb_cdc.u_ctrl_endp.state_q_SB_DFFR_Q_5_D_SB_LUT4_O_I2_SB_LUT4_O_I2[1])
+        t4578 (LocalMux) I -> O: 0.486 ns
+        inmux_9_21_38660_38674 (InMux) I -> O: 0.382 ns
+        lc40_9_21_2 (LogicCell40) in0 -> lcout: 0.662 ns
+    12.287 ns net_34735 (u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_DFFER_Q_E_SB_LUT4_O_I0[1])
+        t4008 (LocalMux) I -> O: 0.486 ns
+        inmux_9_22_38754_38809 (InMux) I -> O: 0.382 ns
+        lc40_9_22_4 (LogicCell40) in0 -> lcout: 0.662 ns
+    13.817 ns net_34839 (u_usb_cdc.ctrl_stall_SB_DFFR_Q_D_SB_LUT4_O_I1_SB_LUT4_I3_O_SB_LUT4_I3_O[0])
+        odrv_9_22_34839_38735 (Odrv4) I -> O: 0.548 ns
+        t4048 (Span4Mux_v4) I -> O: 0.548 ns
+        t4047 (Span4Mux_h4) I -> O: 0.465 ns
+        t4046 (LocalMux) I -> O: 0.486 ns
+        inmux_7_28_32012_32084 (InMux) I -> O: 0.382 ns
+        lc40_7_28_7 (LogicCell40) in0 -> lcout: 0.662 ns
+    16.908 ns net_27898 (u_usb_cdc.u_ctrl_endp.state_q_SB_DFFR_Q_D_SB_LUT4_O_I0_SB_LUT4_O_I1_SB_LUT4_I1_O_SB_LUT4_I1_O)
+        odrv_7_28_27898_27794 (Odrv4) I -> O: 0.548 ns
+        t3876 (Span4Mux_h4) I -> O: 0.465 ns
+        t3875 (LocalMux) I -> O: 0.486 ns
+        inmux_9_29_39640_39692 (CEMux) I -> O: 0.889 ns
+    19.296 ns net_39692 (u_usb_cdc.u_ctrl_endp.state_q_SB_DFFR_Q_D_SB_LUT4_O_I0_SB_LUT4_O_I1_SB_LUT4_I1_O_SB_LUT4_I1_O)
+        lc40_9_29_6 (LogicCell40) ce [setup]: 0.000 ns
+    19.296 ns net_35555 (u_usb_cdc.u_ctrl_endp.byte_cnt_q[5])
 
 Resolvable net names on path:
-     0.896 ns ..  2.312 ns u_usb_cdc.u_sie.clk_gate_SB_LUT4_O_I2[0]
-     2.901 ns ..  4.566 ns u_usb_cdc.u_ctrl_endp.in_endp_q_SB_DFFER_Q_E_SB_LUT4_O_I3[1]
-     5.227 ns ..  6.095 ns u_usb_cdc.u_bulk_endp.u_in_fifo.in_valid_q_SB_LUT4_I3_O_SB_LUT4_O_1_I3[3]
-     6.757 ns ..  8.421 ns u_usb_cdc.u_ctrl_endp.state_q_SB_DFFR_Q_D_SB_LUT4_O_I3_SB_LUT4_O_I1_SB_LUT4_O_I1[0]
-     9.083 ns ..  9.951 ns u_usb_cdc.u_sie.out_eop_q_SB_LUT4_I3_O_SB_LUT4_O_I3_SB_LUT4_I2_O[3]
-    10.540 ns .. 12.969 ns u_usb_cdc.u_sie.clk_gate_SB_LUT4_O_I2_SB_LUT4_I3_O[0]
-    13.435 ns .. 14.303 ns u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_DFFER_Q_E_SB_LUT4_O_I1[3]
-    14.892 ns .. 16.856 ns u_usb_cdc.u_ctrl_endp.class_q_SB_LUT4_I1_I2[2]
-    17.445 ns .. 18.314 ns u_usb_cdc.u_ctrl_endp.req_q_SB_DFFR_Q_3_D_SB_LUT4_O_I3_SB_LUT4_O_I1_SB_LUT4_I2_O[0]
-    18.975 ns .. 20.898 ns u_usb_cdc.u_ctrl_endp.dev_state_q_SB_DFFES_Q_E
-                  lcout -> u_usb_cdc.u_ctrl_endp.dev_state_q[1]
+     0.896 ns ..  2.860 ns u_usb_cdc.u_ctrl_endp.byte_cnt_q[0]
+     3.449 ns ..  4.317 ns u_usb_cdc.u_sie.in_req_q_SB_LUT4_I3_2_O_SB_LUT4_O_1_I0_SB_LUT4_O_I0_SB_LUT4_O_1_I0[0]
+     4.979 ns ..  5.847 ns u_usb_cdc.u_sie.in_req_q_SB_LUT4_I3_2_O_SB_LUT4_O_1_I0_SB_LUT4_O_I0[0]
+     6.312 ns ..  8.742 ns u_usb_cdc.u_sie.in_req_q_SB_LUT4_I3_2_O_SB_LUT4_O_1_I0[0]
+     9.331 ns .. 10.199 ns u_usb_cdc.u_sie.in_req_q_SB_LUT4_I3_2_O[0]
+    10.757 ns .. 11.626 ns u_usb_cdc.u_ctrl_endp.state_q_SB_DFFR_Q_5_D_SB_LUT4_O_I2_SB_LUT4_O_I2[1]
+    12.287 ns .. 13.156 ns u_usb_cdc.u_ctrl_endp.dev_state_qq_SB_DFFER_Q_E_SB_LUT4_O_I0[1]
+    13.817 ns .. 16.246 ns u_usb_cdc.ctrl_stall_SB_DFFR_Q_D_SB_LUT4_O_I1_SB_LUT4_I3_O_SB_LUT4_I3_O[0]
+    16.908 ns .. 19.296 ns u_usb_cdc.u_ctrl_endp.state_q_SB_DFFR_Q_D_SB_LUT4_O_I0_SB_LUT4_O_I1_SB_LUT4_I1_O_SB_LUT4_I1_O
+                  lcout -> u_usb_cdc.u_ctrl_endp.byte_cnt_q[5]
 
-Total number of logic levels: 10
-Total path delay: 20.90 ns (47.85 MHz)
+Total number of logic levels: 9
+Total path delay: 19.30 ns (51.83 MHz)
 

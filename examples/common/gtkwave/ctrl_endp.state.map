@@ -1,0 +1,13 @@
+# 
+## name ## ctrl_endp\.state
+## color ## Blue
+## data ## Decimal
+
+0 ST_IDLE
+1 ST_STALL
+2 ST_SETUP
+3 ST_IN_DATA
+4 ST_OUT_DATA
+5 ST_PRE_IN_STATUS
+6 ST_IN_STATUS
+7 ST_OUT_STATUS

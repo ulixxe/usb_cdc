@@ -25,7 +25,7 @@ module tb_soc ( );
    localparam VENDORID = 16'h1D50;
    localparam PRODUCTID = 16'h6130;
 
-`include "usb_tasks.v"
+`include "usb_test_1ch.v"
 
    `progress_bar(37)
 
@@ -127,8 +127,8 @@ module tb_soc ( );
       test_data_out(address, ENDP_BULK,
                     {"ABCDEFGH",
                      "QRSTUVWX",
-                     "abcd"},
-                    20, PID_NAK, OUT_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, dataout_toggle);
+                     "abcdefgh"},
+                    24, PID_NAK, OUT_BULK_MAXPACKETSIZE, 100000/83*`BIT_TIME, 0, dataout_toggle);
 
       test = "IN BULK DATA with ZLP";
       test_data_in(address, ENDP_BULK,
