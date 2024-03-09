@@ -6,7 +6,7 @@
 
 * Build Date:         Dec 10 2020 17:24:17
 
-* File Generated:     Feb 17 2024 14:56:47
+* File Generated:     Mar 10 2024 17:58:31
 
 * Purpose:            General info of design implementation
 
@@ -27,8 +27,8 @@ Device Info:
 
 Design statistics:
 ------------------
-    FFs:                  1837
-    LUTs:                 4587
+    FFs:                  1838
+    LUTs:                 4611
     RAMs:                 0
     IOBs:                 5
     GBs:                  7
@@ -37,12 +37,12 @@ Design statistics:
 
 Logic Resource Utilization:
 ---------------------------
-    Total Logic Cells: 4589/7680
-        Combinational Logic Cells: 2752     out of   7680      35.8333%
-        Sequential Logic Cells:    1837     out of   7680      23.9193%
-        Logic Tiles:               685      out of   960       71.3542%
+    Total Logic Cells: 4612/7680
+        Combinational Logic Cells: 2774     out of   7680      36.1198%
+        Sequential Logic Cells:    1838     out of   7680      23.9323%
+        Logic Tiles:               704      out of   960       73.3333%
     Registers: 
-        Logic Registers:           1837     out of   7680      23.9193%
+        Logic Registers:           1838     out of   7680      23.9323%
         IO Registers:              0        out of   1280      0
     Block RAMs:                    0        out of   32        0%
     Warm Boots:                    0        out of   1         0%
@@ -83,25 +83,25 @@ Detailed Global Buffer Info:
 ----------------------------
     Buffer Number  IO Bank  Driven By  Fanout  Signal Name                          
     -------------  -------  ---------  ------  -----------                          
-    3              3                   48      u_usb_cdc.u_sie.in_zlp_q_0_sqmuxa_g  
+    3              3                   52      u_usb_cdc.u_sie.in_zlp_q_0_sqmuxa_g  
     0              2                   1621    u_usb_cdc.rstn_i_g                   
-    1              0                   72      u_usb_cdc.N_162_0_g                  
+    1              0                   70      u_usb_cdc.N_165_0_g                  
     2              1                   140     u_usb_cdc.app_rstn_sq_i_g_0          
-    4              0                   72      u_usb_cdc.rstn_sq_i_g_0              
-    7              1                   255     u_usb_cdc.clk_gate_g                 
+    4              0                   73      u_usb_cdc.rstn_sq_i_g_0              
+    7              1                   260     u_usb_cdc.clk_gate_q_g               
     5              2                   142     clk_div4_g                           
 
 
 Router Summary:
 ---------------
     Status:  Successful
-    Runtime: 47 seconds
+    Runtime: 41 seconds
 
 Routing Resource Utilization:
 -----------------------------
-              Local line of tile    31047 out of 146184      21.2383%
-                          Span 4     7788 out of  29696      26.2258%
-                         Span 12     1108 out of   5632      19.6733%
+              Local line of tile    30896 out of 146184      21.135%
+                          Span 4     8640 out of  29696      29.0948%
+                         Span 12     1415 out of   5632      25.1243%
                   Global network        8 out of      8      100%
-      Vertical Inter-LUT Connect      980 out of   6720      14.5833%
+      Vertical Inter-LUT Connect      974 out of   6720      14.494%
 

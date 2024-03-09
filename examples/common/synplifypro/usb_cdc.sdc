@@ -75,10 +75,10 @@ set ctrl_gated_cells [remove_from_collection -intersect [all_registers] [get_cel
     ${path}.*
     "]]
 file_puts $fid "07" $ctrl_gated_cells
-set_multicycle_path -setup [expr 4 * $BIT_SAMPLES] -from $ctrl_gated_cells
-set_multicycle_path -hold [expr 4 * $BIT_SAMPLES - 1] -from $ctrl_gated_cells
-set_multicycle_path -setup [expr 4 * $BIT_SAMPLES] -to $ctrl_gated_cells
-set_multicycle_path -hold [expr 4 * $BIT_SAMPLES - 1] -to $ctrl_gated_cells
+set_multicycle_path -setup [expr 1 * $BIT_SAMPLES] -from $ctrl_gated_cells
+set_multicycle_path -hold [expr 1 * $BIT_SAMPLES - 1] -from $ctrl_gated_cells
+set_multicycle_path -setup [expr 1 * $BIT_SAMPLES] -to $ctrl_gated_cells
+set_multicycle_path -hold [expr 1 * $BIT_SAMPLES - 1] -to $ctrl_gated_cells
 
 set path "${root_path}.*u_bulk_endp.u_in_fifo"
 set in_gated_cells [remove_from_collection -intersect [all_registers] [get_cells "
@@ -138,5 +138,13 @@ set_multicycle_path -setup [expr $BIT_SAMPLES] -from $out2_gated_cells -to $out2
 set_multicycle_path -hold [expr $BIT_SAMPLES - 1] -from $out2_gated_cells -to $out2_gated_cells
 #set_multicycle_path -setup [expr $BIT_SAMPLES] -from $out2_gated_cells -through $out_gated_pins
 #set_multicycle_path -hold [expr $BIT_SAMPLES - 1] -from $out2_gated_cells -through $out_gated_pins
+
+set path "${root_path}"
+set clk_gate_cell [remove_from_collection -intersect [all_registers] [get_cells "
+    ${path}.clk_gate_q*
+    "]]
+file_puts $fid "14" $clk_gate_cell
+set_multicycle_path -setup [expr 1] -from $clk_gate_cell
+set_multicycle_path -hold [expr 1 - 1] -from $clk_gate_cell
 
 close $fid

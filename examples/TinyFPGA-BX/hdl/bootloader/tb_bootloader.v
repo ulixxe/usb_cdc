@@ -28,7 +28,7 @@ module tb_bootloader ( );
 `include "usb_test_1ch.v"
 `include "bootloader_tasks.v"
 
-   `progress_bar(37)
+   `progress_bar(test, 37)
 
    reg                    clk;
 

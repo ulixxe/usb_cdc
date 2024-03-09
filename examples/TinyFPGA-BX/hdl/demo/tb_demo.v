@@ -28,7 +28,7 @@ module tb_demo ( );
 `include "usb_test_1ch.v"
 `include "demo_tasks.v"
 
-   `progress_bar(316)
+   `progress_bar(test, 316)
 
    reg                    clk;
 

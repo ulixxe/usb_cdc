@@ -27,7 +27,7 @@ module tb_loopback_7ch ( );
 
 `include "usb_test_7ch.v"
 
-   `progress_bar(38)
+   `progress_bar(test, 38)
 
    reg                    clk;
 

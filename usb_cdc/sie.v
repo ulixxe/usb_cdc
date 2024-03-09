@@ -90,6 +90,7 @@ module sie
     //   packet shall be consumed.
     // When in_data_i or zlp is consumed, in_ready_o shall be high only for
     //   one clk_gate_i multi-cycle period.
+    // When clk_gate_i is high, in_ready_o shall be updated.
     output        in_data_ack_o,
     // When in_data_ack_o is high and out_ready_o is high, an ACK packet shall be received.
     // When clk_gate_i is high, in_data_ack_o shall be updated.
@@ -150,7 +151,7 @@ module sie
     input [15:0]  out_toggle_reset_i,
     // When out_toggle_reset_i[i] is high, data toggle synchronization of
     //   OUT bulk/int pipe at endpoint=i shall be reset to DATA0.
-    // When clk_gate_i is high, in_toggle_reset_i shall be updated.
+    // When clk_gate_i is high, out_toggle_reset_i shall be updated.
 
     // ---- to/from USB bus physical transmitters/receivers ----------
     output        dp_pu_o,

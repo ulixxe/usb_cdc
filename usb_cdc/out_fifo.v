@@ -136,32 +136,37 @@ module out_fifo
 
    wire [7:0] app_out_data;
    wire       out_empty;
+   wire       app_out_buffer_empty;
 
    assign app_out_data = out_fifo_q[{out_first_q, 3'd0} +:8];
    assign out_empty = ((out_first_q == out_last_q) ? 1'b1 : 1'b0);
-   assign out_empty_o = out_empty;
+   assign out_empty_o = out_empty && app_out_buffer_empty;
 
    generate
       if (USE_APP_CLK == 0) begin : u_sync_data
          reg [7:0] app_out_data_q;
-         reg       app_out_valid_q;
+         reg       app_out_valid_q, app_out_valid_qq;
 
          assign app_out_data_o = app_out_data_q;
          assign app_out_valid_o = app_out_valid_q;
+         assign app_out_buffer_empty = ~app_out_valid_qq;
 
          always @(posedge clk_i or negedge rstn_i) begin
             if (~rstn_i) begin
                out_first_q <= 'd0;
                app_out_data_q <= 8'd0;
                app_out_valid_q <= 1'b0;
+               app_out_valid_qq <= 1'b0;
             end else begin
                if (app_out_ready_i & app_out_valid_q)
                  app_out_valid_q <= 1'b0;
                if (clk_gate_i) begin
+                  app_out_valid_qq <= app_out_valid_q;
                   if (~out_empty) begin
                      if (~app_out_valid_q | (app_out_ready_i & app_out_valid_q)) begin
                         app_out_data_q <= app_out_data;
                         app_out_valid_q <= 1'b1;
+                        app_out_valid_qq <= 1'b1;
                         if (out_first_q == OUT_LENGTH-1)
                           out_first_q <= 'd0;
                         else
@@ -174,12 +179,13 @@ module out_fifo
       end else if (APP_CLK_FREQ <= 12) begin : u_lte12mhz_async_data
          reg [15:0] app_out_data_q;
          reg [1:0]  app_out_valid_q;
-         reg        app_out_valid_qq;
+         reg        app_out_valid_qq, app_out_valid_qqq;
          reg        app_out_consumed_q;
          reg [2:0]  app_clk_sq; // BIT_SAMPLES >= 4
 
          assign app_out_data_o = app_out_data_q[7:0];
          assign app_out_valid_o = app_out_valid_qq;
+         assign app_out_buffer_empty = ~app_out_valid_qqq;
 
          always @(posedge clk_i or negedge rstn_i) begin
             if (~rstn_i) begin
@@ -187,6 +193,7 @@ module out_fifo
                app_out_data_q <= 16'd0;
                app_out_valid_q <= 2'b00;
                app_out_valid_qq <= 1'b0;
+               app_out_valid_qqq <= 1'b0;
                app_clk_sq <= 3'b000;
             end else begin
                app_clk_sq <= {app_clk_i, app_clk_sq[2:1]};
@@ -204,6 +211,7 @@ module out_fifo
                   end
                end
                if (clk_gate_i) begin
+                  app_out_valid_qqq <= |app_out_valid_q;
                   if (~out_empty) begin
                      if (app_out_valid_q != 2'b11 ||
                          (app_clk_sq[1:0] == 2'b10 && app_out_consumed_q == 1'b1)) begin
@@ -211,13 +219,16 @@ module out_fifo
                             (app_clk_sq[1:0] == 2'b10 && app_out_consumed_q == 1'b1)) begin
                            app_out_data_q[15:8] <= app_out_data;
                            app_out_valid_q[1] <= 1'b1;
+                           app_out_valid_qqq <= 1'b1;
                         end else if (app_out_valid_q[0] == 1'b0 ||
                             (app_clk_sq[1:0] == 2'b10 && app_out_consumed_q == 1'b1)) begin
                            app_out_data_q[7:0] <= app_out_data;
                            app_out_valid_q[0] <= 1'b1;
+                           app_out_valid_qqq <= 1'b1;
                         end else begin
                            app_out_data_q[15:8] <= app_out_data;
                            app_out_valid_q[1] <= 1'b1;
+                           app_out_valid_qqq <= 1'b1;
                         end
                         if (out_first_q == OUT_LENGTH-1)
                           out_first_q <= 'd0;
@@ -241,6 +252,8 @@ module out_fifo
          reg [7:0] app_out_data_q;
          reg       app_out_valid_q;
          reg       app_out_consumed_q;
+
+         assign app_out_buffer_empty = ~app_out_valid_q;
 
          always @(posedge clk_i or negedge rstn_i) begin
             if (~rstn_i) begin

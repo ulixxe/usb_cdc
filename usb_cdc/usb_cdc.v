@@ -76,19 +76,20 @@ module usb_cdc
    end
 
    reg [ceil_log2(BIT_SAMPLES)-1:0] clk_cnt_q;
-
-   wire                             clk_gate;
-
-   assign clk_gate = ({1'b0, clk_cnt_q} == BIT_SAMPLES-1) ? 1'b1 : 1'b0;
+   reg                              clk_gate_q;
 
    always @(posedge clk_i or negedge rstn) begin
       if (~rstn) begin
          clk_cnt_q <= 'd0;
+         clk_gate_q <= 1'b0;
       end else begin
-         if ({1'b0, clk_cnt_q} == BIT_SAMPLES-1)
-           clk_cnt_q <= 'd0;
-         else
-           clk_cnt_q <= clk_cnt_q + 1;
+         if ({1'b0, clk_cnt_q} == BIT_SAMPLES-1) begin
+            clk_cnt_q <= 'd0;
+            clk_gate_q <= 1'b1;
+         end else begin
+            clk_cnt_q <= clk_cnt_q + 1;
+            clk_gate_q <= 1'b0;
+         end
       end
    end
 
@@ -172,7 +173,7 @@ module usb_cdc
           .out_iso_endps_i(16'b0),
           .clk_i(clk_i),
           .rstn_i(rstn),
-          .clk_gate_i(clk_gate),
+          .clk_gate_i(clk_gate_q),
           .usb_en_i(usb_en),
           .usb_detach_i(1'b0),
           .dp_rx_i(dp_rx_i),
@@ -214,7 +215,7 @@ module usb_cdc
                 .out_toggle_reset_o(out_toggle_reset),
                 .clk_i(clk_i),
                 .rstn_i(rstn),
-                .clk_gate_i(clk_gate),
+                .clk_gate_i(clk_gate_q),
                 .bus_reset_i(bus_reset),
                 .out_data_i(sie_out_data),
                 .out_valid_i(sie_out_valid),
@@ -248,7 +249,7 @@ module usb_cdc
                       .clk_i(clk_i),
                       .app_clk_i(app_clk_i),
                       .rstn_i(rstn),
-                      .clk_gate_i(clk_gate),
+                      .clk_gate_i(clk_gate_q),
                       .bus_reset_i(bus_reset),
                       .out_data_i(sie_out_data),
                       .out_valid_i(sie_out_valid),

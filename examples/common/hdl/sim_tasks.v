@@ -41,7 +41,7 @@
    $display("%c[0m",27); \
    $finish;
 
-`define progress_bar(end_ms) \
+`define progress_bar(msg, end_ms) \
    integer time_ms; \
    initial begin \
       time_ms = 0; \
@@ -51,7 +51,9 @@
          $write("%4d ms", time_ms); \
          if (end_ms > 0) \
             $write("  (%3d%%)", 100*time_ms/end_ms); \
-         $write("\015"); \
+         if (msg != "") \
+            $write(": %0s", msg); \
+         $write("                     \015"); \
          $fflush(32'h8000_0001); // flush STDOUT \
       end \
    end

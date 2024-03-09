@@ -98,6 +98,10 @@ module flash_spi
       end
    endfunction
 
+   localparam [31:0] RESUME_WAIT = `min(RESUME_US*CLK_PERIODS_PER_US+(SCK_PERIOD_MULTIPLIER+1)/2, {16'h00, 16'hFF}),
+                     BLOCK_ERASE_WAIT = `min(BLOCK_ERASE_US*CLK_PERIODS_PER_US/10, {16'h00, 16'hFF}),
+                     PAGE_PROG_WAIT = `min(PAGE_PROG_US*CLK_PERIODS_PER_US/10, {16'h00, 16'hFF});
+
    localparam [3:0] STATUS_OK = 4'h0,
                     STATUS_errCHECK_ERASED = 4'h5,
                     STATUS_errVERIFY = 4'h7,
@@ -262,7 +266,7 @@ module flash_spi
              end
              'd2 : begin // wait to resume from Deep Power Down
                 wait_cnt_d = wait_cnt_q + 1;
-                if (wait_cnt_q == `min(RESUME_US*CLK_PERIODS_PER_US+(SCK_PERIOD_MULTIPLIER+1)/2, {16{1'b1}})) begin
+                if (wait_cnt_q == RESUME_WAIT[15:0]) begin
                    byte_cnt_d = byte_cnt_q + 1;
                    wait_cnt_d = 'd0;
                 end
@@ -416,7 +420,7 @@ module flash_spi
              end
              default : begin // wait before next status check
                 wait_cnt_d = wait_cnt_q + 1;
-                if (wait_cnt_q == `min(BLOCK_ERASE_US*CLK_PERIODS_PER_US/10, {16{1'b1}})) begin
+                if (wait_cnt_q == BLOCK_ERASE_WAIT[15:0]) begin
                    byte_cnt_d = 'd0;
                    wait_cnt_d = 'd0;
                 end
@@ -575,7 +579,7 @@ module flash_spi
              end
              default : begin // wait before next status check
                 wait_cnt_d = wait_cnt_q + 1;
-                if (wait_cnt_q == `min(PAGE_PROG_US*CLK_PERIODS_PER_US/10, {16{1'b1}})) begin
+                if (wait_cnt_q == PAGE_PROG_WAIT[15:0]) begin
                    byte_cnt_d = 'd0;
                    wait_cnt_d = 'd0;
                 end

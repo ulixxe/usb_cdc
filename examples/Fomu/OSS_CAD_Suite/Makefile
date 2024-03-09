@@ -79,7 +79,7 @@ $(OUT_DIR)/%.fst: $(OUT_DIR)/%.vvp
 sim: $(OUT_DIR)/$(PROJ).fst
 
 $(OUT_DIR)/%.xml: $(HDL_FILES) $(TB_HDL_FILES) | $(OUT_DIR) $(OUT_DIR)/cells_sim.v
-	verilator -xml-only --bbox-unsup --bbox-sys -Wno-lint -Wno-TIMESCALEMOD -Wno-STMTDLY -Wno-INFINITELOOP -DBLACKBOX -DNO_ICE40_DEFAULT_ASSIGNMENTS $(DEFINES) --top tb_$(PROJ) $(INC_DIRS) -v $(OUT_DIR)/cells_sim.v $^ --xml-output $@
+	verilator --no-timing -xml-only --bbox-unsup --bbox-sys -Wno-lint -Wno-MULTIDRIVEN -Wno-TIMESCALEMOD -Wno-STMTDLY -Wno-INFINITELOOP -DBLACKBOX -DNO_ICE40_DEFAULT_ASSIGNMENTS $(DEFINES) --top tb_$(PROJ) $(INC_DIRS) -v $(OUT_DIR)/cells_sim.v $^ --xml-output $@
 
 $(OUT_DIR)/%.stems: $(OUT_DIR)/%.xml
 	xml2stems $< $@

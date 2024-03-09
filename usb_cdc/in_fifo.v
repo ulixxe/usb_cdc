@@ -50,6 +50,7 @@ module in_fifo
     // When in_valid_o is low, either in_req_i or in_data_ack_i shall be high
     //   at next in_ready_i high.
     // When both in_ready_i and clk_gate_i are high, in_valid_o shall be updated.
+    // When clk_gate_i is high, in_valid_o shall be updated.
     input        in_req_i,
     // When both in_req_i and in_ready_i are high, a new IN packet shall be requested.
     // When clk_gate_i is high, in_req_i shall be updated.
@@ -106,11 +107,11 @@ module in_fifo
       end
    end
 
-   wire in_full;
+   wire in_full, app_in_buffer_empty;
 
    assign in_full = (in_first_q == ((in_last_q == IN_LENGTH-1) ? 'd0 : in_last_q+1) ? 1'b1 : 1'b0);
    assign in_full_o = in_full;
-   assign in_empty_o = ((in_first_q == in_last_q) ? 1'b1 : 1'b0);
+   assign in_empty_o = ((in_first_q == in_last_q && app_in_buffer_empty == 1'b1) ? 1'b1 : 1'b0);
 
    generate
       if (USE_APP_CLK == 0) begin : u_sync_data
@@ -119,6 +120,7 @@ module in_fifo
          reg       app_in_ready_q;
 
          assign app_in_ready_o = app_in_ready_q;
+         assign app_in_buffer_empty = ~app_in_valid_qq;
 
          always @(posedge clk_i or negedge rstn_i) begin
             if (~rstn_i) begin
@@ -170,6 +172,7 @@ module in_fifo
          reg        app_in_ready_q;
 
          assign app_in_ready_o = app_in_ready_q;
+         assign app_in_buffer_empty = ~|app_in_valid_qqq;
 
          always @(posedge clk_i or negedge rstn_i) begin
             if (~rstn_i) begin
@@ -267,6 +270,8 @@ module in_fifo
          reg [7:0] app_in_data_q;
          reg       app_in_valid_q, app_in_valid_qq;
          reg       app_in_ready_q;
+
+         assign app_in_buffer_empty = ~app_in_valid_qq;
 
          always @(posedge clk_i or negedge rstn_i) begin
             if (~rstn_i) begin
